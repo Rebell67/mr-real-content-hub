@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import { HubProvider } from './state/HubContext';
 import { AppLayout } from './components/layout/AppLayout';
 import { Dashboard } from './pages/Dashboard';
@@ -12,7 +12,7 @@ import { Settings } from './pages/Settings';
 export default function App() {
   return (
     <HubProvider>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route element={<AppLayout />}>
             <Route index element={<Dashboard />} />
@@ -24,7 +24,7 @@ export default function App() {
             <Route path="settings" element={<Settings />} />
           </Route>
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </HubProvider>
   );
 }
