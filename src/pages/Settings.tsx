@@ -1,0 +1,181 @@
+import { useRef, useState } from 'react';
+import { Database, KeyRound, Upload, Download, CheckCircle2, AlertTriangle, FileJson, Plug } from 'lucide-react';
+import { useHub } from '../state/HubContext';
+import { Topbar } from '../components/layout/Topbar';
+import { Card } from '../components/ui/primitives';
+import { PLATFORM_META, PLATFORMS } from '../types';
+import { importCSV, importJSON, exportJSON, exportCSV, downloadFile, SAMPLE_CSV, type ImportResult } from '../lib/dataIO';
+
+export function Settings() {
+  const { sourceId, setSource, metricoolConfig, saveMetricoolConfig, applyImportedMetrics, data, lastSync } = useHub();
+  const [cfg, setCfg] = useState({
+    apiToken: metricoolConfig?.apiToken ?? '',
+    userId: metricoolConfig?.userId ?? '',
+    blogId: metricoolConfig?.blogId ?? '',
+  });
+  const [savedMsg, setSavedMsg] = useState(false);
+  const [importMsg, setImportMsg] = useState<ImportResult | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const handleFile = async (file: File) => {
+    const text = await file.text();
+    const result = file.name.endsWith('.json') ? importJSON(text) : importCSV(text);
+    setImportMsg(result);
+    if (result.ok && result.metrics) applyImportedMetrics(result.metrics);
+  };
+
+  const saveMetricool = () => {
+    saveMetricoolConfig({ ...cfg, baseUrl: 'https://app.metricool.com/api' });
+    setSavedMsg(true);
+    setTimeout(() => setSavedMsg(false), 2500);
+  };
+
+  return (
+    <>
+      <Topbar title="Daten & Setup" subtitle="Datenquellen, API-Integration und Import" />
+      <div className="mx-auto max-w-4xl space-y-6 p-5 sm:p-8">
+        {/* Source selector */}
+        <Card className="p-5">
+          <div className="mb-4 flex items-center gap-2">
+            <Database size={18} className="text-brand-300" />
+            <h2 className="section-title">Aktive Datenquelle</h2>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-3">
+            <SourceCard active={sourceId === 'mock'} onClick={() => setSource('mock')} title="Demo-Daten" desc="Realistische Beispieldaten. Kein Setup nötig." icon={<FileJson size={18} />} />
+            <SourceCard active={sourceId === 'metricool'} onClick={() => setSource('metricool')} title="Metricool API" desc="Live-Daten aller Kanäle. Token erforderlich." icon={<Plug size={18} />} badge={metricoolConfig ? 'konfiguriert' : 'offen'} />
+            <SourceCard active={sourceId === 'import'} onClick={() => fileRef.current?.click()} title="CSV / JSON Import" desc="Eigene Exporte hochladen." icon={<Upload size={18} />} />
+          </div>
+          {lastSync && <p className="mt-3 text-xs text-slate-500">Zuletzt synchronisiert: {new Date(lastSync).toLocaleString('de-AT')}</p>}
+        </Card>
+
+        {/* Metricool config */}
+        <Card className="p-5">
+          <div className="mb-1 flex items-center gap-2">
+            <KeyRound size={18} className="text-gold-400" />
+            <h2 className="section-title">Metricool-Verbindung</h2>
+          </div>
+          <p className="mb-4 text-sm text-slate-400">
+            Hinterlege Token & Brand-ID. Die Abruf-Schicht ist bereits vorbereitet – sobald ein gültiger Token vorliegt, werden Instagram, TikTok, YouTube & Facebook automatisch normalisiert geladen.
+          </p>
+          <div className="grid gap-3 sm:grid-cols-3">
+            <Field label="API Token" value={cfg.apiToken} onChange={(v) => setCfg({ ...cfg, apiToken: v })} placeholder="mc_xxx…" type="password" />
+            <Field label="User ID" value={cfg.userId} onChange={(v) => setCfg({ ...cfg, userId: v })} placeholder="123456" />
+            <Field label="Brand / Blog ID" value={cfg.blogId} onChange={(v) => setCfg({ ...cfg, blogId: v })} placeholder="987654" />
+          </div>
+          <div className="mt-4 flex items-center gap-3">
+            <button onClick={saveMetricool} className="btn-primary" disabled={!cfg.apiToken || !cfg.blogId}>Verbindung speichern</button>
+            {savedMsg && <span className="flex items-center gap-1.5 text-sm text-brand-300"><CheckCircle2 size={15} /> Gespeichert</span>}
+          </div>
+          <div className="mt-4 flex items-start gap-2 rounded-xl border border-tiktok/20 bg-tiktok/[0.06] p-3 text-xs text-slate-300">
+            <AlertTriangle size={15} className="mt-0.5 shrink-0 text-tiktok" />
+            <span>Hinweis: Der Token wird nur lokal im Browser (localStorage) gespeichert. Für Produktion sollte der Abruf über ein Backend/Proxy laufen, damit der Token nicht im Client liegt.</span>
+          </div>
+        </Card>
+
+        {/* Import / Export */}
+        <Card className="p-5">
+          <div className="mb-4 flex items-center gap-2">
+            <Upload size={18} className="text-tiktok" />
+            <h2 className="section-title">Import & Export</h2>
+          </div>
+
+          <div
+            onClick={() => fileRef.current?.click()}
+            onDragOver={(e) => e.preventDefault()}
+            onDrop={(e) => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f) handleFile(f); }}
+            className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-white/[0.1] bg-ink-850/40 py-8 text-center transition-colors hover:border-brand-500/40 hover:bg-brand-500/[0.04]"
+          >
+            <Upload size={22} className="text-slate-500" />
+            <p className="text-sm font-medium text-slate-300">CSV oder JSON hierher ziehen oder klicken</p>
+            <p className="text-xs text-slate-500">Erwartete Spalten: date, platform, followers, impressions, reach, engagements</p>
+          </div>
+          <input
+            ref={fileRef}
+            type="file"
+            accept=".csv,.json"
+            className="hidden"
+            onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); e.target.value = ''; }}
+          />
+
+          {importMsg && (
+            <div className={`mt-3 flex items-center gap-2 rounded-xl border p-3 text-sm ${importMsg.ok ? 'border-brand-500/25 bg-brand-500/[0.06] text-brand-200' : 'border-youtube/25 bg-youtube/[0.06] text-youtube'}`}>
+              {importMsg.ok ? <CheckCircle2 size={16} /> : <AlertTriangle size={16} />}
+              {importMsg.message}
+            </div>
+          )}
+
+          <div className="mt-4 flex flex-wrap gap-3">
+            <button onClick={() => data && downloadFile('mrreal-hubdata.json', exportJSON(data), 'application/json')} className="btn-ghost" disabled={!data}>
+              <Download size={16} /> JSON exportieren
+            </button>
+            <button onClick={() => data && downloadFile('mrreal-metrics.csv', exportCSV(data.dailyMetrics), 'text/csv')} className="btn-ghost" disabled={!data}>
+              <Download size={16} /> CSV exportieren
+            </button>
+            <button onClick={() => downloadFile('mrreal-vorlage.csv', SAMPLE_CSV, 'text/csv')} className="btn-ghost">
+              <FileJson size={16} /> CSV-Vorlage laden
+            </button>
+          </div>
+        </Card>
+
+        {/* Connected platforms overview */}
+        <Card className="p-5">
+          <h2 className="section-title mb-4">Verknüpfte Kanäle</h2>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {PLATFORMS.map((p) => {
+              const meta = PLATFORM_META[p];
+              const connected = Boolean(data?.dailyMetrics.some((m) => m.platform === p));
+              return (
+                <div key={p} className="flex items-center justify-between rounded-xl border border-white/[0.06] bg-ink-850/40 p-3">
+                  <div className="flex items-center gap-3">
+                    <span className="flex h-9 w-9 items-center justify-center rounded-lg font-bold" style={{ backgroundColor: `${meta.color}1e`, color: meta.color }}>
+                      {meta.short}
+                    </span>
+                    <div>
+                      <div className="text-sm font-semibold text-white">{meta.label}</div>
+                      <div className="text-xs text-slate-500">{meta.handle}</div>
+                    </div>
+                  </div>
+                  <span className={`chip ${connected ? 'bg-brand-500/15 text-brand-300' : 'bg-white/[0.04] text-slate-500'}`}>
+                    {connected ? 'Daten aktiv' : 'keine Daten'}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </Card>
+      </div>
+    </>
+  );
+}
+
+function SourceCard({ active, onClick, title, desc, icon, badge }: { active: boolean; onClick: () => void; title: string; desc: string; icon: React.ReactNode; badge?: string }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`rounded-xl border p-4 text-left transition-all ${active ? 'border-brand-500/50 bg-brand-500/[0.08] ring-1 ring-brand-500/30' : 'border-white/[0.08] bg-ink-850/40 hover:border-white/20'}`}
+    >
+      <div className="mb-2 flex items-center justify-between">
+        <span className={active ? 'text-brand-300' : 'text-slate-400'}>{icon}</span>
+        {badge && <span className="chip bg-white/[0.06] text-[10px] text-slate-400">{badge}</span>}
+        {active && !badge && <span className="chip bg-brand-500/15 text-[10px] text-brand-300">aktiv</span>}
+      </div>
+      <div className="text-sm font-semibold text-white">{title}</div>
+      <div className="mt-0.5 text-xs text-slate-500">{desc}</div>
+    </button>
+  );
+}
+
+function Field({ label, value, onChange, placeholder, type = 'text' }: { label: string; value: string; onChange: (v: string) => void; placeholder?: string; type?: string }) {
+  return (
+    <label className="block">
+      <span className="stat-label">{label}</span>
+      <input
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        className="mt-1 w-full rounded-xl border border-white/[0.08] bg-ink-850/60 px-3 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-brand-500/40 focus:outline-none"
+      />
+    </label>
+  );
+}

@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-ink-900 text-slate-200 font-sans antialiased;
+    background-image:
+      radial-gradient(900px 500px at 100% -10%, rgba(0, 195, 137, 0.08), transparent 60%),
+      radial-gradient(800px 500px at -10% 110%, rgba(91, 141, 239, 0.06), transparent 55%);
+    background-attachment: fixed;
+  }
+
+  ::selection {
+    @apply bg-brand-500/30 text-white;
+  }
+
+  /* Slim, subtle scrollbars */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-ink-600 rounded-full;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-ink-700;
+    background-clip: content-box;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-2xl border border-white/[0.06] bg-ink-800/70 backdrop-blur-sm shadow-card;
+  }
+
+  .card-hover {
+    @apply transition-all duration-200 hover:border-white/[0.12] hover:bg-ink-800;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/60 disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+  .btn-primary {
+    @apply btn bg-brand-500 text-ink-950 hover:bg-brand-400 shadow-[0_6px_20px_-6px_rgba(0,195,137,0.6)];
+  }
+  .btn-ghost {
+    @apply btn border border-white/[0.08] bg-white/[0.02] text-slate-200 hover:bg-white/[0.06];
+  }
+
+  .stat-label {
+    @apply text-[11px] font-semibold uppercase tracking-wider text-slate-500;
+  }
+
+  .section-title {
+    @apply font-display text-lg font-semibold text-white;
+  }
+}
