@@ -29,13 +29,13 @@ export type RawScript = Record<string, string>; // keyed by section key
 
 const SECTION_META: Array<{ key: string; label: string; hint: string; seconds: string }> = [
   { key: 'hook', label: 'Hook', hint: 'Erste 1,5 Sek. – sofort stoppen', seconds: '0–3 Sek.' },
-  { key: 'lead', label: 'Lead', hint: 'Versprechen: warum dranbleiben lohnt', seconds: '3–6 Sek.' },
-  { key: 'body1', label: 'Body 1', hint: 'Erster Kernpunkt', seconds: '6–12 Sek.' },
-  { key: 'openLoop1', label: 'Open Loop 1', hint: 'Spannung auf den nächsten Punkt', seconds: '2–3 Sek.' },
-  { key: 'body2', label: 'Body 2', hint: 'Zweiter Kernpunkt', seconds: '6–12 Sek.' },
-  { key: 'openLoop2', label: 'Open Loop 2', hint: 'Spannung auf den Abschluss', seconds: '2–3 Sek.' },
-  { key: 'body3', label: 'Body 3', hint: 'Dritter Punkt / Zuspitzung', seconds: '6–12 Sek.' },
-  { key: 'cta', label: 'CTA', hint: 'Klare Aufforderung zu folgen', seconds: '3–5 Sek.' },
+  { key: 'lead', label: 'Lead', hint: 'Versprechen: warum dranbleiben lohnt', seconds: '4–8 Sek.' },
+  { key: 'body1', label: 'Body 1', hint: 'Erster Kernpunkt', seconds: '10–16 Sek.' },
+  { key: 'openLoop1', label: 'Open Loop 1', hint: 'Spannung auf den nächsten Punkt', seconds: '2–4 Sek.' },
+  { key: 'body2', label: 'Body 2', hint: 'Zweiter Kernpunkt', seconds: '10–16 Sek.' },
+  { key: 'openLoop2', label: 'Open Loop 2', hint: 'Spannung auf den Abschluss', seconds: '2–4 Sek.' },
+  { key: 'body3', label: 'Body 3', hint: 'Dritter Punkt / Zuspitzung', seconds: '10–16 Sek.' },
+  { key: 'cta', label: 'CTA', hint: 'Klare Aufforderung zu folgen', seconds: '4–7 Sek.' },
 ];
 
 // Baut aus 8 Roh-Texten (Vorlage ODER Claude) ein fertiges Script-Objekt.
@@ -44,7 +44,7 @@ export function assembleScript(idea: ContentIdea, raw: RawScript): Script {
     ideaId: idea.id,
     title: idea.title,
     format: idea.format,
-    totalSeconds: '≈ 35–45 Sek.',
+    totalSeconds: '≈ 45–60 Sek.',
     sections: SECTION_META.map((m) => ({
       key: m.key,
       label: m.label,
@@ -197,6 +197,24 @@ const BODY3: Record<ContentFormatId, string[]> = {
   ],
 };
 
+// Zweiter Satz pro Body – macht die Skripte länger (30–60 Sek. gesprochen)
+// und ist bewusst themen-unabhängig, damit er überall sauber passt.
+const BODY1_EXTRA = [
+  'Ich mach dir das an einer echten Zahl fest, damit du es sofort auf dein Leben übertragen kannst.',
+  'Das klingt banal, aber genau hier verschenken die meisten schon bares Geld – oft ohne es zu merken.',
+  'Und das gilt völlig egal, ob du gerade 20.000 oder 200.000 auf dem Konto hast.',
+];
+const BODY2_EXTRA = [
+  'Rechne kurz mit: Nimm deine eigene Zahl, und du siehst in Sekunden, wo du wirklich stehst.',
+  'Das ist der Punkt, an dem sich in ein paar Jahren entscheidet, wer vorne ist und wer nachläuft.',
+  'Ja, das ist unbequem – aber genau deshalb reden die wenigsten offen darüber.',
+];
+const BODY3_EXTRA = [
+  'Wenn du nur eine Sache aus diesem Video mitnimmst, dann diese – der Rest ergibt sich daraus.',
+  'Das ist der Unterschied zwischen „hätte ich damals mal" und „hab ich rechtzeitig gemacht".',
+  'Mit dieser einen Regel triffst du deine nächste Entscheidung mit Plan statt mit Bauchgefühl.',
+];
+
 const OPEN_LOOPS = [
   'Aber das ist noch nicht mal das Wichtigste – der nächste Punkt ist der eigentliche Gamechanger.',
   'Und jetzt kommt der Teil, den fast alle übersehen.',
@@ -223,11 +241,11 @@ export function generateScript(idea: ContentIdea): Script {
   const raw: RawScript = {
     hook: idea.hook,
     lead: fill(pick(LEADS[fmt])),
-    body1: fill(pick(BODY1[fmt])),
+    body1: `${fill(pick(BODY1[fmt]))} ${pick(BODY1_EXTRA)}`,
     openLoop1: pick(OPEN_LOOPS),
-    body2: fill(pick(BODY2[fmt])),
+    body2: `${fill(pick(BODY2[fmt]))} ${pick(BODY2_EXTRA)}`,
     openLoop2: pick(OPEN_LOOPS),
-    body3: fill(pick(BODY3[fmt])),
+    body3: `${fill(pick(BODY3[fmt]))} ${pick(BODY3_EXTRA)}`,
     cta: pick(CTAS),
   };
   return assembleScript(idea, raw);

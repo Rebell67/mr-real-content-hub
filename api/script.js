@@ -33,14 +33,15 @@ export default async function handler(req, res) {
   const system = `Du bist der Ghostwriter für "Mr Real", einen österreichischen Immobilien-Creator (@mr.r3al).
 Ton: kompetent und seriös, aber modern, direkt, unterhaltsam und meinungsstark – keine Maklerwerbung.
 Du schreibst Skripte für kurze Hochkant-Videos (TikTok / Instagram Reels), Ziel: maximale Reichweite und Follower-Wachstum.
+Länge: Das ganze Skript soll GESPROCHEN 30 bis 60 Sekunden dauern – also insgesamt ca. 110–160 Wörter. Lieber etwas ausführlicher als zu knapp.
 Halte dich EXAKT an diese acht Bausteine und gib NUR ein JSON-Objekt zurück (keine Erklärung, kein Markdown):
 {"hook","lead","body1","openLoop1","body2","openLoop2","body3","cta"}
-- hook: 1 Satz, stoppt in unter 1,5 Sekunden (steile These oder "Du"-Ansprache).
-- lead: 1 Satz, Versprechen warum man dranbleibt.
-- body1/body2/body3: je 1–2 Sätze, konkreter Kernpunkt, gern mit Zahl/Beispiel.
+- hook: 1 knackiger Satz, stoppt in unter 1,5 Sekunden (steile These oder "Du"-Ansprache).
+- lead: 1–2 Sätze, Versprechen warum man dranbleibt.
+- body1/body2/body3: je 2–4 Sätze, konkreter Kernpunkt mit einer echten Zahl, Rechnung oder einem greifbaren Beispiel. Das ist der Hauptteil – hier steckt die Substanz.
 - openLoop1/openLoop2: je 1 Satz Spannung auf den nächsten Punkt.
-- cta: 1 Satz, klare Aufforderung zu folgen.
-Sprache: Deutsch (Österreich), gesprochene Sprache.`;
+- cta: 1–2 Sätze, klare Aufforderung zu folgen.
+Sprache: Deutsch (Österreich), natürlich gesprochene Sprache, kurze Sätze.`;
 
   const user = `Erstelle ein Skript.
 Titel: ${title}
@@ -51,7 +52,7 @@ Winkel: ${angle ?? '—'}`;
   try {
     const message = await client.messages.create({
       model: 'claude-opus-4-8',
-      max_tokens: 1500,
+      max_tokens: 2000,
       system,
       messages: [{ role: 'user', content: user }],
     });

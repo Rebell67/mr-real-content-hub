@@ -65,7 +65,7 @@ export function ScriptModal({ idea, onClose }: { idea: ContentIdea; onClose: () 
             <div>
               <div className="mb-1 flex flex-wrap items-center gap-2">
                 <span className="chip" style={{ color: fmt?.color, backgroundColor: `${fmt?.color}18` }}>{fmt?.emoji} {fmt?.name}</span>
-                <span className="text-xs text-slate-500">≈ 35–45 Sek.</span>
+                <span className="text-xs text-slate-500">{script?.totalSeconds ?? '≈ 45–60 Sek.'}</span>
                 <span className={`chip font-semibold ${source === 'ai' ? 'bg-brand-500/15 text-brand-300' : 'bg-white/[0.06] text-slate-400'}`}>
                   {source === 'ai' ? <><Sparkles size={11} /> Von Claude geschrieben</> : 'Vorlage'}
                 </span>
