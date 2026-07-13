@@ -118,6 +118,23 @@ export interface PostingWindow {
   score: number; // 0..100 relative engagement
 }
 
+// A trending / outlier video spotted on Instagram or TikTok.
+// "Outlier" = views far above the creator's normal median → a breaking format.
+export interface Trend {
+  id: string;
+  platform: 'instagram' | 'tiktok';
+  hook: string; // the on-screen hook / title of the viral clip
+  format: string; // human label, e.g. "Rechnung", "Hot Take", "Reaction"
+  views: number;
+  outlierFactor: number; // views ÷ that account's median (e.g. 8.4)
+  creatorHandle: string; // example / anonymised handle
+  region: 'AT/DE' | 'International';
+  daysAgo: number;
+  whyItWorks: string;
+  adaptHook: string; // suggested Mr Real hook to ride this trend
+  suggestedFormat: ContentFormatId; // maps into the script generator
+}
+
 // The full snapshot returned by a DataService.
 export interface HubData {
   generatedAt: string;

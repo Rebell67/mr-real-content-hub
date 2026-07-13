@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Database, KeyRound, Upload, Download, CheckCircle2, AlertTriangle, FileJson, Plug } from 'lucide-react';
+import { Database, KeyRound, Upload, Download, CheckCircle2, AlertTriangle, FileJson, Plug, Flame } from 'lucide-react';
 import { useHub } from '../state/HubContext';
 import { Topbar } from '../components/layout/Topbar';
 import { Card } from '../components/ui/primitives';
@@ -115,6 +115,28 @@ export function Settings() {
             <button onClick={() => downloadFile('mrreal-vorlage.csv', SAMPLE_CSV, 'text/csv')} className="btn-ghost">
               <FileJson size={16} /> CSV-Vorlage laden
             </button>
+          </div>
+        </Card>
+
+        {/* Trend source */}
+        <Card className="p-5">
+          <div className="mb-1 flex items-center gap-2">
+            <Flame size={18} className="text-youtube" />
+            <h2 className="section-title">Trend- & Outlier-Quelle</h2>
+          </div>
+          <p className="text-sm text-slate-400">
+            Für echte, live gezogene Outlier-Videos von Instagram & TikTok wird eine <span className="font-semibold text-slate-200">kostenpflichtige</span> Trend-Quelle benötigt – es gibt keine kostenlose offizielle Schnittstelle dafür.
+          </p>
+          <div className="mt-3 grid gap-2 sm:grid-cols-3">
+            {['EnsembleData', 'Apify (Scraper)', 'RapidAPI'].map((p) => (
+              <div key={p} className="rounded-lg border border-white/[0.06] bg-ink-850/40 px-3 py-2 text-center text-xs font-medium text-slate-300">{p}</div>
+            ))}
+          </div>
+          <div className="mt-3 flex items-start gap-2 rounded-xl border border-tiktok/20 bg-tiktok/[0.06] p-3 text-xs text-slate-300">
+            <AlertTriangle size={15} className="mt-0.5 shrink-0 text-tiktok" />
+            <span>
+              Ohne Quelle zeigt die App kuratierte <span className="font-semibold">Demo-Trends</span> (Muster deiner Nische). Zum Aktivieren <code className="rounded bg-white/10 px-1">TRENDS_PROVIDER_URL</code> und <code className="rounded bg-white/10 px-1">TRENDS_API_KEY</code> in Vercel hinterlegen (Details in <code className="rounded bg-white/10 px-1">.env.example</code>).
+            </span>
           </div>
         </Card>
 
