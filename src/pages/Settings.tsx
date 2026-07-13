@@ -40,9 +40,10 @@ export function Settings() {
             <Database size={18} className="text-brand-300" />
             <h2 className="section-title">Aktive Datenquelle</h2>
           </div>
-          <div className="grid gap-3 sm:grid-cols-3">
-            <SourceCard active={sourceId === 'mock'} onClick={() => setSource('mock')} title="Demo-Daten" desc="Realistische Beispieldaten. Kein Setup nötig." icon={<FileJson size={18} />} />
-            <SourceCard active={sourceId === 'metricool'} onClick={() => setSource('metricool')} title="Metricool API" desc="Live-Daten aller Kanäle. Token erforderlich." icon={<Plug size={18} />} badge={metricoolConfig ? 'konfiguriert' : 'offen'} />
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <SourceCard active={sourceId === 'real'} onClick={() => setSource('real')} title="Echte Daten" desc="Mr-Real-Snapshot aus Metricool (13.04.–11.07.)." icon={<Database size={18} />} badge="live-abzug" />
+            <SourceCard active={sourceId === 'mock'} onClick={() => setSource('mock')} title="Demo-Daten" desc="Beispieldaten zum Ausprobieren." icon={<FileJson size={18} />} />
+            <SourceCard active={sourceId === 'metricool'} onClick={() => setSource('metricool')} title="Metricool API" desc="Automatischer Abruf. Token erforderlich." icon={<Plug size={18} />} badge={metricoolConfig ? 'konfiguriert' : 'offen'} />
             <SourceCard active={sourceId === 'import'} onClick={() => fileRef.current?.click()} title="CSV / JSON Import" desc="Eigene Exporte hochladen." icon={<Upload size={18} />} />
           </div>
           {lastSync && <p className="mt-3 text-xs text-slate-500">Zuletzt synchronisiert: {new Date(lastSync).toLocaleString('de-AT')}</p>}

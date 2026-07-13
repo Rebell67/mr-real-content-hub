@@ -23,6 +23,20 @@ fs.writeFileSync('mr-real-content-os.html', body);
 const test = `<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body>${body}</body></html>`;
 fs.writeFileSync('dist/artifact-test.html', test);
 
-console.log('body bytes:', body.length);
+// Full standalone file for running directly on a PC (double-click, no server).
+// Loads the brand fonts from Google when online; falls back to system fonts offline.
+const favicon = encodeURIComponent(fs.readFileSync('public/favicon.svg', 'utf8').trim());
+const full = [
+  '<!doctype html><html lang="de"><head>',
+  '<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">',
+  '<title>Mr Real · Content OS</title>',
+  `<link rel="icon" href="data:image/svg+xml,${favicon}">`,
+  '<link rel="preconnect" href="https://fonts.googleapis.com">',
+  '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap">',
+  `</head><body>${body}</body></html>`,
+].join('');
+fs.writeFileSync('MrReal-ContentOS.html', full);
+
+console.log('artifact body bytes:', body.length);
+console.log('standalone bytes:', full.length);
 console.log('@import removed:', !/@import/.test(css));
-console.log('leftover font-url garbage:', css.slice(0, 80));

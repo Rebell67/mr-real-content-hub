@@ -2,9 +2,11 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState, t
 import type { DailyMetric, HubData, Post } from '../types';
 import { MockDataService } from '../services/MockDataService';
 import { MetricoolService, type MetricoolConfig } from '../services/MetricoolService';
+import { RealDataService } from '../services/RealDataService';
 import type { DataService } from '../services/DataService';
+import { generateHubData } from '../data/mockData';
 
-type SourceId = 'mock' | 'metricool' | 'import';
+type SourceId = 'real' | 'mock' | 'metricool' | 'import';
 
 interface HubState {
   data: HubData | null;
@@ -24,10 +26,12 @@ const HubContext = createContext<HubState | null>(null);
 
 const LS_SOURCE = 'mrreal.source';
 const LS_METRICOOL = 'mrreal.metricool';
+const LS_IMPORT = 'mrreal.importedMetrics';
 
 function buildService(sourceId: SourceId, metricoolConfig: MetricoolConfig | null): DataService {
   if (sourceId === 'metricool') return new MetricoolService(metricoolConfig);
-  return new MockDataService();
+  if (sourceId === 'mock') return new MockDataService();
+  return new RealDataService();
 }
 
 export function HubProvider({ children }: { children: ReactNode }) {
@@ -36,7 +40,7 @@ export function HubProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState<string | null>(null);
   const [lastSync, setLastSync] = useState<string | null>(null);
   const [sourceId, setSourceId] = useState<SourceId>(
-    () => (localStorage.getItem(LS_SOURCE) as SourceId) || 'mock',
+    () => (localStorage.getItem(LS_SOURCE) as SourceId) || 'real',
   );
   const [metricoolConfig, setMetricoolConfig] = useState<MetricoolConfig | null>(() => {
     const raw = localStorage.getItem(LS_METRICOOL);
@@ -68,12 +72,31 @@ export function HubProvider({ children }: { children: ReactNode }) {
   );
 
   useEffect(() => {
-    // "import" is a client-side overlay – only auto-load real sources.
-    if (sourceId !== 'import') load(sourceId);
+    // Imported data is persisted in localStorage so it survives closing the
+    // app (important for the local single-file usage). Rehydrate it here;
+    // otherwise fall back to the regular sources.
+    if (sourceId === 'import') {
+      const stored = localStorage.getItem(LS_IMPORT);
+      if (stored) {
+        try {
+          const metrics = JSON.parse(stored) as DailyMetric[];
+          const scaffold = generateHubData();
+          setData({ ...scaffold, dailyMetrics: metrics, generatedAt: new Date().toISOString() });
+          setLastSync(new Date().toISOString());
+          setLoading(false);
+          return;
+        } catch {
+          /* corrupt store – fall back to mock */
+        }
+      }
+      load('real');
+      return;
+    }
+    load(sourceId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const reload = useCallback(() => load(sourceId === 'import' ? 'mock' : sourceId), [load, sourceId]);
+  const reload = useCallback(() => load(sourceId === 'import' ? 'real' : sourceId), [load, sourceId]);
 
   const setSource = useCallback(
     (id: SourceId) => {
@@ -91,11 +114,17 @@ export function HubProvider({ children }: { children: ReactNode }) {
 
   const applyImportedMetrics = useCallback((metrics: DailyMetric[]) => {
     setData((prev) => {
-      const base = prev ?? { generatedAt: new Date().toISOString(), dailyMetrics: [], posts: [], goals: [], postingWindows: [] };
+      // Keep posts/goals/posting windows – only the account metrics change.
+      const base = prev ?? generateHubData();
       return { ...base, generatedAt: new Date().toISOString(), dailyMetrics: metrics };
     });
     setSourceId('import');
     localStorage.setItem(LS_SOURCE, 'import');
+    try {
+      localStorage.setItem(LS_IMPORT, JSON.stringify(metrics));
+    } catch {
+      /* storage quota exceeded – data still lives for this session */
+    }
     setLastSync(new Date().toISOString());
     setError(null);
   }, []);
