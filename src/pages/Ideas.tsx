@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Sparkles, Wand2 } from 'lucide-react';
+import { Sparkles, Wand2, FileText } from 'lucide-react';
 import { Topbar } from '../components/layout/Topbar';
 import { Card, PlatformBadge } from '../components/ui/primitives';
 import { CONTENT_FORMATS, FORMAT_MAP } from '../data/formats';
 import { CONTENT_IDEAS } from '../data/ideas';
+import { ScriptModal } from '../components/ScriptModal';
 import type { ContentFormatId, ContentIdea, Platform } from '../types';
 
 const POTENTIAL_STYLE: Record<string, { label: string; color: string }> = {
@@ -28,6 +29,7 @@ const HOOK_TEMPLATES: Record<ContentFormatId, string[]> = {
 export function Ideas() {
   const [filter, setFilter] = useState<ContentFormatId | 'all'>('all');
   const [generated, setGenerated] = useState<ContentIdea[]>([]);
+  const [scriptIdea, setScriptIdea] = useState<ContentIdea | null>(null);
 
   const ideas = filter === 'all' ? CONTENT_IDEAS : CONTENT_IDEAS.filter((i) => i.format === filter);
 
@@ -101,7 +103,7 @@ export function Ideas() {
             </div>
             {generated.length > 0 && (
               <div className="mt-4 grid gap-4 md:grid-cols-3">
-                {generated.map((idea) => <IdeaCard key={idea.id} idea={idea} generated />)}
+                {generated.map((idea) => <IdeaCard key={idea.id} idea={idea} generated onScript={setScriptIdea} />)}
               </div>
             )}
           </Card>
@@ -124,15 +126,17 @@ export function Ideas() {
             </div>
           </div>
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {ideas.map((idea) => <IdeaCard key={idea.id} idea={idea} />)}
+            {ideas.map((idea) => <IdeaCard key={idea.id} idea={idea} onScript={setScriptIdea} />)}
           </div>
         </section>
       </div>
+
+      {scriptIdea && <ScriptModal idea={scriptIdea} onClose={() => setScriptIdea(null)} />}
     </>
   );
 }
 
-function IdeaCard({ idea, generated }: { idea: ContentIdea; generated?: boolean }) {
+function IdeaCard({ idea, generated, onScript }: { idea: ContentIdea; generated?: boolean; onScript: (idea: ContentIdea) => void }) {
   const fmt = FORMAT_MAP[idea.format];
   const pot = POTENTIAL_STYLE[idea.potential];
   return (
@@ -150,6 +154,9 @@ function IdeaCard({ idea, generated }: { idea: ContentIdea; generated?: boolean 
         </div>
         <span className="text-[10px] text-slate-500">{EFFORT_LABEL[idea.effort]}</span>
       </div>
+      <button onClick={() => onScript(idea)} className="btn-primary mt-3 w-full">
+        <FileText size={15} /> Skript erstellen
+      </button>
     </Card>
   );
 }
