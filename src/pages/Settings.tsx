@@ -1,10 +1,11 @@
 import { useRef, useState } from 'react';
-import { Database, KeyRound, Upload, Download, CheckCircle2, AlertTriangle, FileJson, Plug, Flame } from 'lucide-react';
+import { Database, KeyRound, Upload, Download, CheckCircle2, AlertTriangle, FileJson, Plug, Flame, Mic, RotateCcw } from 'lucide-react';
 import { useHub } from '../state/HubContext';
 import { Topbar } from '../components/layout/Topbar';
 import { Card } from '../components/ui/primitives';
 import { PLATFORM_META, PLATFORMS } from '../types';
 import { importCSV, importJSON, exportJSON, exportCSV, downloadFile, SAMPLE_CSV, type ImportResult } from '../lib/dataIO';
+import { DEFAULT_STYLE, loadStyle, saveStyle, type Dialect, type StyleProfile } from '../lib/styleProfile';
 
 export function Settings() {
   const { sourceId, setSource, metricoolConfig, saveMetricoolConfig, applyImportedMetrics, data, lastSync } = useHub();
@@ -48,6 +49,9 @@ export function Settings() {
           </div>
           {lastSync && <p className="mt-3 text-xs text-slate-500">Zuletzt synchronisiert: {new Date(lastSync).toLocaleString('de-AT')}</p>}
         </Card>
+
+        {/* Style / voice */}
+        <StyleCard />
 
         {/* Metricool config */}
         <Card className="p-5">
@@ -168,6 +172,122 @@ export function Settings() {
         </Card>
       </div>
     </>
+  );
+}
+
+const DIALECTS: { id: Dialect; label: string }[] = [
+  { id: 'hochdeutsch', label: 'Hochdeutsch' },
+  { id: 'leicht-oesterreichisch', label: 'Leicht österreichisch' },
+  { id: 'oesterreichisch', label: 'Österreichisch' },
+];
+
+function StyleCard() {
+  const [style, setStyle] = useState<StyleProfile>(() => loadStyle());
+  const [saved, setSaved] = useState(false);
+
+  const set = <K extends keyof StyleProfile>(key: K, value: StyleProfile[K]) => {
+    setStyle((s) => ({ ...s, [key]: value }));
+    setSaved(false);
+  };
+  const setLines = (key: 'catchphrases' | 'avoid' | 'examples', text: string) =>
+    set(key, text.split('\n').map((l) => l.trim()).filter(Boolean));
+
+  const save = () => {
+    saveStyle(style);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2500);
+  };
+  const reset = () => {
+    setStyle(DEFAULT_STYLE);
+    saveStyle(DEFAULT_STYLE);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2500);
+  };
+
+  return (
+    <Card className="p-5">
+      <div className="mb-1 flex items-center gap-2">
+        <Mic size={18} className="text-brand-300" />
+        <h2 className="section-title">Mein Stil (Voice)</h2>
+      </div>
+      <p className="mb-4 text-sm text-slate-400">
+        Danach klingen deine Skripte. Der KI-Generator bekommt dieses Profil als Vorlage – je konkreter, desto mehr klingt es nach dir. Tipp: Bei „Beispiel-Zeilen" echte Sätze aus deinen besten Videos einfügen.
+      </p>
+
+      <div className="space-y-4">
+        <label className="block">
+          <span className="stat-label">Ton & Haltung</span>
+          <textarea
+            value={style.tone}
+            onChange={(e) => set('tone', e.target.value)}
+            rows={3}
+            className="mt-1 w-full resize-y rounded-xl border border-white/[0.08] bg-ink-850/60 px-3 py-2.5 text-sm text-white focus:border-brand-500/40 focus:outline-none"
+          />
+        </label>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <label className="block">
+            <span className="stat-label">Sprache / Dialekt</span>
+            <div className="mt-1 flex gap-1.5 rounded-xl border border-white/[0.08] bg-ink-850/60 p-1">
+              {DIALECTS.map((d) => (
+                <button
+                  key={d.id}
+                  onClick={() => set('dialect', d.id)}
+                  className={`flex-1 rounded-lg px-2 py-1.5 text-xs font-semibold transition-all ${style.dialect === d.id ? 'bg-brand-500/20 text-brand-200' : 'text-slate-400 hover:text-slate-200'}`}
+                >
+                  {d.label}
+                </button>
+              ))}
+            </div>
+          </label>
+          <label className="block">
+            <span className="stat-label">Signatur / Abschluss (CTA-Ton)</span>
+            <input
+              value={style.signature}
+              onChange={(e) => set('signature', e.target.value)}
+              className="mt-1 w-full rounded-xl border border-white/[0.08] bg-ink-850/60 px-3 py-2.5 text-sm text-white focus:border-brand-500/40 focus:outline-none"
+            />
+          </label>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <label className="block">
+            <span className="stat-label">Typische Wendungen (eine pro Zeile)</span>
+            <textarea
+              value={style.catchphrases.join('\n')}
+              onChange={(e) => setLines('catchphrases', e.target.value)}
+              rows={3}
+              className="mt-1 w-full resize-y rounded-xl border border-white/[0.08] bg-ink-850/60 px-3 py-2.5 text-sm text-white focus:border-brand-500/40 focus:outline-none"
+            />
+          </label>
+          <label className="block">
+            <span className="stat-label">Vermeiden (eine pro Zeile)</span>
+            <textarea
+              value={style.avoid.join('\n')}
+              onChange={(e) => setLines('avoid', e.target.value)}
+              rows={3}
+              className="mt-1 w-full resize-y rounded-xl border border-white/[0.08] bg-ink-850/60 px-3 py-2.5 text-sm text-white focus:border-brand-500/40 focus:outline-none"
+            />
+          </label>
+        </div>
+
+        <label className="block">
+          <span className="stat-label">Beispiel-Zeilen in deiner Stimme (eine pro Zeile)</span>
+          <textarea
+            value={style.examples.join('\n')}
+            onChange={(e) => setLines('examples', e.target.value)}
+            rows={4}
+            className="mt-1 w-full resize-y rounded-xl border border-white/[0.08] bg-ink-850/60 px-3 py-2.5 text-sm text-white focus:border-brand-500/40 focus:outline-none"
+          />
+        </label>
+      </div>
+
+      <div className="mt-4 flex flex-wrap items-center gap-3">
+        <button onClick={save} className="btn-primary">Stil speichern</button>
+        <button onClick={reset} className="btn-ghost"><RotateCcw size={15} /> Zurücksetzen</button>
+        {saved && <span className="flex items-center gap-1.5 text-sm text-brand-300"><CheckCircle2 size={15} /> Gespeichert</span>}
+      </div>
+    </Card>
   );
 }
 

@@ -1,5 +1,6 @@
 import type { ContentFormatId, ContentIdea } from '../types';
 import { FORMAT_MAP } from '../data/formats';
+import type { StyleProfile } from './styleProfile';
 
 // ---------------------------------------------------------------------------
 // Skript-Struktur für Mr Real.
@@ -233,7 +234,10 @@ const CTAS = [
 ];
 
 // Offline-Vorlage: erzeugt sofort ein vollständiges Skript (keine API nötig).
-export function generateScript(idea: ContentIdea): Script {
+// Wenn ein Stil-Profil vorliegt, wird zumindest der CTA auf Mr Reals Signatur
+// gesetzt (die Vorlage kann den Ton nur begrenzt treffen – der Claude-Pfad
+// setzt den Stil vollständig um).
+export function generateScript(idea: ContentIdea, style?: StyleProfile): Script {
   const topic = deriveTopic(idea);
   const fmt = idea.format;
   const fill = (s: string) => s.replace(/\{topic\}/g, topic);
@@ -246,7 +250,7 @@ export function generateScript(idea: ContentIdea): Script {
     body2: `${fill(pick(BODY2[fmt]))} ${pick(BODY2_EXTRA)}`,
     openLoop2: pick(OPEN_LOOPS),
     body3: `${fill(pick(BODY3[fmt]))} ${pick(BODY3_EXTRA)}`,
-    cta: pick(CTAS),
+    cta: style?.signature ? `${style.signature} Folge jetzt, damit du Teil 2 nicht verpasst.` : pick(CTAS),
   };
   return assembleScript(idea, raw);
 }

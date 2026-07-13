@@ -22,7 +22,7 @@ export default async function handler(req, res) {
     return;
   }
 
-  const { title, hook, format, angle } = req.body ?? {};
+  const { title, hook, format, angle, styleBlock } = req.body ?? {};
   if (!title) {
     res.status(400).json({ error: 'title fehlt.' });
     return;
@@ -30,8 +30,10 @@ export default async function handler(req, res) {
 
   const client = new Anthropic();
 
+  const styleSection = styleBlock ? `\n\n${styleBlock}\n` : '';
+
   const system = `Du bist der Ghostwriter für "Mr Real", einen österreichischen Immobilien-Creator (@mr.r3al).
-Ton: kompetent und seriös, aber modern, direkt, unterhaltsam und meinungsstark – keine Maklerwerbung.
+Ton: kompetent und seriös, aber modern, direkt, unterhaltsam und meinungsstark – keine Maklerwerbung.${styleSection}
 Du schreibst Skripte für kurze Hochkant-Videos (TikTok / Instagram Reels), Ziel: maximale Reichweite und Follower-Wachstum.
 Länge: Das ganze Skript soll GESPROCHEN 30 bis 60 Sekunden dauern – also insgesamt ca. 110–160 Wörter. Lieber etwas ausführlicher als zu knapp.
 Halte dich EXAKT an diese acht Bausteine und gib NUR ein JSON-Objekt zurück (keine Erklärung, kein Markdown):

@@ -1,5 +1,6 @@
 import type { ContentIdea } from '../types';
 import { assembleScript, generateScript, type Script } from '../lib/scriptGenerator';
+import { loadStyle, styleToPromptBlock } from '../lib/styleProfile';
 
 export type ScriptSource = 'ai' | 'template';
 
@@ -9,10 +10,13 @@ export interface ScriptResult {
   note?: string;
 }
 
-// Fordert ein Skript an: zuerst der echte Claude-Pfad (/api/script), sonst
-// die Offline-Vorlage. So funktioniert der Knopf überall – in der gehosteten
-// App mit KI, in der Einzeldatei mit der Vorlage.
+// Fordert ein Skript an: zuerst der echte Claude-Pfad (/api/script) mit Mr
+// Reals Stil-Profil, sonst die Offline-Vorlage. So funktioniert der Knopf
+// überall – in der gehosteten App mit KI in seinem Stil, in der Einzeldatei
+// mit der Vorlage.
 export async function requestScript(idea: ContentIdea): Promise<ScriptResult> {
+  const style = loadStyle();
+
   try {
     const res = await fetch('/api/script', {
       method: 'POST',
@@ -22,6 +26,7 @@ export async function requestScript(idea: ContentIdea): Promise<ScriptResult> {
         hook: idea.hook,
         format: idea.format,
         angle: idea.angle,
+        styleBlock: styleToPromptBlock(style),
       }),
     });
 
@@ -37,8 +42,8 @@ export async function requestScript(idea: ContentIdea): Promise<ScriptResult> {
   }
 
   return {
-    script: generateScript(idea),
+    script: generateScript(idea, style),
     source: 'template',
-    note: 'Vorlage (kein Claude-Zugang aktiv – in gehosteter Version schreibt Claude live)',
+    note: 'Vorlage (kein Claude-Zugang aktiv – in gehosteter Version schreibt Claude in deinem Stil)',
   };
 }
