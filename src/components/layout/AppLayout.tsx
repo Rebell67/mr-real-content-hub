@@ -1,13 +1,13 @@
 import { Outlet, NavLink } from 'react-router-dom';
-import { LayoutDashboard, LineChart, CalendarDays, Lightbulb, Rocket, Settings } from 'lucide-react';
+import { LayoutDashboard, LineChart, CalendarDays, Lightbulb, Map, Settings } from 'lucide-react';
 import { Sidebar } from './Sidebar';
 
 const MOBILE_NAV = [
   { to: '/', label: 'Cockpit', icon: LayoutDashboard },
   { to: '/analytics', label: 'Analytics', icon: LineChart },
-  { to: '/planner', label: 'Plan', icon: CalendarDays },
+  { to: '/plan', label: 'Plan', icon: Map },
+  { to: '/planner', label: 'Kalender', icon: CalendarDays },
   { to: '/ideas', label: 'Ideen', icon: Lightbulb },
-  { to: '/strategy', label: 'Strategie', icon: Rocket },
   { to: '/settings', label: 'Setup', icon: Settings },
 ];
 

@@ -5,6 +5,7 @@ import {
   CalendarDays,
   Lightbulb,
   Rocket,
+  Map,
   Library,
   Settings,
   type LucideIcon,
@@ -23,6 +24,7 @@ const NAV: NavItem[] = [
   { to: '/planner', label: 'Redaktionsplan', icon: CalendarDays, hint: 'Pipeline & Kalender' },
   { to: '/ideas', label: 'Ideen & Formate', icon: Lightbulb, hint: 'Content-Engine' },
   { to: '/strategy', label: 'Strategie', icon: Rocket, hint: 'Empfehlungen' },
+  { to: '/plan', label: 'Wachstums-Plan', icon: Map, hint: 'Fahrplan zu 20k' },
   { to: '/library', label: 'Bibliothek', icon: Library, hint: 'Content-Archiv' },
   { to: '/settings', label: 'Daten & Setup', icon: Settings, hint: 'Import & API' },
 ];
