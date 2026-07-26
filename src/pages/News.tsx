@@ -251,7 +251,7 @@ function NewsCard({ item, total, onScript }: { item: NewsItem; total: number; on
       <div className="mt-3 flex items-center gap-2">
         <button onClick={onScript} className="btn-primary flex-1"><FileText size={15} /> Skript daraus</button>
         {item.url && (
-          <a href={item.url} target="_blank" rel="noreferrer" className="btn-ghost px-3" title="Quelle öffnen"><ExternalLink size={15} /></a>
+          <a href={item.url} target="_blank" rel="noreferrer" className="btn-ghost" title="Original-Artikel öffnen"><ExternalLink size={15} /> Quelle</a>
         )}
       </div>
     </Card>

@@ -1,5 +1,5 @@
 import type { NewsItem } from '../types';
-import { SEED_NEWS } from '../data/news';
+import { SEED_NEWS, NEWS_SNAPSHOT_LABEL } from '../data/news';
 
 export type NewsSource = 'live' | 'demo';
 
@@ -27,6 +27,6 @@ export async function requestNews(): Promise<NewsResult> {
   return {
     items: SEED_NEWS,
     source: 'demo',
-    note: 'Demo-News (Muster). Für echte, tagesaktuelle Meldungen die gehostete Version nutzen – der News-Abruf ist kostenlos (RSS), kein bezahlter Zugang nötig.',
+    note: `Echter News-Snapshot vom ${NEWS_SNAPSHOT_LABEL} aus verlässlichen Quellen (u. a. DerStandard, Arbeiterkammer, Statistik Austria, Finanztip). Auf „Quelle" tippen führt direkt zum Artikel. Automatische tägliche Updates gibt es in der gehosteten Version.`,
   };
 }
