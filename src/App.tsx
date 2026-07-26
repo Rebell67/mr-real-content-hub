@@ -6,6 +6,7 @@ import { Analytics } from './pages/Analytics';
 import { Planner } from './pages/Planner';
 import { Ideas } from './pages/Ideas';
 import { Trends } from './pages/Trends';
+import { News } from './pages/News';
 import { Strategy } from './pages/Strategy';
 import { GrowthPlan } from './pages/GrowthPlan';
 import { Library } from './pages/Library';
@@ -22,6 +23,7 @@ export default function App() {
             <Route path="planner" element={<Planner />} />
             <Route path="ideas" element={<Ideas />} />
             <Route path="trends" element={<Trends />} />
+            <Route path="news" element={<News />} />
             <Route path="strategy" element={<Strategy />} />
             <Route path="plan" element={<GrowthPlan />} />
             <Route path="library" element={<Library />} />

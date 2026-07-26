@@ -135,6 +135,33 @@ export interface Trend {
   suggestedFormat: ContentFormatId; // maps into the script generator
 }
 
+// ---- News / daily relevance ----------------------------------------------
+export type NewsCategory = 'immobilien' | 'finanzen' | 'wirtschaft' | 'zinsen' | 'politik';
+
+// The five transparent sub-scores that make up the relevance factor (0-100 each).
+export interface RelevanceSubs {
+  emotion: number; // polarising / surprising / emotional pull
+  betroffenheit: number; // hits the viewer's own money / home
+  naehe: number; // closeness to real-estate / finance core
+  hook: number; // how easily a strong hook can be built
+  aktualitaet: number; // freshness / time-sensitivity
+}
+
+export interface NewsItem {
+  id: string;
+  headline: string;
+  summary: string;
+  source: string;
+  url?: string;
+  publishedAgoHours: number;
+  category: NewsCategory;
+  region: 'AT' | 'DE' | 'International';
+  subs: RelevanceSubs;
+  hook: string; // ready Mr Real hook
+  angle: string; // why it works / the take
+  suggestedFormat: ContentFormatId;
+}
+
 // The full snapshot returned by a DataService.
 export interface HubData {
   generatedAt: string;
