@@ -29,6 +29,8 @@ const favicon = encodeURIComponent(fs.readFileSync('public/favicon.svg', 'utf8')
 const full = [
   '<!doctype html><html lang="de"><head>',
   '<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">',
+  // Keep this page out of search engines (Google, Bing, …).
+  '<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">',
   '<title>Mr Real · Content OS</title>',
   `<link rel="icon" href="data:image/svg+xml,${favicon}">`,
   '<link rel="preconnect" href="https://fonts.googleapis.com">',
