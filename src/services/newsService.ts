@@ -27,6 +27,6 @@ export async function requestNews(): Promise<NewsResult> {
   return {
     items: SEED_NEWS,
     source: 'demo',
-    note: `Echter News-Snapshot vom ${NEWS_SNAPSHOT_LABEL} aus verlässlichen Quellen (u. a. DerStandard, Arbeiterkammer, Statistik Austria, Finanztip). Auf „Quelle" tippen führt direkt zum Artikel. Automatische tägliche Updates gibt es in der gehosteten Version.`,
+    note: `Echter News-Snapshot vom ${NEWS_SNAPSHOT_LABEL} aus verlässlichen Quellen (u. a. ORF, news.at, Bundeskanzleramt, ImmoFokus). Auf „Quelle" tippen führt direkt zum Artikel. Automatische tägliche Updates gibt es in der gehosteten Version.`,
   };
 }
