@@ -42,16 +42,26 @@ export default async function handler(req, res) {
     items.sort((a, b) => relevance(b.subs) - relevance(a.subs));
     items = items.slice(0, 16);
 
-    if (process.env.ANTHROPIC_API_KEY && items.length) {
+    const hasKey = !!process.env.ANTHROPIC_API_KEY;
+    let enriched = false;
+    let enrichError = null;
+    if (hasKey && items.length) {
       try {
         items = await enrichWithClaude(items);
-      } catch {
-        /* KI-Bewertung fehlgeschlagen – heuristische Werte behalten */
+        enriched = true;
+      } catch (e) {
+        enrichError = e?.message ?? String(e);
       }
     }
 
-    res.setHeader('Cache-Control', 's-maxage=1800, stale-while-revalidate=7200');
-    res.status(200).json({ source: 'live', items });
+    const body = { source: 'live', mode: enriched ? 'ai' : 'heuristic', items };
+    // Diagnose mit ?debug=1 (verrät KEINEN Schlüssel, nur Status + Fehlertext).
+    if (req.query && (req.query.debug === '1' || req.query.debug === 'true')) {
+      body._debug = { hasKey, enriched, enrichError };
+    }
+
+    res.setHeader('Cache-Control', enriched ? 's-maxage=1800, stale-while-revalidate=7200' : 'no-store');
+    res.status(200).json(body);
   } catch (e) {
     res.status(502).json({ error: `News-Abruf fehlgeschlagen: ${e.message}` });
   }
