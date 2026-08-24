@@ -3,21 +3,28 @@
 // bezahlter Zugang nötig.
 //
 // Ablauf:
-//   1. RSS-Feeds abrufen (Standard: Google-News-Suchen für die Nische).
-//   2. Meldungen heuristisch bewerten (Relevanz-Teilwerte, Kategorie, Hook).
+//   1. RSS-Feeds abrufen (Standard: gezielte Google-News-Suchen für die Nische).
+//   2. Themenfremdes (Kriminal, Sport, …) herausfiltern, Relevanz heuristisch bewerten.
 //   3. Optional: wenn ANTHROPIC_API_KEY gesetzt ist, bewertet & betextet Claude
 //      die Top-Meldungen deutlich besser (Relevanz + Mr-Real-Hook in seinem Ton).
 //
-// Optionale Environment-Variablen (Vercel → Settings → Environment Variables):
+// Optionale Environment-Variablen:
 //   NEWS_FEEDS         – eigene RSS-URLs, mit Komma getrennt (überschreibt Standard)
 //   ANTHROPIC_API_KEY  – aktiviert die KI-Bewertung/Betextung
-//
-// Ohne alles liefert dieser Endpoint trotzdem echte News (heuristisch bewertet).
 
 const DEFAULT_FEEDS = [
-  'https://news.google.com/rss/search?q=Immobilien%20OR%20Wohnung%20OR%20Baufinanzierung%20when:2d&hl=de-AT&gl=AT&ceid=AT:de',
-  'https://news.google.com/rss/search?q=Zinsen%20OR%20EZB%20OR%20Leitzins%20OR%20Kredit%20when:2d&hl=de-AT&gl=AT&ceid=AT:de',
-  'https://news.google.com/rss/search?q=Inflation%20OR%20Wirtschaft%20%C3%96sterreich%20OR%20Miete%20when:2d&hl=de-AT&gl=AT&ceid=AT:de',
+  'https://news.google.com/rss/search?q=Immobilienpreise%20OR%20Immobilienmarkt%20OR%20Wohnimmobilien%20OR%20Eigenheim%20%C3%96sterreich%20when:3d&hl=de-AT&gl=AT&ceid=AT:de',
+  'https://news.google.com/rss/search?q=Baufinanzierung%20OR%20Wohnkredit%20OR%20Hypothekarzinsen%20OR%20EZB%20Leitzins%20when:3d&hl=de-AT&gl=AT&ceid=AT:de',
+  'https://news.google.com/rss/search?q=Mietpreisbremse%20OR%20Mietpreise%20OR%20Grunderwerbsteuer%20OR%20Wohnkosten%20%C3%96sterreich%20when:4d&hl=de-AT&gl=AT&ceid=AT:de',
+  'https://news.google.com/rss/search?q=Inflation%20%C3%96sterreich%20OR%20Immobilien%20Steuer%20OR%20Zinsen%20Sparen%20when:4d&hl=de-AT&gl=AT&ceid=AT:de',
+];
+
+// Worte, die eine Meldung als themenfremd markieren (Kriminal/Tragödie/Sport …).
+const BLOCK = [
+  'leiche', 'mord', 'getötet', 'toter', 'tote ', 'unfall', 'verletzt', 'festgenommen',
+  'polizei', 'messer', 'vermisst', 'missbrauch', 'drogen', 'prozess', 'verurteilt',
+  'überfall', 'einbruch', 'brand ', 'feuerwehr', 'verletzte', 'gestorben', 'fußball',
+  'liga', 'champions', 'wm ', 'em ', 'olympia',
 ];
 
 export default async function handler(req, res) {
@@ -27,24 +34,35 @@ export default async function handler(req, res) {
 
   try {
     const raw = (await Promise.all(feeds.map(fetchFeed))).flat();
-    const deduped = dedupe(raw).slice(0, 24);
-    if (deduped.length === 0) throw new Error('Keine Meldungen abrufbar.');
+    const cleaned = dedupe(raw).filter((it) => !isOffTopic(it.headline));
+    if (cleaned.length === 0) throw new Error('Keine passenden Meldungen abrufbar.');
 
-    let items = deduped.map(heuristicScore);
+    let items = cleaned.map(heuristicScore).filter((n) => n.subs.naehe >= 34);
+    // Nach Relevanz sortieren (grobe Gewichtung wie im Frontend).
+    items.sort((a, b) => relevance(b.subs) - relevance(a.subs));
+    items = items.slice(0, 16);
 
-    if (process.env.ANTHROPIC_API_KEY) {
+    if (process.env.ANTHROPIC_API_KEY && items.length) {
       try {
-        items = await enrichWithClaude(deduped);
+        items = await enrichWithClaude(items);
       } catch {
         /* KI-Bewertung fehlgeschlagen – heuristische Werte behalten */
       }
     }
 
-    res.setHeader('Cache-Control', 's-maxage=1800, stale-while-revalidate=3600');
-    res.status(200).json({ source: 'live', items: items.slice(0, 16) });
+    res.setHeader('Cache-Control', 's-maxage=1800, stale-while-revalidate=7200');
+    res.status(200).json({ source: 'live', items });
   } catch (e) {
     res.status(502).json({ error: `News-Abruf fehlgeschlagen: ${e.message}` });
   }
+}
+
+const relevance = (s) =>
+  s.emotion * 0.28 + s.betroffenheit * 0.24 + s.naehe * 0.22 + s.hook * 0.16 + s.aktualitaet * 0.1;
+
+function isOffTopic(headline) {
+  const t = ` ${headline.toLowerCase()} `;
+  return BLOCK.some((w) => t.includes(w));
 }
 
 // ---- RSS abrufen & parsen (ohne Zusatz-Library) ---------------------------
@@ -55,21 +73,23 @@ async function fetchFeed(url) {
   const items = [];
   const blocks = xml.match(/<item[\s\S]*?<\/item>/g) ?? [];
   for (const b of blocks.slice(0, 15)) {
-    const title = clean(pick(b, 'title'));
-    if (!title) continue;
+    const rawTitle = clean(pick(b, 'title'));
+    if (!rawTitle) continue;
     const link = clean(pick(b, 'link'));
-    const desc = stripHtml(clean(pick(b, 'description')));
     const pub = pick(b, 'pubDate');
     const ageHours = pub ? Math.max(0, (Date.now() - new Date(pub).getTime()) / 3.6e6) : 12;
     // Google-News-Titel: "Headline - Quelle"
-    const m = title.match(/^(.*)\s[–-]\s([^–-]+)$/);
-    items.push({
-      headline: (m ? m[1] : title).trim(),
-      source: (m ? m[2] : 'News').trim(),
-      summary: desc.slice(0, 220),
-      url: link,
-      publishedAgoHours: Math.round(ageHours),
-    });
+    const m = rawTitle.match(/^(.*)\s[–-]\s([^–-]+)$/);
+    const headline = (m ? m[1] : rawTitle).trim();
+    const source = (m ? m[2] : 'News').trim();
+    // Beschreibung ist bei Google News meist nur Headline+Quelle → nur behalten,
+    // wenn sie echten Mehrwert hat.
+    const desc = stripHtml(clean(pick(b, 'description')));
+    const summary =
+      desc && !desc.toLowerCase().startsWith(headline.slice(0, 18).toLowerCase())
+        ? desc.slice(0, 220)
+        : '';
+    items.push({ headline, source, summary, url: link, publishedAgoHours: Math.round(ageHours) });
   }
   return items;
 }
@@ -78,15 +98,19 @@ const pick = (block, tag) => {
   const m = block.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i'));
   return m ? m[1] : '';
 };
-const clean = (s) =>
-  s
+function clean(s) {
+  return s
     .replace(/<!\[CDATA\[|\]\]>/g, '')
+    .replace(/&nbsp;/g, ' ')
     .replace(/&amp;/g, '&')
-    .replace(/&#39;|&apos;/g, "'")
+    .replace(/&#0?39;|&apos;/g, "'")
     .replace(/&quot;/g, '"')
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')
+    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
+    .replace(/\s+/g, ' ')
     .trim();
+}
 const stripHtml = (s) => s.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 
 function dedupe(items) {
@@ -101,15 +125,15 @@ function dedupe(items) {
 
 // ---- Heuristische Bewertung (Fallback ohne KI) ----------------------------
 const KW = {
-  naehe: ['immobili', 'wohnung', 'miete', 'kredit', 'zins', 'baufinanz', 'hypothek', 'eigentum', 'grundst', 'haus', 'bauen', 'ezb', 'darlehen'],
-  betroffenheit: ['preis', 'steuer', 'inflation', 'sparen', 'teuer', 'kosten', 'rate', 'geld', 'gehalt', 'lohn'],
-  emotion: ['verbot', 'deckel', 'krise', 'crash', 'rekord', 'streit', 'warn', 'schock', 'aus', 'ende', 'skandal', 'droht', 'kollaps', 'boom'],
+  naehe: ['immobili', 'wohnimmobili', 'wohnungsmarkt', 'eigenheim', 'eigentumswohnung', 'miete', 'mietpreis', 'kredit', 'zins', 'baufinanz', 'hypothek', 'eigentum', 'grundst', 'bauen', 'ezb', 'darlehen', 'wohnkosten', 'wohnbau'],
+  betroffenheit: ['preis', 'steuer', 'inflation', 'sparen', 'teuer', 'kosten', 'rate', 'leistbar', 'gehalt', 'lohn'],
+  emotion: ['verbot', 'deckel', 'krise', 'crash', 'rekord', 'streit', 'warn', 'schock', 'droht', 'kollaps', 'boom', 'unerschwing', 'unleistbar', 'explodier'],
 };
 const CAT_KW = {
-  zinsen: ['zins', 'ezb', 'leitzins'],
-  immobilien: ['immobili', 'wohnung', 'miete', 'haus', 'grundst', 'bauen'],
-  finanzen: ['kredit', 'bauspar', 'aktie', 'sparen', 'hypothek', 'darlehen'],
-  politik: ['regierung', 'gesetz', 'reform', 'verordnung', 'steuer'],
+  zinsen: ['zins', 'ezb', 'leitzins', 'euribor'],
+  immobilien: ['immobili', 'wohnungsmarkt', 'eigenheim', 'eigentumswohnung', 'haus', 'grundst', 'bauen', 'wohnbau'],
+  finanzen: ['kredit', 'bauspar', 'aktie', 'sparen', 'hypothek', 'darlehen', 'baufinanz'],
+  politik: ['regierung', 'gesetz', 'reform', 'verordnung', 'steuer', 'ministerrat', 'mietpaket'],
   wirtschaft: ['wirtschaft', 'inflation', 'konjunktur', 'arbeitsmarkt'],
 };
 
@@ -121,7 +145,7 @@ function score(text, list) {
 
 function heuristicScore(it) {
   const text = `${it.headline} ${it.summary}`;
-  const naehe = Math.max(20, score(text, KW.naehe));
+  const naehe = score(text, KW.naehe);
   const betroffenheit = Math.max(25, score(text, KW.betroffenheit));
   const emotion = Math.max(30, score(text, KW.emotion));
   const aktualitaet = Math.max(20, Math.round(100 * Math.pow(0.5, it.publishedAgoHours / 48)));
@@ -138,7 +162,7 @@ function heuristicScore(it) {
   return {
     id: `live-${hashId(it.headline)}`,
     headline: it.headline,
-    summary: it.summary,
+    summary: it.summary || `${it.source} · aktuelle Meldung aus deinem Themenbereich.`,
     source: it.source,
     url: it.url,
     publishedAgoHours: it.publishedAgoHours,
@@ -163,7 +187,7 @@ async function enrichWithClaude(items) {
   const client = new Anthropic();
   const list = items
     .slice(0, 14)
-    .map((it, i) => `${i}. ${it.headline} — ${it.summary}`)
+    .map((it, i) => `${i}. ${it.headline}${it.summary ? ` — ${it.summary}` : ''}`)
     .join('\n');
 
   const system = `Du bist Analyst für "Mr Real", einen österreichischen Immobilien-Creator (@mr.r3al).
@@ -183,14 +207,13 @@ subs: emotion=polarisiert/überrascht, betroffenheit=trifft Geldbeutel, naehe=Im
 
   return items.slice(0, 14).map((it, i) => {
     const a = arr.find((x) => x.i === i) ?? {};
-    const base = heuristicScore(it);
     return {
-      ...base,
-      category: a.category ?? base.category,
-      subs: a.subs ?? base.subs,
-      hook: a.hook ?? base.hook,
-      angle: a.angle ?? base.angle,
-      suggestedFormat: a.format ?? base.suggestedFormat,
+      ...it,
+      category: a.category ?? it.category,
+      subs: a.subs ?? it.subs,
+      hook: a.hook ?? it.hook,
+      angle: a.angle ?? it.angle,
+      suggestedFormat: a.format ?? it.suggestedFormat,
     };
   });
 }
