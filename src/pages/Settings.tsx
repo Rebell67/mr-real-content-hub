@@ -42,7 +42,7 @@ export function Settings() {
             <h2 className="section-title">Aktive Datenquelle</h2>
           </div>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            <SourceCard active={sourceId === 'real'} onClick={() => setSource('real')} title="Echte Daten" desc="Mr-Real-Snapshot aus Metricool (13.04.–11.07.)." icon={<Database size={18} />} badge="live-abzug" />
+            <SourceCard active={sourceId === 'real'} onClick={() => setSource('real')} title="Echte Daten" desc="Mr-Real-Snapshot aus Metricool (13.06.–09.09.)." icon={<Database size={18} />} badge="live-abzug" />
             <SourceCard active={sourceId === 'mock'} onClick={() => setSource('mock')} title="Demo-Daten" desc="Beispieldaten zum Ausprobieren." icon={<FileJson size={18} />} />
             <SourceCard active={sourceId === 'metricool'} onClick={() => setSource('metricool')} title="Metricool API" desc="Automatischer Abruf. Token erforderlich." icon={<Plug size={18} />} badge={metricoolConfig ? 'konfiguriert' : 'offen'} />
             <SourceCard active={sourceId === 'import'} onClick={() => fileRef.current?.click()} title="CSV / JSON Import" desc="Eigene Exporte hochladen." icon={<Upload size={18} />} />
