@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Flame, TrendingUp, Loader2, FileText, ArrowUpRight, Info } from 'lucide-react';
+import { Flame, TrendingUp, Loader2, FileText, ArrowUpRight, Info, Home, Clapperboard } from 'lucide-react';
 import { Topbar } from '../components/layout/Topbar';
 import { Card, PlatformBadge } from '../components/ui/primitives';
 import { ScriptModal } from '../components/ScriptModal';
@@ -101,7 +101,14 @@ function TrendCard({ trend, onScript }: { trend: Trend; onScript: () => void }) 
   return (
     <Card hover className="flex flex-col p-4">
       <div className="mb-2 flex items-center justify-between">
-        <PlatformBadge platform={trend.platform} size="md" />
+        <div className="flex items-center gap-1.5">
+          <PlatformBadge platform={trend.platform} size="md" />
+          {trend.realEstate && (
+            <span className="chip font-bold text-brand-200" style={{ backgroundColor: '#22D3EE18' }}>
+              <Home size={11} /> Makler
+            </span>
+          )}
+        </div>
         <span
           className="chip font-bold"
           style={{ color: hot ? '#FF5A5A' : '#F7C14B', backgroundColor: hot ? '#FF5A5A18' : '#F7C14B18' }}
@@ -127,6 +134,13 @@ function TrendCard({ trend, onScript }: { trend: Trend; onScript: () => void }) 
         <span className="stat-label flex items-center gap-1 text-brand-300"><ArrowUpRight size={12} /> Für Mr Real</span>
         <p className="mt-0.5 text-sm italic leading-relaxed text-brand-100">{trend.adaptHook}</p>
       </div>
+
+      {trend.replicate && (
+        <div className="mt-2 rounded-lg border border-tiktok/20 bg-tiktok/[0.06] p-2.5">
+          <span className="stat-label flex items-center gap-1 text-tiktok"><Clapperboard size={12} /> So drehst du's nach</span>
+          <p className="mt-0.5 text-xs leading-relaxed text-slate-300">{trend.replicate}</p>
+        </div>
+      )}
 
       <div className="mt-3 flex items-center gap-2">
         <button onClick={onScript} className="btn-primary flex-1">

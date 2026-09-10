@@ -15,15 +15,22 @@ if (!TOKEN) {
   process.exit(1);
 }
 
-// Kuratierte Nischen-Accounts (Immobilien/Finanzen), DE + EN.
-// Fokus: Creator, deren virale Formate REALISTISCH nachmachbar sind – also
-// Talking-Head, Erklär-Reels, Text-Overlay, Whiteboard/Kamera-im-Auto –
-// NICHT solche, die auf teure Requisiten (Luxusautos, Villen) oder Familie
-// bauen. Ziel des OS: erst Reichweite & Follower, später Leads.
+// Kuratierte Accounts – Schwerpunkt IMMOBILIEN/MAKLER, dann Finanzen. DE + EN.
+// Fokus: Creator, deren virale Formate ein Makler mit Handy + eigener Listing
+// oder Talking-Head 1:1 nachdrehen kann (Preis-Reveal, Objekt-Rundgang,
+// Besichtigungs-Tipps, Erklär-Reels) – KEINE Lifestyle-Protzerei (Auto/Jet/
+// Uhr) und keine familienabhängigen Formate. Ziel des OS: jetzt Reichweite &
+// Follower aufbauen, später Leads/gewerbliche Kunden.
 const DEFAULT_ACCOUNTS = [
-  'finanzfluss', 'immocation', 'finanztip', 'madamemoneypenny', 'fabi_lehner',
-  'saidshiripour', 'aktienmitkopf', 'finanzenerklaert', 'zinsbaustein',
-  'humphreytalks', 'yourrichbff', 'ipohtherich', 'nischa.uk', 'gabe_bult',
+  // AT/DE Immobilien & Makler (posten regelmäßig Reels)
+  'fabi_lehner', 'maklerleben', 'wohnglueck.de',
+  // EN Makler/Real-Estate-Agents mit extrem nachmachbaren Formaten
+  // (Talking-Head, Skits, Preis-Reveal, Objekt-Rundgang)
+  'thebrokeagent', 'matt.lionetti', 'garrettbrownre', 'wealthfromrentals',
+  'ryanserhant', 'biggerpockets',
+  // AT/DE Finanzen (nachmachbare Erklär-Formate, füllt auf)
+  'finanzfluss', 'finanztip', 'madamemoneypenny', 'aktienmitkopf',
+  'humphreytalks', 'grahamstephan',
 ];
 const accounts = (process.env.TRENDS_IG_ACCOUNTS ? process.env.TRENDS_IG_ACCOUNTS.split(',') : DEFAULT_ACCOUNTS)
   .map((s) => s.trim()).filter(Boolean);
@@ -57,20 +64,37 @@ const median = (arr) => {
   return s.length % 2 ? s[m] : Math.round((s[m - 1] + s[m]) / 2);
 };
 
+// Handle bestimmen – manche Items liefern kein ownerUsername, dann aus der URL.
+const ownerOf = (x) =>
+  x.ownerUsername ||
+  (String(x.inputUrl || x.url || '').match(/instagram\.com\/([^/?#]+)/i)?.[1]) ||
+  '';
+
 // Nach Creator gruppieren, Kanal-Median bilden.
 const byOwner = {};
 for (const x of items) {
   if (!isReel(x)) continue;
-  (byOwner[x.ownerUsername] ??= []).push(x);
+  const o = ownerOf(x);
+  if (!o) continue;
+  (byOwner[o] ??= []).push(x);
 }
 
 // Vulgäres / politisch aufgeladenes rausfiltern (nicht seriös nachahmbar).
 const BLOCK = /motherf|fuck|f\*ck|fick|hurens|scheiß|arschloch|\bnazi|weidel|\bafd\b|hitler|\bbitch|penis|sex(ual)?/i;
 
-// NICHT nachmachbar für Mr Real: teure Requisiten (Luxusautos, Villen, Jets,
-// Uhren) und Familien-/Kinder-abhängige Formate. Solche Outlier ziehen zwar
-// Views, lassen sich aber nicht 1:1 replizieren → raus.
-const NOT_REPLICABLE = /porsche|ferrari|lamborghini|\blambo|bugatti|bentley|rolls[- ]?royce|mclaren|maserati|\brolex|patek|audemars|richard mille|private ?jet|privatjet|\byacht|yacht|mansion|villa|penthouse|\bmy (kid|kids|son|daughter|baby|child|children|wife|husband|family)\b|meine (kinder|tochter|sohn|frau|familie)|\bnewborn|toddler|pregnan|schwanger|millionaire lifestyle|luxury (car|watch|life|lifestyle)|supercar|10\.?000\s?€\s?uhr/i;
+// NICHT nachmachbar für Mr Real: reine Lifestyle-Protzerei (Luxusautos, Jets,
+// Yachten, teure Uhren) und familien-/kinderabhängige Formate. WICHTIG: Villen,
+// Penthouses & teure Objekte sind für einen Makler KEIN Ausschluss – Objekt-
+// Touren sind sein Kerngeschäft und mit eigenen Listings nachdrehbar.
+const NOT_REPLICABLE = /porsche|ferrari|lamborghini|\blambo|bugatti|bentley|rolls[- ]?royce|mclaren|maserati|\brolex|patek|audemars|richard mille|private ?jet|privatjet|\byacht|supercar|\bmy (kid|kids|son|daughter|baby|child|children|wife|husband|family)\b|meine (kinder|tochter|sohn|frau|familie)|\bnewborn|toddler|pregnan|schwanger|millionaire lifestyle|luxury (car|watch)|10\.?000\s?€\s?uhr/i;
+
+// Makler-Fit: Formate mit klarem Immobilien-/Finanz-Bezug, die ein Makler mit
+// Handy + Talking-Head oder eigener Listing nachdrehen kann. Alles ohne Bezug
+// (generische Money-Reels, Off-Niche) fliegt raus.
+const MAKLER_FIT = /immobil|makler|wohnung|\bhaus|miet|kauf|zins|quadratmeter|\bqm\b|besichtig|grundriss|eigentum|vermiet|kredit|finanzier|hypothek|preis|kostet|€|rendite|invest|\bgeld|sparen|\betf|depot|vermögen|\bmoney|\brent\b|mortgage|propert|real ?estate|apartment|\bhome\b|\bhouse/i;
+
+// Reines Immobilien-Thema (für die Priorisierung: Makler-Content zuerst).
+const REAL_ESTATE = /immobil|makler|wohnung|\bhaus|miet|kauf(?!kraft)|besichtig|grundriss|eigentum|vermiet|quadratmeter|\bqm\b|hypothek|propert|real ?estate|apartment|\bhome\b|\bhouse|listing/i;
 
 const GERMAN = /[äöüß]|(^|\s)(der|die|das|und|für|ich|du|mit|nicht|Immobilie|Wohnung|Miete|Zinsen|Geld|kaufen)(\s|$)/i;
 const clean = (s) => (s || '').replace(/#[\wäöüÄÖÜß]+/g, '').replace(/\s+/g, ' ').trim();
@@ -87,6 +111,20 @@ function suggestedFormat(hook) {
   return 'story';
 }
 
+// Konkrete Nachmach-Anleitung für Mr Real – wenig Aufwand, nur Handy.
+function replicate(hook) {
+  const h = hook.toLowerCase();
+  if (/kostet|preis|€|was (bekommst|kriegst|gibt)|guess/.test(h))
+    return 'Nimm eine deiner Listings, film 10–15 Sek. Rundgang mit dem Handy und blende den Preis erst am Schluss ein – Rätsel-Effekt hält die Leute bis zum Ende.';
+  if (/besichtig|grundriss|rundgang|tour|pov/.test(h))
+    return 'Bei der nächsten Besichtigung 20–30 Sek. mitfilmen und deinen Insider-Kommentar als Voice-over drüberlegen. Kein Setup nötig.';
+  if (/fehler|tipp|wahrheit|verschweig|mythos|lüge|\bnie\b|\bimmer\b|hör auf|vergiss|3 |5 /.test(h))
+    return 'Talking-Head vor der Kamera: 3 Punkte, je ein kurzer Satz, dazu Text-Overlay. Handy + du reichen.';
+  if (/rechne|verdien|miete|kauf|zins|kredit|rendite|spar/.test(h))
+    return 'In die Kamera sprechen und die Zahlen als On-Screen-Text einblenden – keine Requisiten, nur klare Rechnung.';
+  return 'Talking-Head mit knackigem Hook in den ersten 2 Sek. – nur du + Handy, minimaler Aufwand.';
+}
+
 const trends = [];
 for (const [owner, reels] of Object.entries(byOwner)) {
   if (reels.length < 3) continue; // zu wenig Basis für einen Median
@@ -94,10 +132,14 @@ for (const [owner, reels] of Object.entries(byOwner)) {
   for (const r of reels) {
     const v = views(r);
     const factor = v / med;
-    if (factor < 1.8 || v < 15000) continue; // nur echte Ausreißer
     const caption = r.caption || '';
     if (BLOCK.test(caption)) continue; // vulgär/politisch überspringen
-    if (NOT_REPLICABLE.test(caption)) continue; // teure Requisiten / Familie → nicht nachmachbar
+    if (NOT_REPLICABLE.test(caption)) continue; // Lifestyle-Protzerei / Familie → nicht nachmachbar
+    if (!MAKLER_FIT.test(caption)) continue; // ohne Immobilien-/Finanz-Bezug → raus
+    const isRE = REAL_ESTATE.test(caption);
+    // Nur echte Ausreißer. Für Makler-/Immobilien-Formate niedrigere View-Schwelle,
+    // weil AT/DE-Immobilien-Creator kleinere, aber sehr nachmachbare Reichweiten haben.
+    if (factor < 1.8 || v < (isRE ? 8000 : 15000)) continue;
     const hook = firstLine(caption) || 'Virales Reel';
     const german = GERMAN.test(caption);
     const f = Math.round(factor * 10) / 10;
@@ -105,22 +147,25 @@ for (const [owner, reels] of Object.entries(byOwner)) {
       id: `ig-${r.shortCode || r.id}`,
       platform: 'instagram',
       hook,
-      format: 'Reel',
+      format: isRE ? 'Immobilien-Reel' : 'Finanz-Reel',
       views: v,
       likes: Number(r.likesCount || 0),
       outlierFactor: f,
       creatorHandle: `@${owner}`,
       region: german ? 'AT/DE' : 'International',
       daysAgo: daysAgo(r.timestamp),
-      whyItWorks: `${f}× über dem Kanal-Schnitt (${v.toLocaleString('de-AT')} Views) – ein Reichweiten-Ausreißer, den du mit Handy + Talking-Head nachdrehen kannst (keine teuren Requisiten nötig). Genau solche Formate bauen jetzt Reichweite & Follower auf.`,
-      adaptHook: `Nachdrehbar für Mr Real (nur du + Kamera): übertrag den Aufhänger auf den österreichischen Immobilien-/Finanzmarkt – „${hook}"`,
+      realEstate: isRE,
+      whyItWorks: `${f}× über dem Kanal-Schnitt (${v.toLocaleString('de-AT')} Views). ${isRE ? 'Genau dein Terrain als Makler' : 'Nachmachbares Erklär-Format'} – hoher Reichweiten-Hebel, um jetzt Follower aufzubauen.`,
+      adaptHook: `Für Mr Real (nur du + Handy): übertrag den Aufhänger auf den österreichischen ${isRE ? 'Immobilienmarkt' : 'Finanzmarkt'} – „${hook}"`,
+      replicate: replicate(hook),
       suggestedFormat: suggestedFormat(hook),
       url: r.url,
     });
   }
 }
 
-trends.sort((a, b) => b.outlierFactor - a.outlierFactor);
+// Makler/Immobilien-Formate zuerst, dann nach Outlier-Faktor.
+trends.sort((a, b) => (Number(b.realEstate) - Number(a.realEstate)) || (b.outlierFactor - a.outlierFactor));
 const top = trends.slice(0, 18);
 fs.writeFileSync(path.join(ROOT, 'src/data/trends.json'), JSON.stringify(top));
 

@@ -135,6 +135,8 @@ export interface Trend {
   suggestedFormat: ContentFormatId; // maps into the script generator
   url?: string; // link to the original video (when from a live source)
   likes?: number;
+  realEstate?: boolean; // true = core real-estate/Makler format (ranks first)
+  replicate?: string; // concrete "so drehst du's nach" instruction (low effort)
 }
 
 // ---- News / daily relevance ----------------------------------------------
