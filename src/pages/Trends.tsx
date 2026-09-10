@@ -58,11 +58,7 @@ export function Trends() {
         {/* Datenquellen-Hinweis */}
         <div className={`flex items-start gap-2 rounded-xl border p-3 text-sm ${source === 'live' ? 'border-brand-500/25 bg-brand-500/[0.06] text-brand-200' : 'border-tiktok/20 bg-tiktok/[0.06] text-slate-300'}`}>
           <Info size={16} className="mt-0.5 shrink-0 text-tiktok" />
-          <span>
-            {source === 'live'
-              ? 'Live-Trends aus deiner verbundenen Trend-Quelle.'
-              : note ?? 'Demo-Trends aktiv.'}
-          </span>
+          <span>{note ?? (source === 'live' ? 'Live-Trends aktiv.' : 'Demo-Trends aktiv.')}</span>
         </div>
 
         {/* Filter */}
@@ -132,9 +128,16 @@ function TrendCard({ trend, onScript }: { trend: Trend; onScript: () => void }) 
         <p className="mt-0.5 text-sm italic leading-relaxed text-brand-100">{trend.adaptHook}</p>
       </div>
 
-      <button onClick={onScript} className="btn-primary mt-3 w-full">
-        <FileText size={15} /> Skript daraus
-      </button>
+      <div className="mt-3 flex items-center gap-2">
+        <button onClick={onScript} className="btn-primary flex-1">
+          <FileText size={15} /> Skript daraus
+        </button>
+        {trend.url && (
+          <a href={trend.url} target="_blank" rel="noreferrer" className="btn-ghost" title="Original-Reel ansehen">
+            <ArrowUpRight size={15} /> Ansehen
+          </a>
+        )}
+      </div>
     </Card>
   );
 }

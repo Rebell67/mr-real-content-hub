@@ -133,6 +133,8 @@ export interface Trend {
   whyItWorks: string;
   adaptHook: string; // suggested Mr Real hook to ride this trend
   suggestedFormat: ContentFormatId; // maps into the script generator
+  url?: string; // link to the original video (when from a live source)
+  likes?: number;
 }
 
 // ---- News / daily relevance ----------------------------------------------
