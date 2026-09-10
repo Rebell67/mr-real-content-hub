@@ -22,6 +22,8 @@ if (!TOKEN) {
 // Uhr) und keine familienabhängigen Formate. Ziel des OS: jetzt Reichweite &
 // Follower aufbauen, später Leads/gewerbliche Kunden.
 const DEFAULT_ACCOUNTS = [
+  // AT Makler direkt (dünner Markt – umso mehr Whitespace zum Rausstechen)
+  'michaelleber.vienna', 'dominik.k.reiter',
   // AT/DE Immobilien & Makler (posten regelmäßig Reels)
   'fabi_lehner', 'maklerleben', 'wohnglueck.de',
   // EN Makler/Real-Estate-Agents mit extrem nachmachbaren Formaten

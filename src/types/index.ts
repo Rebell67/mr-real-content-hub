@@ -139,6 +139,24 @@ export interface Trend {
   replicate?: string; // concrete "so drehst du's nach" instruction (low effort)
 }
 
+// A signature "viral format" – an original, entertainment-first content concept
+// engineered for Mr Real to stand out as a Vienna real-estate agent and turn
+// views into follows. These are creative playbook ideas (not scraped metrics).
+export interface SignatureFormat {
+  id: string;
+  emoji: string;
+  name: string; // the format name, e.g. "Rate den Wiener Preis"
+  hook: string; // example on-screen opening line
+  format: ContentFormatId; // maps into the script generator
+  entertain: string; // why it grabs & entertains (the psychological hook)
+  followTrigger: string; // why it specifically converts viewers into followers
+  howTo: string; // how to shoot it cheaply (phone-only, low effort)
+  effort: 'low' | 'medium';
+  potential: 'high' | 'viral';
+  series: boolean; // true = recurring series → builds a watch habit
+  platforms: Platform[];
+}
+
 // ---- News / daily relevance ----------------------------------------------
 export type NewsCategory = 'immobilien' | 'finanzen' | 'wirtschaft' | 'zinsen' | 'politik';
 

@@ -1,12 +1,12 @@
 import { Outlet, NavLink } from 'react-router-dom';
-import { LayoutDashboard, Newspaper, Flame, Lightbulb, Map, Settings } from 'lucide-react';
+import { LayoutDashboard, Newspaper, Flame, Wand2, Map, Settings } from 'lucide-react';
 import { Sidebar } from './Sidebar';
 
 const MOBILE_NAV = [
   { to: '/', label: 'Cockpit', icon: LayoutDashboard },
   { to: '/news', label: 'News', icon: Newspaper },
   { to: '/trends', label: 'Trends', icon: Flame },
-  { to: '/ideas', label: 'Ideen', icon: Lightbulb },
+  { to: '/signature', label: 'Signature', icon: Wand2 },
   { to: '/plan', label: 'Plan', icon: Map },
   { to: '/settings', label: 'Setup', icon: Settings },
 ];
