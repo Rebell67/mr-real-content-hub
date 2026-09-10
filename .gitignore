@@ -27,3 +27,7 @@ dist-ssr
 .env
 .env.local
 scripts/metricool-raw/
+
+# Lokale Standalone-Builds von artifact-build.mjs (öffentlich liegt hosted/index.html)
+/MrReal-ContentOS.html
+/mr-real-content-os.html
