@@ -21,7 +21,7 @@ export async function requestTrends(): Promise<TrendResult> {
     return {
       trends: live,
       source: 'live',
-      note: `Echte virale Instagram-Reels aus deiner Nische (Immobilien/Finanzen, DE + EN) – Ausreißer per Apify erkannt, zuletzt aktualisiert am ${TRENDS_UPDATED}.`,
+      note: `Echte virale Instagram-Reels aus deiner Nische (Immobilien/Finanzen, DE + EN) – gefiltert auf Formate, die du selbst nachdrehen kannst (kein Luxusauto, keine Familie nötig). Fokus: jetzt Reichweite & Follower aufbauen. Ausreißer per Apify erkannt, zuletzt aktualisiert am ${TRENDS_UPDATED}.`,
     };
   }
   return {

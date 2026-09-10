@@ -16,9 +16,14 @@ if (!TOKEN) {
 }
 
 // Kuratierte Nischen-Accounts (Immobilien/Finanzen), DE + EN.
+// Fokus: Creator, deren virale Formate REALISTISCH nachmachbar sind – also
+// Talking-Head, Erklär-Reels, Text-Overlay, Whiteboard/Kamera-im-Auto –
+// NICHT solche, die auf teure Requisiten (Luxusautos, Villen) oder Familie
+// bauen. Ziel des OS: erst Reichweite & Follower, später Leads.
 const DEFAULT_ACCOUNTS = [
-  'finanzfluss', 'immocation', 'finanztip', 'madamemoneypenny', 'immo.tommy', 'fabi_lehner',
-  'grahamstephan', 'biggerpockets', 'meetkevin', 'humphreytalks', 'mattlionetti',
+  'finanzfluss', 'immocation', 'finanztip', 'madamemoneypenny', 'fabi_lehner',
+  'saidshiripour', 'aktienmitkopf', 'finanzenerklaert', 'zinsbaustein',
+  'humphreytalks', 'yourrichbff', 'ipohtherich', 'nischa.uk', 'gabe_bult',
 ];
 const accounts = (process.env.TRENDS_IG_ACCOUNTS ? process.env.TRENDS_IG_ACCOUNTS.split(',') : DEFAULT_ACCOUNTS)
   .map((s) => s.trim()).filter(Boolean);
@@ -61,6 +66,12 @@ for (const x of items) {
 
 // Vulgäres / politisch aufgeladenes rausfiltern (nicht seriös nachahmbar).
 const BLOCK = /motherf|fuck|f\*ck|fick|hurens|scheiß|arschloch|\bnazi|weidel|\bafd\b|hitler|\bbitch|penis|sex(ual)?/i;
+
+// NICHT nachmachbar für Mr Real: teure Requisiten (Luxusautos, Villen, Jets,
+// Uhren) und Familien-/Kinder-abhängige Formate. Solche Outlier ziehen zwar
+// Views, lassen sich aber nicht 1:1 replizieren → raus.
+const NOT_REPLICABLE = /porsche|ferrari|lamborghini|\blambo|bugatti|bentley|rolls[- ]?royce|mclaren|maserati|\brolex|patek|audemars|richard mille|private ?jet|privatjet|\byacht|yacht|mansion|villa|penthouse|\bmy (kid|kids|son|daughter|baby|child|children|wife|husband|family)\b|meine (kinder|tochter|sohn|frau|familie)|\bnewborn|toddler|pregnan|schwanger|millionaire lifestyle|luxury (car|watch|life|lifestyle)|supercar|10\.?000\s?€\s?uhr/i;
+
 const GERMAN = /[äöüß]|(^|\s)(der|die|das|und|für|ich|du|mit|nicht|Immobilie|Wohnung|Miete|Zinsen|Geld|kaufen)(\s|$)/i;
 const clean = (s) => (s || '').replace(/#[\wäöüÄÖÜß]+/g, '').replace(/\s+/g, ' ').trim();
 const firstLine = (s) => {
@@ -84,9 +95,12 @@ for (const [owner, reels] of Object.entries(byOwner)) {
     const v = views(r);
     const factor = v / med;
     if (factor < 1.8 || v < 15000) continue; // nur echte Ausreißer
-    if (BLOCK.test(r.caption || '')) continue; // vulgär/politisch überspringen
-    const hook = firstLine(r.caption) || 'Virales Reel';
-    const german = GERMAN.test(r.caption || '');
+    const caption = r.caption || '';
+    if (BLOCK.test(caption)) continue; // vulgär/politisch überspringen
+    if (NOT_REPLICABLE.test(caption)) continue; // teure Requisiten / Familie → nicht nachmachbar
+    const hook = firstLine(caption) || 'Virales Reel';
+    const german = GERMAN.test(caption);
+    const f = Math.round(factor * 10) / 10;
     trends.push({
       id: `ig-${r.shortCode || r.id}`,
       platform: 'instagram',
@@ -94,12 +108,12 @@ for (const [owner, reels] of Object.entries(byOwner)) {
       format: 'Reel',
       views: v,
       likes: Number(r.likesCount || 0),
-      outlierFactor: Math.round(factor * 10) / 10,
+      outlierFactor: f,
       creatorHandle: `@${owner}`,
       region: german ? 'AT/DE' : 'International',
       daysAgo: daysAgo(r.timestamp),
-      whyItWorks: `Lief rund ${Math.round(factor * 10) / 10}× über dem Kanal-Schnitt (${v.toLocaleString('de-AT')} Views). Format & Aufhänger haben klar überdurchschnittlich gezogen.`,
-      adaptHook: `Übertrag den Aufhänger auf den österreichischen Markt: „${hook}"`,
+      whyItWorks: `${f}× über dem Kanal-Schnitt (${v.toLocaleString('de-AT')} Views) – ein Reichweiten-Ausreißer, den du mit Handy + Talking-Head nachdrehen kannst (keine teuren Requisiten nötig). Genau solche Formate bauen jetzt Reichweite & Follower auf.`,
+      adaptHook: `Nachdrehbar für Mr Real (nur du + Kamera): übertrag den Aufhänger auf den österreichischen Immobilien-/Finanzmarkt – „${hook}"`,
       suggestedFormat: suggestedFormat(hook),
       url: r.url,
     });

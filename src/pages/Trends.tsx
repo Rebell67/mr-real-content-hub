@@ -53,7 +53,7 @@ export function Trends() {
 
   return (
     <>
-      <Topbar title="Trends & Outlier" subtitle="Virale Formate aus deiner Nische – zum Adaptieren" />
+      <Topbar title="Trends & Outlier" subtitle="Nachmachbare virale Formate für Reichweite & Follower – ohne teure Requisiten" />
       <div className="space-y-6 p-5 sm:p-8">
         {/* Datenquellen-Hinweis */}
         <div className={`flex items-start gap-2 rounded-xl border p-3 text-sm ${source === 'live' ? 'border-brand-500/25 bg-brand-500/[0.06] text-brand-200' : 'border-tiktok/20 bg-tiktok/[0.06] text-slate-300'}`}>
