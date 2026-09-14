@@ -1,10 +1,11 @@
-import { useState } from 'react';
-import { Sparkles, Wand2, FileText } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { Sparkles, FileText, Plus, Trash2, Pin, Inbox, Check } from 'lucide-react';
 import { Topbar } from '../components/layout/Topbar';
 import { Card, PlatformBadge } from '../components/ui/primitives';
 import { CONTENT_FORMATS, FORMAT_MAP } from '../data/formats';
 import { CONTENT_IDEAS } from '../data/ideas';
 import { ScriptModal } from '../components/ScriptModal';
+import { ideaStore, formatStore, generateIdeas, ideaToFormat, newId } from '../lib/contentStore';
 import type { ContentFormatId, ContentIdea, Platform } from '../types';
 
 const POTENTIAL_STYLE: Record<string, { label: string; color: string }> = {
@@ -14,121 +15,126 @@ const POTENTIAL_STYLE: Record<string, { label: string; color: string }> = {
 };
 const EFFORT_LABEL: Record<string, string> = { low: 'Geringer Aufwand', medium: 'Mittel', high: 'Hoch' };
 
-// Simple template bank for the idea generator (client-side, no API needed).
-const TOPICS = ['Eigenkapital', 'Zinsen', 'Vorsorgewohnung', 'Miete vs. Kauf', 'Nebenkosten', 'Besichtigung', 'Wertsteigerung', 'Erstwohnung', 'Immobilien-Mythen', 'Standort Wien vs. Land'];
-const HOOK_TEMPLATES: Record<ContentFormatId, string[]> = {
-  'hot-take': ['Unpopuläre Meinung: {topic} wird komplett falsch verstanden.', 'Wer bei {topic} noch so denkt, verliert Geld.', '{topic}? Der größte Irrtum unserer Generation.'],
-  explainer: ['{topic} in 45 Sekunden erklärt – ohne Fachchinesisch.', 'So funktioniert {topic} wirklich (mit Rechnung).', 'Das musst du über {topic} wissen, bevor du unterschreibst.'],
-  'myth-buster': ['Der größte Mythos über {topic} – und die Wahrheit.', '"{topic}" – was alle glauben vs. was stimmt.', '3 Lügen über {topic}, die dich Geld kosten.'],
-  story: ['Wie {topic} mir einen Deal gerettet hat.', 'Mein größter Fehler bei {topic}.', 'Was mir ein Kunde über {topic} beigebracht hat.'],
-  'market-update': ['{topic} 2026: Was sich gerade wirklich ändert.', 'Neue Zahlen zu {topic} – und was du jetzt tun solltest.', '{topic}: Der Trend, den alle übersehen.'],
-  'behind-the-scenes': ['Live bei einer Besichtigung: {topic} entlarvt.', 'So prüfe ich {topic} vor Ort.', 'Ein Tag als Makler: {topic} in echt.'],
-  'property-breakdown': ['Dieses Objekt und {topic}: lohnt es sich?', '{topic} an einem echten Objekt durchgerechnet.', 'Kaufen oder Finger weg? {topic}-Check.'],
-};
-
 export function Ideas() {
+  const [extras, setExtras] = useState<ContentIdea[]>(() => ideaStore.extras());
+  const [hidden, setHidden] = useState<string[]>(() => ideaStore.hidden());
   const [filter, setFilter] = useState<ContentFormatId | 'all'>('all');
-  const [generated, setGenerated] = useState<ContentIdea[]>([]);
   const [scriptIdea, setScriptIdea] = useState<ContentIdea | null>(null);
+  const [draftTitle, setDraftTitle] = useState('');
+  const [draftHook, setDraftHook] = useState('');
+  const [draftFormat, setDraftFormat] = useState<ContentFormatId>('hot-take');
+  const [pinned, setPinned] = useState<string | null>(null); // id der zuletzt übernommenen Idee
 
-  const ideas = filter === 'all' ? CONTENT_IDEAS : CONTENT_IDEAS.filter((i) => i.format === filter);
+  const list = useMemo(() => {
+    const merged = [...extras, ...CONTENT_IDEAS.filter((i) => !hidden.includes(i.id))];
+    return filter === 'all' ? merged : merged.filter((i) => i.format === filter);
+  }, [extras, hidden, filter]);
 
-  const generate = () => {
-    const formats = CONTENT_FORMATS;
-    const picks: ContentIdea[] = [];
-    for (let i = 0; i < 3; i++) {
-      const fmt = formats[Math.floor(Math.random() * formats.length)];
-      const topic = TOPICS[Math.floor(Math.random() * TOPICS.length)];
-      const templates = HOOK_TEMPLATES[fmt.id];
-      const hook = templates[Math.floor(Math.random() * templates.length)].replace('{topic}', topic);
-      const potentials: ContentIdea['potential'][] = ['medium', 'high', 'viral'];
-      const platforms: Platform[] = fmt.id === 'market-update' || fmt.id === 'property-breakdown' ? ['instagram', 'youtube'] : ['tiktok', 'instagram'];
-      picks.push({
-        id: `gen-${Date.now()}-${i}`,
-        title: `${topic} – ${fmt.name}`,
-        hook,
-        format: fmt.id,
-        angle: fmt.description,
-        rationale: `Automatisch generiert aus Format „${fmt.name}" × Thema „${topic}". ${fmt.purpose}`,
-        effort: fmt.id === 'property-breakdown' ? 'high' : 'low',
-        potential: potentials[Math.floor(Math.random() * potentials.length)],
-        suggestedPlatforms: platforms,
-      });
-    }
-    setGenerated(picks);
+  const persistExtras = (v: ContentIdea[]) => { setExtras(v); ideaStore.saveExtras(v); };
+  const persistHidden = (v: string[]) => { setHidden(v); ideaStore.saveHidden(v); };
+
+  const addOwn = () => {
+    const t = draftTitle.trim();
+    if (!t) return;
+    const idea: ContentIdea = {
+      id: newId('idea'),
+      title: t,
+      hook: draftHook.trim() || t,
+      format: draftFormat,
+      angle: 'Eigene Idee',
+      rationale: 'Selbst reingebrainstormt.',
+      effort: 'low',
+      potential: 'high',
+      suggestedPlatforms: ['instagram', 'tiktok'],
+    };
+    persistExtras([idea, ...extras]);
+    setDraftTitle(''); setDraftHook('');
+  };
+
+  const generate = () => persistExtras([...generateIdeas(3), ...extras]);
+
+  const remove = (idea: ContentIdea) => {
+    if (extras.some((e) => e.id === idea.id)) persistExtras(extras.filter((e) => e.id !== idea.id));
+    else persistHidden([...hidden, idea.id]);
+  };
+
+  const pinToFormat = (idea: ContentIdea) => {
+    const current = formatStore.extras();
+    formatStore.saveExtras([ideaToFormat(idea), ...current]);
+    setPinned(idea.id);
+    setTimeout(() => setPinned((p) => (p === idea.id ? null : p)), 2000);
   };
 
   return (
     <>
-      <Topbar title="Ideen & Formate" subtitle="Die Content-Engine hinter Mr Real" />
-      <div className="space-y-8 p-5 sm:p-8">
-        {/* Formats */}
-        <section>
-          <div className="mb-4">
-            <h2 className="section-title">Wiederkehrende Formate</h2>
-            <p className="mt-0.5 text-sm text-slate-400">Wiedererkennbare Formate schlagen Zufalls-Content. Das ist dein Wachstums-Gerüst.</p>
+      <Topbar title="Ideen-Inbox" subtitle="Dein roher Kreativ-Speicher – wirf eigene Ideen rein & generiere neue" />
+      <div className="space-y-6 p-5 sm:p-8">
+        {/* Eigene Idee reinbrainstormen */}
+        <Card className="p-4">
+          <div className="mb-3 flex items-center gap-2">
+            <Inbox size={18} className="text-brand-300" />
+            <h2 className="section-title">Eigene Idee reinwerfen</h2>
           </div>
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-2 sm:grid-cols-[1fr_1fr_auto]">
+            <input
+              value={draftTitle}
+              onChange={(e) => setDraftTitle(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && addOwn()}
+              placeholder="Titel / Idee in einem Satz…"
+              className="rounded-lg border border-white/[0.08] bg-ink-850/60 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-brand-500/40 focus:outline-none"
+            />
+            <input
+              value={draftHook}
+              onChange={(e) => setDraftHook(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && addOwn()}
+              placeholder="Hook (optional)…"
+              className="rounded-lg border border-white/[0.08] bg-ink-850/60 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-brand-500/40 focus:outline-none"
+            />
+            <div className="flex gap-2">
+              <select
+                value={draftFormat}
+                onChange={(e) => setDraftFormat(e.target.value as ContentFormatId)}
+                className="rounded-lg border border-white/[0.08] bg-ink-850/60 px-2 py-2 text-sm text-slate-200 focus:outline-none"
+              >
+                {CONTENT_FORMATS.map((f) => (
+                  <option key={f.id} value={f.id}>{f.emoji} {f.name}</option>
+                ))}
+              </select>
+              <button onClick={addOwn} className="btn-primary whitespace-nowrap"><Plus size={16} /> Rein</button>
+            </div>
+          </div>
+          <div className="mt-3 flex items-center justify-between gap-2">
+            <span className="text-xs text-slate-500">Ideen bleiben im Browser gespeichert.</span>
+            <button onClick={generate} className="btn-ghost"><Sparkles size={15} /> 3 Ideen generieren</button>
+          </div>
+        </Card>
+
+        {/* Filter */}
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap gap-1.5 rounded-xl border border-white/[0.06] bg-ink-800/60 p-1">
+            <FormatFilter active={filter === 'all'} onClick={() => setFilter('all')}>Alle</FormatFilter>
             {CONTENT_FORMATS.map((f) => (
-              <Card key={f.id} hover className="p-5">
-                <div className="mb-2 flex items-center justify-between">
-                  <span className="text-2xl">{f.emoji}</span>
-                  <span className="chip" style={{ color: f.color, backgroundColor: `${f.color}18` }}>{f.cadence}</span>
-                </div>
-                <h3 className="font-display text-base font-semibold text-white">{f.name}</h3>
-                <p className="mt-1 text-sm leading-relaxed text-slate-400">{f.description}</p>
-                <div className="mt-3 rounded-lg border border-white/[0.05] bg-ink-850/50 p-2.5">
-                  <span className="stat-label">Strategischer Zweck</span>
-                  <p className="mt-0.5 text-xs leading-relaxed text-slate-300">{f.purpose}</p>
-                </div>
-              </Card>
+              <FormatFilter key={f.id} active={filter === f.id} onClick={() => setFilter(f.id)} color={f.color}>
+                {f.emoji}
+              </FormatFilter>
             ))}
           </div>
-        </section>
+          <span className="text-xs text-slate-500">{list.length} Ideen</span>
+        </div>
 
-        {/* Idea generator */}
-        <section>
-          <Card className="p-5">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div className="flex items-center gap-2">
-                <Wand2 size={18} className="text-brand-300" />
-                <div>
-                  <h2 className="section-title">Ideen-Generator</h2>
-                  <p className="text-sm text-slate-400">Kombiniert deine Formate mit relevanten Themen zu neuen Hooks.</p>
-                </div>
-              </div>
-              <button onClick={generate} className="btn-primary">
-                <Sparkles size={16} /> 3 Ideen erzeugen
-              </button>
-            </div>
-            {generated.length > 0 && (
-              <div className="mt-4 grid gap-4 md:grid-cols-3">
-                {generated.map((idea) => <IdeaCard key={idea.id} idea={idea} generated onScript={setScriptIdea} />)}
-              </div>
-            )}
-          </Card>
-        </section>
-
-        {/* Idea bank */}
-        <section>
-          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <h2 className="section-title">Ideen-Pool</h2>
-              <p className="mt-0.5 text-sm text-slate-400">Kuratiert auf deine Positionierung – bereit für die Pipeline.</p>
-            </div>
-            <div className="flex flex-wrap gap-1.5 rounded-xl border border-white/[0.06] bg-ink-800/60 p-1">
-              <FormatFilter active={filter === 'all'} onClick={() => setFilter('all')}>Alle</FormatFilter>
-              {CONTENT_FORMATS.map((f) => (
-                <FormatFilter key={f.id} active={filter === f.id} onClick={() => setFilter(f.id)} color={f.color}>
-                  {f.emoji}
-                </FormatFilter>
-              ))}
-            </div>
-          </div>
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {ideas.map((idea) => <IdeaCard key={idea.id} idea={idea} onScript={setScriptIdea} />)}
-          </div>
-        </section>
+        {/* Ideen-Grid */}
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {list.map((idea) => (
+            <IdeaCard
+              key={idea.id}
+              idea={idea}
+              pinned={pinned === idea.id}
+              onScript={setScriptIdea}
+              onPin={() => pinToFormat(idea)}
+              onRemove={() => remove(idea)}
+            />
+          ))}
+        </div>
       </div>
 
       {scriptIdea && <ScriptModal idea={scriptIdea} onClose={() => setScriptIdea(null)} />}
@@ -136,11 +142,15 @@ export function Ideas() {
   );
 }
 
-function IdeaCard({ idea, generated, onScript }: { idea: ContentIdea; generated?: boolean; onScript: (idea: ContentIdea) => void }) {
+function IdeaCard({
+  idea, pinned, onScript, onPin, onRemove,
+}: {
+  idea: ContentIdea; pinned: boolean; onScript: (idea: ContentIdea) => void; onPin: () => void; onRemove: () => void;
+}) {
   const fmt = FORMAT_MAP[idea.format];
   const pot = POTENTIAL_STYLE[idea.potential];
   return (
-    <Card hover className={`flex flex-col p-4 ${generated ? 'ring-1 ring-brand-500/20' : ''}`}>
+    <Card hover className="flex flex-col p-4">
       <div className="mb-2 flex items-center justify-between">
         <span className="chip" style={{ color: fmt?.color, backgroundColor: `${fmt?.color}18` }}>{fmt?.emoji} {fmt?.name}</span>
         <span className="chip font-semibold" style={{ color: pot.color, backgroundColor: `${pot.color}18` }}>{pot.label}</span>
@@ -150,13 +160,23 @@ function IdeaCard({ idea, generated, onScript }: { idea: ContentIdea; generated?
       <p className="mt-2 flex-1 text-xs leading-relaxed text-slate-400">{idea.rationale}</p>
       <div className="mt-3 flex items-center justify-between">
         <div className="flex gap-1">
-          {idea.suggestedPlatforms.map((p) => <PlatformBadge key={p} platform={p} />)}
+          {idea.suggestedPlatforms.map((p: Platform) => <PlatformBadge key={p} platform={p} />)}
         </div>
         <span className="text-[10px] text-slate-500">{EFFORT_LABEL[idea.effort]}</span>
       </div>
-      <button onClick={() => onScript(idea)} className="btn-primary mt-3 w-full">
-        <FileText size={15} /> Skript erstellen
-      </button>
+      <div className="mt-3 flex items-center gap-2">
+        <button onClick={() => onScript(idea)} className="btn-primary flex-1"><FileText size={15} /> Skript</button>
+        <button
+          onClick={onPin}
+          className={`btn-ghost ${pinned ? 'text-brand-300' : ''}`}
+          title="In Formate übernehmen"
+        >
+          {pinned ? <><Check size={15} /> Drin</> : <><Pin size={15} /> Formate</>}
+        </button>
+        <button onClick={onRemove} className="btn-ghost text-slate-400 hover:text-youtube" title="Idee löschen">
+          <Trash2 size={15} />
+        </button>
+      </div>
     </Card>
   );
 }

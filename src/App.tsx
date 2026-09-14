@@ -5,8 +5,8 @@ import { Dashboard } from './pages/Dashboard';
 import { Analytics } from './pages/Analytics';
 import { Planner } from './pages/Planner';
 import { Ideas } from './pages/Ideas';
+import { Formats } from './pages/Formats';
 import { Trends } from './pages/Trends';
-import { Signature } from './pages/Signature';
 import { News } from './pages/News';
 import { Strategy } from './pages/Strategy';
 import { GrowthPlan } from './pages/GrowthPlan';
@@ -23,8 +23,8 @@ export default function App() {
             <Route path="analytics" element={<Analytics />} />
             <Route path="planner" element={<Planner />} />
             <Route path="ideas" element={<Ideas />} />
+            <Route path="formats" element={<Formats />} />
             <Route path="trends" element={<Trends />} />
-            <Route path="signature" element={<Signature />} />
             <Route path="news" element={<News />} />
             <Route path="strategy" element={<Strategy />} />
             <Route path="plan" element={<GrowthPlan />} />
