@@ -2,7 +2,7 @@ import { RefreshCw, Circle, Zap } from 'lucide-react';
 import { useHub } from '../../state/HubContext';
 
 const SOURCE_LABEL: Record<string, string> = {
-  real: 'Echte Daten (13.09.)',
+  real: 'Echte Daten (20.09.)',
   mock: 'Demo-Daten',
   metricool: 'Metricool',
   import: 'Import (CSV/JSON)',
