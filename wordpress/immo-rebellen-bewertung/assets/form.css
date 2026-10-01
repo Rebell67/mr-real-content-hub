@@ -1,0 +1,230 @@
+/* Immo Rebellen – Immobilienbewertung 2.0
+ * Alle Stile sind auf .irb-form begrenzt. Schriftfamilie wird von der Website geerbt.
+ * Layout reagiert auf die Breite des Containers (Elementor-Spalte), nicht nur des Bildschirms. */
+
+.irb-form {
+	--irb-accent: #3e5945;
+	--irb-ink: #212221;
+	--irb-muted: #6c706a;
+	--irb-line: #e6e7e3;
+	--irb-soft: #f6f7f3;
+	--irb-hover: #edf2e7;
+	--irb-hover-edge: #9cae8e;
+	--irb-hover-ink: #344c3b;
+	--irb-error: #9e3030;
+	--irb-radius: 18px;
+	container: irb / inline-size;
+	color: var(--irb-ink);
+	font-family: inherit;
+	font-size: 16px;
+	line-height: 1.5;
+	max-width: 1100px;
+	margin: 36px auto;
+	scroll-margin-top: 90px;
+	text-align: left;
+}
+.irb-form *, .irb-form *::before, .irb-form *::after { box-sizing: border-box; }
+.irb-form button, .irb-form input, .irb-form select, .irb-form textarea { font: inherit; letter-spacing: normal; text-transform: none; }
+.irb-form button { cursor: pointer; box-shadow: none; white-space: normal; line-height: 1.35; }
+.irb-form a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+.irb-form :is(button, input, select, textarea, a, summary):focus-visible { outline: 3px solid color-mix(in srgb, var(--irb-accent) 70%, white); outline-offset: 3px; }
+.irb-form .irb-sr, .irb-form .irb-honeypot { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.irb-form .irb-loading { padding: 40px; text-align: center; color: var(--irb-muted); }
+
+/* ---------- Rahmen */
+.irb-form .irb-shell { background: #fff; border: 1px solid #ececea; border-radius: var(--irb-radius); box-shadow: 0 12px 55px #17231a0d; overflow: hidden; margin: 0; padding: 0; }
+.irb-form .irb-header { padding: 36px 44px 26px; }
+.irb-form .irb-eyebrow { display: block; font-size: 10px; letter-spacing: 2px; font-weight: 600; color: var(--irb-muted); margin: 0 0 18px; }
+.irb-form .irb-heading-row { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.irb-form h2 { font-family: inherit; font-weight: 500; font-size: clamp(23px, 2.5vw, 33px); line-height: 1.22; letter-spacing: -.6px; margin: 0; color: var(--irb-ink); }
+.irb-form h2:focus { outline: none; }
+.irb-form .irb-step { white-space: nowrap; font-size: 12px; color: var(--irb-muted); font-variant-numeric: tabular-nums; }
+.irb-form .irb-subtitle { font-size: 14px; color: var(--irb-muted); margin: 10px 0 0; }
+.irb-form .irb-progress { height: 3px; background: var(--irb-line); }
+.irb-form .irb-progress > span { height: 100%; display: block; background: var(--irb-accent); transition: width .35s cubic-bezier(.2, .7, .3, 1); }
+.irb-form .irb-body { padding: 36px 44px 22px; min-height: 280px; }
+.irb-form .irb-forward { animation: irb-in-right .32s cubic-bezier(.2, .7, .3, 1); }
+.irb-form .irb-backward { animation: irb-in-left .32s cubic-bezier(.2, .7, .3, 1); }
+@keyframes irb-in-right { from { opacity: 0; transform: translateX(14px); } }
+@keyframes irb-in-left { from { opacity: 0; transform: translateX(-14px); } }
+
+.irb-form .irb-footer { border-top: 1px solid #f0f0ec; padding: 20px 44px; display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 86px; }
+.irb-form .irb-footer-note { font-size: 12px; color: var(--irb-muted); }
+.irb-form .irb-actions { display: flex; gap: 14px; align-items: center; margin-left: auto; }
+
+/* ---------- Buttons */
+.irb-form .irb-primary { display: inline-flex; align-items: center; justify-content: center; gap: 22px; min-height: 48px; background: var(--irb-ink); color: #fff; border: 1px solid var(--irb-ink); border-radius: 8px; padding: 13px 24px; text-decoration: none; font-size: 14px; font-weight: 500; transition: background .2s, border-color .2s, box-shadow .2s, transform .2s; }
+.irb-form .irb-primary > span { display: inline-block; transition: transform .2s; }
+.irb-form .irb-primary:disabled { background: #e6e8e3; border-color: #e6e8e3; color: #7c8078; cursor: progress; }
+.irb-form .irb-secondary { display: inline-flex; align-items: center; min-height: 48px; padding: 13px 8px; font-size: 14px; color: var(--irb-muted); }
+.irb-form .irb-back, .irb-form .irb-skip { background: transparent; color: var(--irb-muted); border: 0; padding: 12px 2px; min-height: 44px; font-size: 14px; }
+.irb-form .irb-back:hover, .irb-form .irb-skip:hover { color: var(--irb-ink); text-decoration: underline; background: transparent; }
+.irb-form .irb-spinner { width: 14px; height: 14px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: irb-spin .7s linear infinite; }
+@keyframes irb-spin { to { transform: rotate(360deg); } }
+
+/* ---------- Auswahl */
+.irb-form .irb-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.irb-form .irb-choice { appearance: none; position: relative; background: #fff; border: 1px solid var(--irb-line); border-radius: 12px; color: var(--irb-ink); display: flex; align-items: center; gap: 14px; padding: 20px 22px; min-height: 74px; text-align: left; font-size: 16px; transition: background .22s, border-color .22s, box-shadow .22s, transform .22s, color .22s; }
+.irb-form .irb-choice-label { min-width: 0; overflow-wrap: anywhere; hyphens: auto; }
+.irb-form .irb-choice-mark { width: 16px; height: 16px; border: 1.5px solid #aab0a8; border-radius: 50%; flex-shrink: 0; transition: background .2s, box-shadow .2s, border-color .2s; }
+.irb-form .irb-multi .irb-choice-mark { border-radius: 5px; }
+.irb-form .is-selected .irb-choice-mark { background: var(--irb-accent); border-color: var(--irb-accent); box-shadow: inset 0 0 0 3px #fff; }
+.irb-form .irb-multi .is-selected .irb-choice-mark { box-shadow: none; background: var(--irb-accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5L12 5.5' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 14px no-repeat; }
+.irb-form .irb-choice-arrow { margin-left: auto; color: #8e958c; font-size: 19px; transition: transform .25s, color .25s; }
+.irb-form .irb-choice.is-selected { background: var(--irb-hover); border-color: var(--irb-hover-edge); color: var(--irb-hover-ink); box-shadow: 0 8px 25px #344c3b0d; }
+
+.irb-form .irb-types { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+.irb-form .irb-types .irb-choice { flex-direction: column; justify-content: center; gap: 12px; padding: 22px 10px 24px; min-height: 237px; text-align: center; background: linear-gradient(180deg, #fafbf8 0%, #fff 100%); overflow: hidden; border-color: #e4e8de; }
+.irb-form .irb-art { display: block; width: min(100%, 180px); height: 144px; flex-shrink: 0; pointer-events: none; }
+.irb-form .irb-art svg { width: 100%; height: 100%; overflow: visible; }
+.irb-form .irb-art-building { transform-origin: 100px 130px; transition: transform .35s cubic-bezier(.2, .7, .3, 1); }
+.irb-form .irb-art-shadow { transform-origin: 100px 139px; transition: transform .35s, opacity .35s; }
+.irb-form .irb-types .irb-choice-arrow { position: absolute; top: 13px; right: 13px; display: flex; align-items: center; justify-content: center; width: 27px; height: 27px; border-radius: 50%; font-size: 16px; background: #f0f3eb; color: #617559; margin: 0; }
+
+@media (hover: hover) and (pointer: fine) {
+	.irb-form .irb-choice:hover { background: var(--irb-hover); border-color: var(--irb-hover-edge); color: var(--irb-hover-ink); transform: translateY(-3px); box-shadow: 0 13px 28px #344c3b12; }
+	.irb-form .irb-choice:hover .irb-choice-arrow { color: var(--irb-accent); transform: translate(2px, -2px); }
+	.irb-form .irb-types .irb-choice:hover .irb-art-building { transform: translateY(-5px); }
+	.irb-form .irb-types .irb-choice:hover .irb-art-shadow { transform: scale(.92); opacity: .06; }
+	.irb-form .irb-types .irb-choice:hover .irb-choice-arrow { background: var(--irb-accent); color: #fff; transform: rotate(4deg); }
+	.irb-form .irb-primary:not(:disabled):hover { background: var(--irb-accent); border-color: var(--irb-accent); color: #fff; box-shadow: 0 5px 15px #344c3b20; transform: translateY(-1px); }
+	.irb-form .irb-primary:not(:disabled):hover > span { transform: translateX(3px); }
+	.irb-form .irb-chip:hover, .irb-form .irb-counter:hover { border-color: var(--irb-hover-edge); background: var(--irb-hover); }
+}
+.irb-form .irb-choice:active, .irb-form .irb-primary:not(:disabled):active { transform: scale(.985); }
+
+/* ---------- Zahlen, Schieberegler, Chips */
+.irb-form .irb-number-wrap { max-width: 580px; margin: 10px auto 0; text-align: center; }
+.irb-form .irb-number-row { display: flex; justify-content: center; align-items: center; gap: 14px; }
+.irb-form input.irb-number { width: 260px; min-width: 0; text-align: center; font-size: 32px; font-variant-numeric: tabular-nums; padding: 14px 8px; border: 0; border-bottom: 2px solid #bbc1b8; border-radius: 0; color: var(--irb-ink); background: transparent; box-shadow: none; height: auto; transition: border-color .2s; }
+.irb-form input.irb-number:focus { border-bottom-color: var(--irb-accent); outline: none; }
+.irb-form input.irb-number[aria-invalid="true"] { border-bottom-color: #b24b40; }
+.irb-form .irb-number::placeholder { font-size: 21px; color: #9a9f96; }
+.irb-form .irb-unit { color: var(--irb-muted); font-size: 18px; min-width: 1em; }
+.irb-form .irb-counter { width: 46px; height: 46px; flex-shrink: 0; border-radius: 50%; background: var(--irb-soft); color: var(--irb-ink); border: 1px solid var(--irb-line); font-size: 22px; padding: 0; transition: background .2s, border-color .2s; }
+.irb-form .irb-range { width: 100%; margin: 34px 0 4px; accent-color: var(--irb-accent); min-height: 32px; cursor: pointer; background: transparent; }
+.irb-form .irb-range:focus-visible { outline: 2px solid color-mix(in srgb, var(--irb-accent) 45%, white); outline-offset: 2px; border-radius: 999px; }
+.irb-form .irb-range.is-empty { opacity: .4; }
+.irb-form .irb-range-scale { display: flex; justify-content: space-between; font-size: 11px; color: var(--irb-muted); }
+.irb-form .irb-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 24px 0 0; }
+.irb-form .irb-chip { min-width: 46px; min-height: 42px; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--irb-line); background: #fff; color: var(--irb-ink); font-size: 14px; transition: background .2s, border-color .2s, color .2s; }
+.irb-form .irb-chip.is-selected { background: var(--irb-accent); border-color: var(--irb-accent); color: #fff; }
+.irb-form .irb-divider { display: flex; align-items: center; gap: 12px; margin: 26px 0 0; color: var(--irb-muted); font-size: 12px; }
+.irb-form .irb-divider::before, .irb-form .irb-divider::after { content: ""; flex: 1; height: 1px; background: var(--irb-line); }
+.irb-form .irb-hint { color: var(--irb-muted); font-size: 13px; line-height: 1.65; margin: 16px 0 0; }
+
+/* ---------- Felder */
+.irb-form .irb-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 18px; }
+.irb-form .irb-address { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.irb-form .irb-span-1 { grid-column: span 1; }
+.irb-form .irb-span-3 { grid-column: span 3; }
+.irb-form .irb-wide { grid-column: 1 / -1; }
+.irb-form .irb-field { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--irb-ink); margin: 0; min-width: 0; }
+.irb-form .irb-field input, .irb-form .irb-field select, .irb-form .irb-field textarea { width: 100%; min-height: 48px; background: #fff; color: var(--irb-ink); border: 1px solid #d9ddd5; border-radius: 8px; padding: 11px 13px; font-size: 16px; box-shadow: none; transition: border-color .2s, box-shadow .2s; }
+.irb-form .irb-field textarea { min-height: 90px; resize: vertical; }
+.irb-form .irb-field :is(input, select, textarea):focus { border-color: var(--irb-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--irb-accent) 15%, transparent); outline: none; }
+.irb-form .irb-field input[aria-invalid="true"] { border-color: #b24b40; background: #fffaf8; }
+.irb-form small { font-size: 12px; color: var(--irb-muted); font-weight: 400; }
+.irb-form .irb-required { color: #65765d; font-size: 13px; }
+.irb-form .irb-required-note { font-size: 12px; color: var(--irb-muted); margin: 0 0 16px; }
+.irb-form .irb-field-error, .irb-form .irb-step-error { display: block; color: var(--irb-error); font-size: 12px; line-height: 1.5; font-weight: 400; }
+.irb-form .irb-step-error { text-align: center; font-size: 14px; margin: 14px 0 0; }
+.irb-form .irb-field-error:empty, .irb-form .irb-step-error:empty { display: none; }
+.irb-form .irb-error { color: var(--irb-error); font-size: 14px; margin: 16px 0 0; padding: 12px 14px; background: #fdf3f1; border-radius: 8px; }
+.irb-form .irb-error:empty { display: none; }
+
+/* ---------- Kontakt */
+.irb-form .irb-contact-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 38px; align-items: start; }
+.irb-form .irb-consent { display: flex; gap: 11px; align-items: flex-start; font-size: 12px; line-height: 1.7; margin: 20px 0 0; }
+.irb-form .irb-consent input { width: 19px; height: 19px; min-width: 19px; margin: 3px 0 0; accent-color: var(--irb-accent); }
+.irb-form .irb-message { margin: 16px 0 0; }
+.irb-form .irb-message summary, .irb-form .irb-review summary { cursor: pointer; font-size: 13px; color: var(--irb-accent); font-weight: 500; list-style: none; }
+.irb-form .irb-message summary::-webkit-details-marker, .irb-form .irb-review summary::-webkit-details-marker { display: none; }
+.irb-form .irb-message summary::before { content: "+ "; }
+.irb-form .irb-message[open] summary::before { content: "− "; }
+.irb-form .irb-message .irb-field { margin-top: 10px; }
+.irb-form .irb-review { margin: 22px 0 0; border: 1px solid var(--irb-line); border-radius: 10px; padding: 12px 16px; background: #fcfcfa; }
+.irb-form .irb-review summary span { color: var(--irb-muted); font-weight: 400; }
+.irb-form .irb-review summary::after { content: "▾"; float: right; color: var(--irb-muted); transition: transform .2s; }
+.irb-form .irb-review[open] summary::after { transform: rotate(180deg); }
+.irb-form .irb-review ul { list-style: none; margin: 10px 0 0; padding: 0; }
+.irb-form .irb-review li { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr) auto; gap: 10px; align-items: baseline; padding: 7px 0; border-top: 1px solid #f0f0ec; font-size: 13px; }
+.irb-form .irb-review-label { color: var(--irb-muted); }
+.irb-form .irb-review-value { overflow-wrap: anywhere; }
+.irb-form .irb-edit { background: none; border: 0; padding: 4px 0; font-size: 12px; color: var(--irb-accent); text-decoration: underline; }
+.irb-form .irb-person { background: var(--irb-soft); border-radius: 12px; padding: 18px; }
+.irb-form .irb-person img { width: 100%; height: auto; max-height: 240px; object-fit: contain; border-radius: 8px; margin-bottom: 16px; }
+.irb-form .irb-person img[hidden] { display: none; }
+.irb-form .irb-person .irb-eyebrow { margin: 0 0 8px; font-size: 9px; }
+.irb-form .irb-person h3 { font-family: inherit; font-size: 20px; font-weight: 500; margin: 0 0 8px; color: var(--irb-ink); }
+.irb-form .irb-person p { font-size: 13px; line-height: 1.7; margin: 0; color: #62685e; }
+.irb-form .irb-trust { list-style: none; margin: 14px 0 0; padding: 0; font-size: 13px; color: #4f564d; }
+.irb-form .irb-trust li { padding: 3px 0 3px 24px; position: relative; }
+.irb-form .irb-trust li::before { content: ""; position: absolute; left: 2px; top: 8px; width: 12px; height: 7px; border-left: 2px solid var(--irb-accent); border-bottom: 2px solid var(--irb-accent); transform: rotate(-45deg); }
+.irb-form .irb-restored { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; font-size: 13px; color: var(--irb-muted); background: var(--irb-soft); border-radius: 8px; padding: 10px 14px; margin: -12px 0 22px; }
+.irb-form .irb-restored button { background: none; border: 0; padding: 0; color: var(--irb-accent); text-decoration: underline; font-size: 13px; }
+
+/* ---------- Danke-Seite */
+.irb-form.irb-thanks { max-width: 820px; padding: 0 16px; }
+.irb-form .irb-thanks-card { padding: 52px 48px; }
+.irb-form.irb-thanks h1 { font-family: inherit; font-size: clamp(28px, 4vw, 38px); font-weight: 500; line-height: 1.2; letter-spacing: -.6px; margin: 14px 0 0; }
+.irb-form .irb-check { display: inline-flex; align-items: center; justify-content: center; width: 54px; height: 54px; border-radius: 50%; background: var(--irb-hover); color: var(--irb-accent); margin: 4px 0 6px; }
+.irb-form.irb-thanks p { margin: 18px 0 0; }
+.irb-form .irb-lead { font-size: 17px; color: #4b5049; }
+.irb-form .irb-timeline { list-style: none; margin: 30px 0 8px; padding: 0; counter-reset: irb; }
+.irb-form .irb-timeline li { position: relative; padding: 0 0 22px 46px; counter-increment: irb; }
+.irb-form .irb-timeline li::before { content: counter(irb); position: absolute; left: 0; top: 0; width: 30px; height: 30px; border-radius: 50%; background: var(--irb-accent); color: #fff; font-size: 13px; display: flex; align-items: center; justify-content: center; }
+.irb-form .irb-timeline li:not(:last-child)::after { content: ""; position: absolute; left: 14px; top: 34px; bottom: 4px; width: 2px; background: var(--irb-line); }
+.irb-form .irb-timeline strong { display: block; font-weight: 600; }
+.irb-form .irb-timeline span { color: var(--irb-muted); font-size: 15px; }
+.irb-form .irb-thanks-actions { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; margin-top: 28px; }
+.irb-form.irb-thanks .irb-primary, .irb-form.irb-thanks .irb-primary:hover { color: #fff; }
+
+/* ---------- Containerbreite (Elementor-Spalten, Sidebars, Mobil) */
+@container irb (max-width: 880px) {
+	.irb-form .irb-types { gap: 12px; }
+	.irb-form .irb-types .irb-choice { min-height: 200px; }
+	.irb-form .irb-art { height: 116px; }
+	.irb-form .irb-contact-grid { gap: 26px; }
+}
+@container irb (max-width: 700px) {
+	.irb-form .irb-header { padding: 26px 22px 22px; }
+	.irb-form .irb-heading-row { display: block; }
+	.irb-form .irb-step { display: block; margin: 12px 0 0; }
+	.irb-form .irb-body { padding: 26px 22px 20px; min-height: 0; }
+	.irb-form .irb-footer { padding: 16px 22px; min-height: 76px; }
+	.irb-form .irb-types { grid-template-columns: 1fr 1fr; }
+	.irb-form .irb-types .irb-choice { min-height: 172px; padding: 18px 6px; gap: 8px; font-size: 15px; }
+	.irb-form .irb-art { width: 100%; max-width: 145px; height: 104px; }
+	.irb-form .irb-types .irb-choice-arrow { width: 23px; height: 23px; top: 9px; right: 9px; font-size: 14px; }
+	.irb-form .irb-choices:not(.irb-types) { grid-template-columns: 1fr; gap: 10px; }
+	.irb-form .irb-choice { min-height: 62px; padding: 16px 18px; }
+	.irb-form .irb-contact-grid { grid-template-columns: 1fr; }
+	.irb-form .irb-person { display: grid; grid-template-columns: 110px 1fr; gap: 0 16px; align-items: start; }
+	.irb-form .irb-person img { grid-row: span 4; margin: 0; max-height: 140px; object-fit: cover; aspect-ratio: 1; }
+	.irb-form .irb-person .irb-trust { grid-column: 1 / -1; }
+	.irb-form input.irb-number { width: 190px; font-size: 28px; }
+	.irb-form .irb-number-row { gap: 8px; }
+	.irb-form .irb-primary { gap: 14px; padding: 13px 18px; }
+	.irb-form .irb-footer-note { font-size: 11px; }
+	.irb-form .irb-thanks-card { padding: 36px 24px; }
+}
+@container irb (max-width: 440px) {
+	.irb-form .irb-fields { grid-template-columns: 1fr; gap: 14px; }
+	.irb-form .irb-address { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+	.irb-form .irb-address .irb-span-3 { grid-column: span 3; }
+	.irb-form .irb-types .irb-choice { min-height: 150px; }
+	.irb-form .irb-art { height: 84px; }
+	.irb-form input.irb-number { width: 150px; }
+	.irb-form .irb-person { grid-template-columns: 1fr; }
+	.irb-form .irb-person img { grid-row: auto; aspect-ratio: auto; max-height: 180px; object-fit: contain; margin-bottom: 14px; }
+	.irb-form .irb-review li { grid-template-columns: 1fr auto; }
+	.irb-form .irb-review-label { grid-column: 1 / -1; }
+}
+@media (max-width: 760px) { .irb-form { margin: 18px auto; } }
+
+@media (hover: none) { .irb-form .irb-choice:active { background: var(--irb-hover); } }
+@media (prefers-reduced-motion: reduce) {
+	.irb-form *, .irb-form *::before { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+	.irb-form .irb-choice, .irb-form .irb-primary, .irb-form .irb-art-building { transform: none !important; }
+}

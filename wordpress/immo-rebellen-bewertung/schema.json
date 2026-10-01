@@ -1,0 +1,149 @@
+{
+  "version": 2,
+  "types": {
+    "haus": "Haus",
+    "wohnung": "Wohnung",
+    "grundstueck": "Grundstück",
+    "gewerbe": "Gewerbeimmobilie"
+  },
+  "subtypes": {
+    "haus": ["Einfamilienhaus", "Mehrfamilienhaus", "Reihenhaus", "Doppelhaushälfte", "Sonstiges"],
+    "wohnung": ["Erdgeschosswohnung", "Etagenwohnung", "Penthouse/Dachgeschosswohnung", "Sonstiges"],
+    "grundstueck": ["Baugrundstück", "Grünland/Freizeitgrundstück", "Landwirtschaftliche Fläche", "Sonstiges"],
+    "gewerbe": ["Bürofläche", "Halle/Produktion", "Geschäftslokal/Einzelhandel", "Gewerbegrundstück", "Sonstiges"]
+  },
+  "paths": {
+    "haus": ["wohnflaeche", "grundflaeche", "zimmer", "baujahr", "zustand", "ausstattung", "nutzung"],
+    "wohnung": ["wohnflaeche", "zimmer", "baujahr", "zustand", "ausstattung", "nutzung"],
+    "grundstueck": ["grundflaeche", "widmung", "bebaut"],
+    "gewerbe": ["nutzflaeche", "grund_optional", "baujahr", "zustand", "nutzung"]
+  },
+  "common": ["anlass", "zeitraum", "adresse", "kontakt"],
+  "steps": {
+    "objektart": {
+      "question": "Was möchtest du bewerten lassen?",
+      "type": "choice"
+    },
+    "unterart": {
+      "question": "Um welche Art handelt es sich genau?",
+      "type": "choice"
+    },
+    "wohnflaeche": {
+      "question": "Wie groß ist die Wohnfläche?",
+      "label": "Wohnfläche",
+      "type": "area",
+      "unit": "m²",
+      "min": 1,
+      "max": 100000,
+      "slider": [15, 500]
+    },
+    "nutzflaeche": {
+      "question": "Wie groß ist die Nutzfläche?",
+      "label": "Nutzfläche",
+      "type": "area",
+      "unit": "m²",
+      "min": 1,
+      "max": 1000000,
+      "slider": [20, 5000]
+    },
+    "grundflaeche": {
+      "question": "Wie groß ist das Grundstück?",
+      "label": "Grundstück",
+      "type": "area",
+      "unit": "m²",
+      "min": 1,
+      "max": 100000000,
+      "slider": [100, 10000]
+    },
+    "grund_optional": {
+      "question": "Wie groß ist das Grundstück?",
+      "label": "Grundstück",
+      "type": "area",
+      "unit": "m²",
+      "min": 1,
+      "max": 100000000,
+      "slider": [100, 10000],
+      "optional": true
+    },
+    "zimmer": {
+      "question": "Wie viele Zimmer hat die Immobilie?",
+      "label": "Zimmer",
+      "type": "counter",
+      "unit": "Zimmer",
+      "min": 1,
+      "max": 1000,
+      "hint": "Ohne Küche, Bad und Vorraum.",
+      "quick": [1, 2, 3, 4, 5, 6]
+    },
+    "baujahr": {
+      "question": "Wann wurde die Immobilie erbaut?",
+      "label": "Baujahr",
+      "type": "year",
+      "min": 1000,
+      "periods": ["Altbau (vor 1945)", "1945–1980", "1981–2000", "2001–2015", "Neubau (ab 2016)"],
+      "hint": "Genaues Jahr unbekannt? Wähle einfach den passenden Zeitraum."
+    },
+    "zustand": {
+      "question": "Wie ist der Zustand der Immobilie?",
+      "label": "Zustand",
+      "type": "choice",
+      "options": ["Sanierungsbedürftig", "Gepflegt", "Neuwertig / saniert"]
+    },
+    "ausstattung": {
+      "question": "Was gehört zur Immobilie dazu?",
+      "label": "Ausstattung",
+      "type": "multi",
+      "optional": true,
+      "feature": "ausstattung",
+      "hint": "Mehrfachauswahl möglich. Freiflächen und Stellplätze beeinflussen den Wert spürbar.",
+      "options_by_type": {
+        "haus": ["Garten", "Terrasse / Balkon", "Keller", "Garage / Carport", "Photovoltaik", "Pool", "Wärmepumpe"],
+        "wohnung": ["Balkon / Loggia", "Terrasse", "Eigengarten", "Lift", "Kellerabteil", "Garage / Stellplatz", "Klimaanlage"]
+      }
+    },
+    "nutzung": {
+      "question": "Wie wird die Immobilie derzeit genutzt?",
+      "label": "Nutzung",
+      "type": "choice",
+      "options": ["Eigennutzung", "Vermietet", "Teilvermietet", "Leerstehend"]
+    },
+    "widmung": {
+      "question": "Wie ist das Grundstück gewidmet?",
+      "label": "Widmung",
+      "type": "choice",
+      "options": ["Bauland", "Grünland", "Gewerbe/Industrie", "Landwirtschaft", "Unbekannt"]
+    },
+    "bebaut": {
+      "question": "Ist das Grundstück bereits bebaut?",
+      "label": "Bebauung",
+      "type": "choice",
+      "options": ["Ja", "Nein", "Teilweise"]
+    },
+    "anlass": {
+      "question": "Wofür brauchst du die Bewertung?",
+      "label": "Anlass",
+      "type": "choice",
+      "options": ["Verkauf geplant", "Vermietung geplant", "Kauf geplant", "Nur zur Information"]
+    },
+    "zeitraum": {
+      "question": "Wann möchtest du verkaufen?",
+      "label": "Verkaufszeitraum",
+      "type": "choice",
+      "feature": "zeitraum",
+      "when": { "anlass": ["Verkauf geplant"] },
+      "options": ["So bald wie möglich", "In 3–6 Monaten", "In 6–12 Monaten", "Noch unklar"]
+    },
+    "adresse": {
+      "question": "Wo befindet sich die Immobilie?",
+      "type": "address"
+    },
+    "kontakt": {
+      "question": "An wen dürfen wir deine Bewertung senden?",
+      "type": "contact"
+    }
+  },
+  "contact": {
+    "anrede": ["Keine Angabe", "Herr", "Frau", "Divers"],
+    "erreichbarkeit": ["Jederzeit", "Vormittags", "Mittags", "Nachmittags", "Abends"]
+  }
+}
