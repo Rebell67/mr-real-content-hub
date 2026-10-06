@@ -22,7 +22,10 @@ automatisch – Whisper/Chrome laufen dabei im Hintergrund (Log: `/tmp/video-stu
 2. Claude bereitet vor: `npm run new-reel -- <rohclip> <slug>` – Pausen & Füllwörter raus, 9:16, Lautheit,
    Transkript → `reels/<slug>/`.
 3. Claude schneidet: Versprecher raus, Hook, Zooms, Untertitel, Grafiken, Musik & SFX – nach `STYLE.md`.
-4. Du bekommst das MP4, gibst Feedback → Claude setzt es um und schreibt es in `STYLE.md`.
+4. Du bekommst das fertige MP4 zum Posten. Für kleine Anpassungen in CapCut gibt es auf Wunsch ein
+   **CapCut-Paket** (`npm run capcut -- reels/<slug>`): Video-Ebene, transparente Overlay-Ebene
+   (Untertitel + Grafiken), Untertitel als SRT, Musik und SFX getrennt – Anleitung in `LIESMICH.txt`.
+5. Du gibst Feedback → Claude setzt es um und schreibt es in `STYLE.md`.
    So entsteht dein Stil über die ersten Reels.
 
 ## Einzelbefehle

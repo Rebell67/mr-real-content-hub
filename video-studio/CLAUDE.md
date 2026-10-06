@@ -22,11 +22,19 @@ fertige Reels im Mr-Real-Stil. **Vor jedem Schnitt `STYLE.md` lesen** – dort s
    - SFX (Whoosh/Pop) über `/media-use`
 4. **Prüfen** – `npm run check` muss sauber sein; `npm run snapshot -- --at …` an Schlüsselstellen ansehen
    (Gesicht frei? Text in der Safe-Zone? IG-UI unten/rechts frei?).
-5. **Rendern** – `npm run render` → `reels/<slug>/renders/<slug>.mp4`, dem User schicken.
+5. **Rendern** – `npm run render` → `reels/<slug>/renders/<slug>.mp4`, dem User schicken. Ziel ist immer ein
+   **fix fertiges** Reel zum direkten Posten.
+   Will der User in CapCut nachbessern: `npm run capcut -- reels/<slug>` → `reels/<slug>/capcut/`
+   (fertiges MP4, Video-Ebene, transparente Overlay-Ebene als ProRes-MOV, SRT, Musik/SFX, LIESMICH.txt).
 6. **Feedback einarbeiten** – Änderungen umsetzen und **`STYLE.md` aktualisieren** (Regel bestätigen/ändern +
    Zeile im Feedback-Log). So wird der Stil mit jedem Reel genauer.
 
 ## Konventionen
+
+- **Ebenen für den CapCut-Export** (in jedem Reel einhalten): A-Roll/B-Roll-`<video>` mit `data-capcut="base"`,
+  Musik-`<audio>` mit `data-capcut="music"`, SFX-`<audio>` mit `data-capcut="sfx"`. Alles andere (Untertitel,
+  Karten, Grafiken) als **Sub-Composition-Slot** (leeres `<div data-composition-src=…>`) auf Root-Ebene –
+  nur so lässt es sich als Overlay-Ebene abtrennen. (`data-layer` ist von HyperFrames reserviert.)
 
 - Sprache aller Bildschirmtexte: Deutsch (de-AT). Transkription immer mit `--language de` und einem
   mehrsprachigen Whisper-Modell (`small`/`medium`/`large-v3`, **nie** `*.en`). Transkript vor Untertiteln

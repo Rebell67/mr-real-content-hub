@@ -18,3 +18,5 @@ reels/*/assets/broll/
 reels/*/renders/
 reels/*/snapshots/
 reels/*/.media/
+reels/*/capcut/
+reels/*/.capcut-*.html

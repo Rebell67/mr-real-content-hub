@@ -303,7 +303,7 @@ function cutAndConcat(src, segments, out, info) {
           "-ss", seg.start.toFixed(3), "-i", src, "-t", dur.toFixed(3),
           "-vf", vf,
           ...(af.length ? ["-af", af.join(",")] : []),
-          "-c:v", "libx264", "-preset", "fast", "-crf", "16",
+          "-c:v", "libx264", "-preset", "fast", "-crf", "16", "-g", "30", "-keyint_min", "30",
           "-c:a", "pcm_s16le", "-ar", "48000", "-ac", "2",
           p,
         ],
