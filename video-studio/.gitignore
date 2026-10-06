@@ -1,0 +1,11 @@
+# Rohmaterial & Musik bleiben lokal (zu groß für Git)
+assets/footage/*
+!assets/footage/.gitkeep
+assets/music/*
+!assets/music/.gitkeep
+
+# Erzeugte Dateien
+renders/
+snapshots/
+*.mp4.proxy*
+.hyperframes/

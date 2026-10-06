@@ -1,0 +1,87 @@
+<!doctype html>
+<html
+  lang="de"
+  data-composition-variables='[
+    {"id":"name","type":"string","label":"Name","default":"Mr Real"},
+    {"id":"role","type":"string","label":"Rolle","default":"Immobilien · Wien"},
+    {"id":"accent","type":"color","label":"Akzentfarbe","default":"#00C389"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <style>
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/Inter-Variable.woff2") format("woff2");
+        font-weight: 100 900;
+      }
+      @font-face {
+        font-family: "Space Grotesk";
+        src: url("assets/fonts/SpaceGrotesk-Variable.woff2") format("woff2");
+        font-weight: 300 700;
+      }
+        #root {
+          position: absolute;
+          inset: 0;
+          font-family: "Inter", sans-serif;
+          color: #f4f6f8;
+        }
+        #mr-lt-box {
+          position: absolute;
+          left: 70px;
+          top: 1220px;
+          display: flex;
+          align-items: stretch;
+          gap: 24px;
+          padding: 28px 44px 28px 28px;
+          border-radius: 28px;
+          background: rgba(11, 14, 20, 0.86);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        #mr-lt-bar {
+          width: 10px;
+          border-radius: 10px;
+          background: var(--accent);
+        }
+        #mr-lt-text {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+        #mr-lt-name {
+          font-family: "Space Grotesk", sans-serif;
+          font-weight: 700;
+          font-size: 64px;
+          letter-spacing: -0.02em;
+        }
+        #mr-lt-role {
+          font-size: 36px;
+          font-weight: 500;
+          color: #b8c2cf;
+        }
+      </style>
+      <div id="root" data-composition-id="mr-lower-third" data-width="1080" data-height="1920">
+        <div id="mr-lt-box">
+          <div id="mr-lt-bar"></div>
+          <div id="mr-lt-text">
+            <span id="mr-lt-name" data-var-text="name">Mr Real</span>
+            <span id="mr-lt-role" data-var-text="role">Immobilien · Wien</span>
+          </div>
+        </div>
+      </div>
+      <script>
+        (() => {
+          const tl = gsap.timeline({ paused: true });
+          tl.fromTo("#mr-lt-box", { opacity: 0, x: -80 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 0);
+          tl.fromTo("#mr-lt-bar", { scaleY: 0 }, { scaleY: 1, duration: 0.4, ease: "power2.out" }, 0.15);
+          // Ausstieg: Slot ist 4,5 s lang
+          tl.to("#mr-lt-box", { opacity: 0, x: -40, duration: 0.35, ease: "power2.in" }, 4.15);
+          window.__timelines["mr-lower-third"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

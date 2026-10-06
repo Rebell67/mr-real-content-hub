@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "studio": "npm --prefix video-studio run dev",
+    "studio:setup": "npm --prefix video-studio run setup",
+    "studio:render": "npm --prefix video-studio run render"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.111.0",

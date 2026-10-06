@@ -1,0 +1,97 @@
+<!doctype html>
+<html
+  lang="de"
+  data-composition-variables='[
+    {"id":"handle","type":"string","label":"Handle","default":"@mr.r3al"},
+    {"id":"cta","type":"string","label":"Call to Action","default":"Folgen für mehr Immo-Wissen","maxLength":40},
+    {"id":"button","type":"string","label":"Button","default":"Folgen","maxLength":16},
+    {"id":"accent","type":"color","label":"Akzentfarbe","default":"#00C389"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <style>
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/Inter-Variable.woff2") format("woff2");
+        font-weight: 100 900;
+      }
+      @font-face {
+        font-family: "Space Grotesk";
+        src: url("assets/fonts/SpaceGrotesk-Variable.woff2") format("woff2");
+        font-weight: 300 700;
+      }
+        #root {
+          position: absolute;
+          inset: 0;
+          font-family: "Inter", sans-serif;
+          color: #f4f6f8;
+        }
+        #mr-cta-scrim {
+          position: absolute;
+          inset: 0;
+          background: rgba(8, 10, 15, 0.78);
+        }
+        #mr-cta-inner {
+          position: absolute;
+          left: 90px;
+          right: 90px;
+          top: 640px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 40px;
+          text-align: center;
+        }
+        #mr-cta-handle {
+          display: block;
+          font-family: "Space Grotesk", sans-serif;
+          font-weight: 700;
+          font-size: 120px;
+          letter-spacing: -0.03em;
+          color: var(--accent);
+        }
+        #mr-cta-text {
+          display: block;
+          font-size: 56px;
+          font-weight: 600;
+          line-height: 1.2;
+          text-wrap: balance;
+        }
+        #mr-cta-button {
+          display: block;
+          margin-top: 20px;
+          padding: 26px 64px;
+          border-radius: 999px;
+          border: 3px solid var(--accent);
+          font-family: "Space Grotesk", sans-serif;
+          font-size: 44px;
+          font-weight: 700;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+        }
+      </style>
+      <div id="root" data-composition-id="mr-cta" data-width="1080" data-height="1920">
+        <div id="mr-cta-scrim"></div>
+        <div id="mr-cta-inner">
+          <span id="mr-cta-handle" data-var-text="handle">@mr.r3al</span>
+          <span id="mr-cta-text" data-var-text="cta">Folgen für mehr Immo-Wissen</span>
+          <span id="mr-cta-button" data-var-text="button">Folgen</span>
+        </div>
+      </div>
+      <script>
+        (() => {
+          const tl = gsap.timeline({ paused: true });
+          tl.fromTo("#mr-cta-scrim", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 0);
+          tl.fromTo("#mr-cta-handle", { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.6)" }, 0.1);
+          tl.fromTo("#mr-cta-text", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 0.35);
+          tl.fromTo("#mr-cta-button", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 0.55);
+          window.__timelines["mr-cta"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

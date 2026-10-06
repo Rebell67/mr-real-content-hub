@@ -1,0 +1,14 @@
+{
+  "name": "mr-real-video-studio",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "setup": "bash scripts/setup.sh",
+    "dev": "npx --yes hyperframes@0.8.138 preview",
+    "check": "npx --yes hyperframes@0.8.138 check",
+    "transcribe": "npx --yes hyperframes@0.8.138 transcribe --model small --language de",
+    "snapshot": "npx --yes hyperframes@0.8.138 snapshot",
+    "render": "npx --yes hyperframes@0.8.138 render -o renders/reel.mp4",
+    "publish": "npx --yes hyperframes@0.8.138 publish"
+  }
+}

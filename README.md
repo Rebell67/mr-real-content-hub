@@ -16,6 +16,7 @@ Kein generisches Social-Media-Dashboard, sondern ein Werkzeug, das aus Daten **E
 | **Ideen & Formate** | Wiederkehrende Formate mit strategischem Zweck, kuratierter Ideen-Pool, Ideen-Generator (Format × Thema → Hook). |
 | **Strategie** | Nordstern, datenbasierte Empfehlungen mit konkreter Handlung & erwartetem Impact, empfohlener Content-Mix, Monats-Meilensteine. |
 | **Bibliothek** | Durchsuchbares Content-Archiv mit Filtern, Sortierung und Detail-Ansicht inkl. Performance & Learnings. |
+| **Video-Studio** | Reel-Schnitt mit HyperFrames (HTML → MP4) in `video-studio/`: Mr-Real-Vorlage (Hook, Bauchbinde, CTA), Whisper-Transkription (Deutsch), Render. Siehe `video-studio/README.md`. |
 | **Daten & Setup** | Datenquellen-Umschaltung, Metricool-API-Konfiguration, CSV/JSON-Import (Drag & Drop) und Export. |
 
 ---
@@ -35,6 +36,16 @@ npm install
 npm run dev      # Dev-Server (http://localhost:5173)
 npm run build    # Produktions-Build
 npm run preview  # Build lokal ansehen
+```
+
+---
+
+### Video-Studio
+
+```bash
+npm run studio:setup   # Skills, Chrome, Whisper installieren
+npm run studio         # Studio-Editor (http://localhost:3002)
+npm run studio:render  # → video-studio/renders/reel.mp4
 ```
 
 ---
