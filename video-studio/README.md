@@ -16,7 +16,16 @@ Voraussetzungen: Node ≥ 22, FFmpeg, cmake + C-Compiler (für den Whisper-Build
 In Claude-Code-Cloud-Sessions erledigt das der SessionStart-Hook (`.claude/hooks/session-start.sh`)
 automatisch – Whisper/Chrome laufen dabei im Hintergrund (Log: `/tmp/video-studio-setup.log`).
 
-## Arbeitsablauf
+## Rohclip → Reel (mit Claude)
+
+1. Rohclip an Claude geben („Schneid daraus ein Reel").
+2. Claude bereitet vor: `npm run new-reel -- <rohclip> <slug>` – Pausen & Füllwörter raus, 9:16, Lautheit,
+   Transkript → `reels/<slug>/`.
+3. Claude schneidet: Versprecher raus, Hook, Zooms, Untertitel, Grafiken, Musik & SFX – nach `STYLE.md`.
+4. Du bekommst das MP4, gibst Feedback → Claude setzt es um und schreibt es in `STYLE.md`.
+   So entsteht dein Stil über die ersten Reels.
+
+## Einzelbefehle
 
 | Schritt | Befehl |
 |---|---|

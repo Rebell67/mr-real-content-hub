@@ -1,14 +1,43 @@
 # Mr Real · Video-Studio
 
-Reels für @mr.r3al (Immobilien, deutschsprachig, 9:16). Siehe `README.md` für Vorlage & Ablauf.
+Reels für @mr.r3al (Immobilien, deutschsprachig, 9:16). Der User liefert **Rohclips**, Claude schneidet daraus
+fertige Reels im Mr-Real-Stil. **Vor jedem Schnitt `STYLE.md` lesen** – dort steht der (wachsende) Stil.
 
-- Sprache aller Bildschirmtexte: Deutsch (de-AT). Transkription immer mit `--language de` und
-  einem mehrsprachigen Whisper-Modell (`small`/`medium`/`large-v3`, **nie** `*.en`) – `npm run transcribe`.
+## Playbook: Rohclip → Reel
+
+1. **Vorbereiten** – `npm run new-reel -- <rohclip> <slug>` → `reels/<slug>/` mit `assets/tight.mp4`
+   (Pausen + Füllwörter raus, 1080×1920, 30 fps, SDR, −14 LUFS), `transcript.json` (Wort-Timing), `edit.json`.
+   Fehlen Skills/Chrome/Whisper → `npm run setup`.
+2. **Inhalt schneiden** – `transcript.json` lesen: Versprecher/doppelte Anläufe finden (letzten sauberen Take
+   behalten), stärksten Satz als Hook prüfen, Überlänge kürzen. Schnitte als Clip-Fenster in der Komposition
+   (`data-media-start` + `data-duration`, siehe `/hyperframes-core` → `creator-editing-recipes.md`),
+   Untertitel-Timing entsprechend verschieben.
+3. **Komposition bauen** (`reels/<slug>/index.html`, `/general-video` + `/hyperframes-core`):
+   - A-Roll = `assets/tight.mp4` (bzw. mehrere Fenster daraus)
+   - Zooms/Punch-ins auf Schlüsselwörter → `/hyperframes-keyframes` (Wrapper animieren, nicht den Clip)
+   - Hook-Karte, Bauchbinde, CTA, Fortschrittsbalken aus `compositions/mr-*.html`
+   - Zahlen/Beträge als Grafiken → `/hyperframes-animation`, `/hyperframes-registry` (vorher Katalog suchen)
+   - Untertitel im Stil aus `STYLE.md`; für „Wort hinter der Person" (Matte) → `/embedded-captions`
+   - Musik aus `assets/music/` (oder `/media-use` resolve), mit Ducking unter der Stimme → `/hyperframes-audio`
+   - SFX (Whoosh/Pop) über `/media-use`
+4. **Prüfen** – `npm run check` muss sauber sein; `npm run snapshot -- --at …` an Schlüsselstellen ansehen
+   (Gesicht frei? Text in der Safe-Zone? IG-UI unten/rechts frei?).
+5. **Rendern** – `npm run render` → `reels/<slug>/renders/<slug>.mp4`, dem User schicken.
+6. **Feedback einarbeiten** – Änderungen umsetzen und **`STYLE.md` aktualisieren** (Regel bestätigen/ändern +
+   Zeile im Feedback-Log). So wird der Stil mit jedem Reel genauer.
+
+## Konventionen
+
+- Sprache aller Bildschirmtexte: Deutsch (de-AT). Transkription immer mit `--language de` und einem
+  mehrsprachigen Whisper-Modell (`small`/`medium`/`large-v3`, **nie** `*.en`). Transkript vor Untertiteln
+  gegenlesen und Fachbegriffe/Zahlen korrigieren.
 - Branding: Hintergrund `#080A0F`/`#0B0E14`, Akzent `#00C389`, Gold `#F7C14B`; Schriften Inter + Space Grotesk
-  aus `assets/fonts/` (Pfade root-relativ: `assets/fonts/...`, auch in `compositions/`).
-- Wiederverwendbare Bausteine liegen in `compositions/mr-*.html`; neue Overlays ebenso als Sub-Composition anlegen.
-- Rohmaterial in `assets/footage/`, Musik in `assets/music/` (beides gitignored); Renders nach `renders/`.
-- Fehlen Skills/Chrome/Whisper: `npm run setup`.
+  aus `assets/fonts/` (Pfade root-relativ `assets/fonts/...`, auch in `compositions/`).
+- Wiederverwendbare Bausteine in `compositions/mr-*.html` (Master im Studio-Root; `new-reel` kopiert sie ins
+  Reel). Bewährt sich ein neues Element über mehrere Reels, als `mr-*`-Baustein in den Master übernehmen.
+- Footage (`raw.*`, `tight.mp4`), Renders und Snapshots sind gitignored; committet werden Kompositionen,
+  Transkripte, `edit.json`, `STYLE.md`.
+- `index.html` im Studio-Root ist die Vorlage/Spielwiese für Bausteine, nicht ein konkretes Reel.
 
 ---
 

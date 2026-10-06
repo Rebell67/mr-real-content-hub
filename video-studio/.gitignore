@@ -9,3 +9,12 @@ renders/
 snapshots/
 *.mp4.proxy*
 .hyperframes/
+
+# Reel-Footage (Rohclips & Zwischenschnitte) bleibt lokal – zu groß für Git
+reels/*/assets/raw.*
+reels/*/assets/pass1.mp4
+reels/*/assets/tight.mp4
+reels/*/assets/broll/
+reels/*/renders/
+reels/*/snapshots/
+reels/*/.media/

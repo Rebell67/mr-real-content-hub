@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "setup": "bash scripts/setup.sh",
+    "new-reel": "node scripts/new-reel.mjs",
     "dev": "npx --yes hyperframes@0.8.138 preview",
     "check": "npx --yes hyperframes@0.8.138 check",
     "transcribe": "npx --yes hyperframes@0.8.138 transcribe --model small --language de",

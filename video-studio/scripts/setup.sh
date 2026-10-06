@@ -17,6 +17,8 @@ CACHE="${HOME}/.cache/hyperframes"
 
 echo "▸ HyperFrames-Skills aktualisieren"
 npx --yes "$HF" skills update >/dev/null 2>&1 || echo "  (Skills-Update fehlgeschlagen – offline?)"
+# Schnitt-Workflows: Untertitel, Overlays, freier Schnitt
+npx --yes "$HF" skills update embedded-captions talking-head-recut general-video >/dev/null 2>&1 || true
 
 [[ "${1:-}" == "--skills" ]] && exit 0
 
