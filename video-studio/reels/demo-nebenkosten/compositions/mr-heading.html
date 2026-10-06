@@ -1,0 +1,108 @@
+<!doctype html>
+<html
+  lang="de"
+  data-composition-variables='[
+    {"id":"word","type":"string","label":"Wort","default":"Nebenkosten","maxLength":18},
+    {"id":"y","type":"number","label":"Position (px von oben)","default":230,"min":180,"max":1500,"step":10,"unit":"px"},
+    {"id":"accent","type":"color","label":"Akzentfarbe","default":"#00C389"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face {
+          font-family: "Inter";
+          src: url("assets/fonts/Inter-Variable.woff2") format("woff2");
+          font-weight: 100 900;
+        }
+        @font-face {
+          font-family: "Space Grotesk";
+          src: url("assets/fonts/SpaceGrotesk-Variable.woff2") format("woff2");
+          font-weight: 300 700;
+        }
+        #root {
+          position: absolute;
+          inset: 0;
+        }
+        #mr-heading-wrap {
+          position: absolute;
+          left: 60px;
+          right: 60px;
+          top: calc(var(--y) * 1px);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 14px;
+        }
+        #mr-heading-word {
+          display: block;
+          font-family: "Space Grotesk", sans-serif;
+          font-weight: 700;
+          font-size: 118px;
+          letter-spacing: -0.03em;
+          color: #f4f6f8;
+          text-shadow: 0 6px 30px rgba(0, 0, 0, 0.55);
+          white-space: nowrap;
+        }
+        #mr-heading-word span {
+          display: inline-block;
+        }
+        #mr-heading-line {
+          width: 220px;
+          height: 10px;
+          border-radius: 10px;
+          background: var(--accent);
+          transform-origin: center;
+        }
+      </style>
+      <div id="root" data-composition-id="mr-heading" data-width="1080" data-height="1920">
+        <div id="mr-heading-wrap">
+          <span id="mr-heading-word" data-var-text="word">Nebenkosten</span>
+          <div id="mr-heading-line"></div>
+        </div>
+      </div>
+      <script>
+        (() => {
+          // document/Selektoren sind vom HyperFrames-Runtime auf diese Instanz begrenzt
+          // (Voraussetzung: eindeutige data-composition-id am Slot, siehe CLAUDE.md).
+          const $ = (sel) => document.querySelector(sel);
+          // Texte aus den Instanz-Variablen setzen (data-var-text greift bei eindeutiger Slot-ID nicht immer
+          // vor dem Skript – so ist es deterministisch)
+          const vars = window.__hyperframes.getVariables();
+          document.querySelectorAll("[data-var-text]").forEach((el) => {
+            const v = vars[el.getAttribute("data-var-text")];
+            if (v != null && v !== "") el.textContent = String(v);
+          });
+          // Buchstaben einzeln einblenden (Tipp-Effekt mit Blur)
+          const el = $("#mr-heading-word");
+          const text = el.textContent;
+          el.textContent = "";
+          for (const ch of text) {
+            const s = document.createElement("span");
+            s.textContent = ch === " " ? " " : ch;
+            el.appendChild(s);
+          }
+          // auf max. 960 px Breite einpassen
+          let fs = 118;
+          while (el.scrollWidth > 960 && fs > 48) {
+            fs -= 4;
+            el.style.fontSize = fs + "px";
+          }
+          const letters = el.querySelectorAll("span");
+          const tl = gsap.timeline({ paused: true });
+          tl.fromTo(
+            letters,
+            { opacity: 0, y: 24, filter: "blur(10px)" },
+            { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.28, ease: "power3.out", stagger: 0.035 },
+            0,
+          );
+          tl.fromTo($("#mr-heading-line"), { scaleX: 0 }, { scaleX: 1, duration: 0.35, ease: "power3.out" }, 0.15 + letters.length * 0.035);
+          window.__timelines["mr-heading"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

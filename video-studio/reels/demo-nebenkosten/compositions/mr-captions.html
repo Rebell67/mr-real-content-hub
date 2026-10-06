@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- generiert von scripts/captions.mjs – Änderungen in captions.json, dann neu erzeugen -->
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face {
+          font-family: "Space Grotesk";
+          src: url("assets/fonts/SpaceGrotesk-Variable.woff2") format("woff2");
+          font-weight: 300 700;
+        }
+        #root {
+          position: absolute;
+          inset: 0;
+        }
+        .cap {
+          position: absolute;
+          left: 60px;
+          right: 60px;
+          top: 1120px;
+          height: 120px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          opacity: 0;
+          font-family: "Space Grotesk", sans-serif;
+          font-weight: 700;
+          font-size: 84px;
+          letter-spacing: -0.02em;
+          color: #ffffff;
+          text-shadow: 0 4px 0 rgba(0, 0, 0, 0.55), 0 0 24px rgba(0, 0, 0, 0.6);
+          -webkit-text-stroke: 2px rgba(8, 10, 15, 0.55);
+          white-space: nowrap;
+        }
+        .cap em {
+          font-style: normal;
+          margin: 0 0.18em;
+        }
+        .cap em:first-child { margin-left: 0; }
+        .cap em:last-child { margin-right: 0; }
+        .cap .hl { color: #00c389; }
+        .cap .num { color: #f7c14b; }
+      </style>
+      <div id="root" data-composition-id="mr-captions" data-width="1080" data-height="1920">
+        <div class="cap" id="cap-0">Sie schauen</div>
+        <div class="cap" id="cap-1">nur auf</div>
+        <div class="cap" id="cap-2">den</div>
+        <div class="cap" id="cap-3"><em class="hl">Kaufpreis</em></div>
+        <div class="cap" id="cap-4">Aber die</div>
+        <div class="cap" id="cap-5"><em class="hl">Nebenkosten</em></div>
+        <div class="cap" id="cap-6">fressen schnell</div>
+        <div class="cap" id="cap-7"><em class="num">10%</em></div>
+        <div class="cap" id="cap-8">extra</div>
+        <div class="cap" id="cap-9">Bei</div>
+        <div class="cap" id="cap-10"><em class="num">300.000</em></div>
+        <div class="cap" id="cap-11"><em class="num">Euro</em></div>
+        <div class="cap" id="cap-12">sind das</div>
+        <div class="cap" id="cap-13"><em class="num">30.000</em></div>
+        <div class="cap" id="cap-14"><em class="num">Euro</em></div>
+        <div class="cap" id="cap-15">Erstens</div>
+        <div class="cap" id="cap-16"><em class="hl">Grunderwerbsteuer</em></div>
+        <div class="cap" id="cap-17">einplanen</div>
+        <div class="cap" id="cap-18">Zweitens</div>
+        <div class="cap" id="cap-19"><em class="hl">Maklerprovision</em></div>
+      </div>
+      <script>
+        (() => {
+          // [start, end, stark]
+          const cues = [
+          [3.720, 4.330, 0],
+          [4.330, 4.770, 0],
+          [4.770, 4.990, 0],
+          [4.990, 5.800, 1],
+          [5.800, 6.240, 0],
+          [6.240, 7.140, 1],
+          [7.140, 8.280, 0],
+          [8.280, 8.810, 1],
+          [8.810, 9.400, 0],
+          [9.400, 9.450, 0],
+          [9.450, 10.670, 1],
+          [10.670, 10.900, 1],
+          [10.900, 11.370, 0],
+          [11.370, 12.340, 1],
+          [12.340, 12.760, 1],
+          [12.760, 13.560, 0],
+          [13.560, 14.480, 1],
+          [14.480, 15.200, 0],
+          [15.200, 16.100, 0],
+          [16.120, 17.150, 1]
+          ];
+          const tl = gsap.timeline({ paused: true });
+          cues.forEach(([start, end, strong], i) => {
+            const el = "#cap-" + i;
+            tl.set(el, { opacity: 1 }, start);
+            tl.fromTo(
+              el,
+              { scale: strong ? 1.35 : 0.82, y: strong ? 0 : 14 },
+              { scale: 1, y: 0, duration: strong ? 0.22 : 0.14, ease: strong ? "back.out(2.2)" : "power2.out" },
+              start,
+            );
+            tl.set(el, { opacity: 0 }, end);
+          });
+          window.__timelines["mr-captions"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

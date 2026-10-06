@@ -1,0 +1,188 @@
+[
+ {
+  "t": 0.0,
+  "s": "impact-short",
+  "note": "Start-Hit"
+ },
+ {
+  "t": 0.05,
+  "s": "whoosh-fast",
+  "note": "Hook-Kicker rein"
+ },
+ {
+  "t": 0.18,
+  "s": "pop"
+ },
+ {
+  "t": 0.35,
+  "s": "typing"
+ },
+ {
+  "t": 1.43,
+  "s": "impact-short",
+  "note": "Punch-in 90 %"
+ },
+ {
+  "t": 1.45,
+  "s": "ping"
+ },
+ {
+  "t": 2.61,
+  "s": "click-soft"
+ },
+ {
+  "t": 3.3,
+  "s": "whoosh-reverse",
+  "note": "Hook raus"
+ },
+ {
+  "t": 3.72,
+  "s": "whoosh-fast",
+  "note": "Zoom zurück"
+ },
+ {
+  "t": 3.75,
+  "s": "typing",
+  "note": "Heading Kaufpreis"
+ },
+ {
+  "t": 4.99,
+  "s": "pop-high"
+ },
+ {
+  "t": 5.55,
+  "s": "whoosh-reverse"
+ },
+ {
+  "t": 5.8,
+  "s": "typing",
+  "note": "Heading Nebenkosten"
+ },
+ {
+  "t": 6.24,
+  "s": "impact-short",
+  "note": "Punch-in Nebenkosten"
+ },
+ {
+  "t": 7.14,
+  "s": "glitch-short",
+  "note": "fressen"
+ },
+ {
+  "t": 7.71,
+  "s": "click"
+ },
+ {
+  "t": 8.28,
+  "s": "impact-short",
+  "note": "10 %"
+ },
+ {
+  "t": 8.3,
+  "s": "ping"
+ },
+ {
+  "t": 9.07,
+  "s": "riser-short",
+  "note": "Aufbau zur Summe"
+ },
+ {
+  "t": 9.3,
+  "s": "whoosh",
+  "note": "Zähler-Karte rein"
+ },
+ {
+  "t": 9.4,
+  "s": "pop-high"
+ },
+ {
+  "t": 10.3,
+  "s": "counter-roll"
+ },
+ {
+  "t": 11.3,
+  "s": "ping",
+  "note": "Zähler landet"
+ },
+ {
+  "t": 11.37,
+  "s": "impact-bass-1",
+  "note": "30.000 Euro"
+ },
+ {
+  "t": 11.4,
+  "s": "sparkle"
+ },
+ {
+  "t": 12.6,
+  "s": "whoosh-reverse"
+ },
+ {
+  "t": 12.72,
+  "s": "whoosh-fast",
+  "note": "Schritt 1"
+ },
+ {
+  "t": 12.76,
+  "s": "pop-high"
+ },
+ {
+  "t": 12.95,
+  "s": "click-soft"
+ },
+ {
+  "t": 13.56,
+  "s": "pop-low"
+ },
+ {
+  "t": 14.48,
+  "s": "click"
+ },
+ {
+  "t": 15.05,
+  "s": "whoosh-reverse"
+ },
+ {
+  "t": 15.15,
+  "s": "whoosh-fast",
+  "note": "Schritt 2"
+ },
+ {
+  "t": 15.2,
+  "s": "pop"
+ },
+ {
+  "t": 15.4,
+  "s": "click-soft"
+ },
+ {
+  "t": 16.12,
+  "s": "impact-short",
+  "note": "Punch-in Provision"
+ },
+ {
+  "t": 17.15,
+  "s": "chime"
+ },
+ {
+  "t": 17.9,
+  "s": "whoosh-deep",
+  "note": "CTA"
+ },
+ {
+  "t": 18.0,
+  "s": "pop"
+ },
+ {
+  "t": 18.25,
+  "s": "pop-high"
+ },
+ {
+  "t": 18.45,
+  "s": "click"
+ },
+ {
+  "t": 18.84,
+  "s": "notification"
+ }
+]

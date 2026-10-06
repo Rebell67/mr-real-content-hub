@@ -62,6 +62,7 @@ step(`Reel-Ordner reels/${slug}`);
 mkdirSync(join(reelDir, "assets"), { recursive: true });
 cpSync(join(STUDIO, "assets/fonts"), join(reelDir, "assets/fonts"), { recursive: true });
 cpSync(join(STUDIO, "compositions"), join(reelDir, "compositions"), { recursive: true });
+cpSync(join(STUDIO, "assets/sfx"), join(reelDir, "assets/sfx"), { recursive: true });
 cpSync(join(STUDIO, "hyperframes.json"), join(reelDir, "hyperframes.json"));
 writeFileSync(
   join(reelDir, "meta.json"),

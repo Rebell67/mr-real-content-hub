@@ -1,0 +1,115 @@
+{
+  "source": "demo-raw.mp4",
+  "raw": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "duration": 31.564989,
+    "hdr": false,
+    "hasAudio": true
+  },
+  "settings": {
+    "silenceDb": -35,
+    "minSilence": 0.45,
+    "pad": 0.12,
+    "fillers": true,
+    "model": "small"
+  },
+  "pass1": {
+    "removedPauses": [
+      {
+        "start": 0,
+        "end": 0.993
+      },
+      {
+        "start": 4.606,
+        "end": 5.829
+      },
+      {
+        "start": 6.389,
+        "end": 7.6
+      },
+      {
+        "start": 9.693,
+        "end": 10.885
+      },
+      {
+        "start": 14.446,
+        "end": 15.674
+      },
+      {
+        "start": 18.996,
+        "end": 20.216
+      },
+      {
+        "start": 22.723,
+        "end": 23.973
+      },
+      {
+        "start": 26.743,
+        "end": 27.955
+      },
+      {
+        "start": 30.253,
+        "end": 31.565
+      }
+    ],
+    "keep": [
+      {
+        "start": 0.993,
+        "end": 4.606
+      },
+      {
+        "start": 5.829,
+        "end": 6.389
+      },
+      {
+        "start": 7.6,
+        "end": 9.693
+      },
+      {
+        "start": 10.885,
+        "end": 14.446
+      },
+      {
+        "start": 15.674,
+        "end": 18.996
+      },
+      {
+        "start": 20.216,
+        "end": 22.723
+      },
+      {
+        "start": 23.973,
+        "end": 26.743
+      },
+      {
+        "start": 27.955,
+        "end": 30.253
+      }
+    ]
+  },
+  "pass2": {
+    "removedFillers": [
+      {
+        "text": "Ähm,",
+        "start": 3.66,
+        "end": 4.24
+      }
+    ],
+    "keep": [
+      {
+        "start": 0,
+        "end": 3.66
+      },
+      {
+        "start": 4.24,
+        "end": 20.855
+      }
+    ]
+  },
+  "tight": {
+    "duration": 20.332,
+    "words": 40
+  }
+}

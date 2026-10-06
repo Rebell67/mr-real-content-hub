@@ -12,14 +12,17 @@ fertige Reels im Mr-Real-Stil. **Vor jedem Schnitt `STYLE.md` lesen** – dort s
    behalten), stärksten Satz als Hook prüfen, Überlänge kürzen. Schnitte als Clip-Fenster in der Komposition
    (`data-media-start` + `data-duration`, siehe `/hyperframes-core` → `creator-editing-recipes.md`),
    Untertitel-Timing entsprechend verschieben.
-3. **Komposition bauen** (`reels/<slug>/index.html`, `/general-video` + `/hyperframes-core`):
-   - A-Roll = `assets/tight.mp4` (bzw. mehrere Fenster daraus)
-   - Zooms/Punch-ins auf Schlüsselwörter → `/hyperframes-keyframes` (Wrapper animieren, nicht den Clip)
-   - Hook-Karte, Bauchbinde, CTA, Fortschrittsbalken aus `compositions/mr-*.html`
-   - Zahlen/Beträge als Grafiken → `/hyperframes-animation`, `/hyperframes-registry` (vorher Katalog suchen)
-   - Untertitel im Stil aus `STYLE.md`; für „Wort hinter der Person" (Matte) → `/embedded-captions`
-   - Musik aus `assets/music/` (oder `/media-use` resolve), mit Ducking unter der Stimme → `/hyperframes-audio`
-   - SFX (Whoosh/Pop) über `/media-use`
+3. **Komposition bauen** (`reels/<slug>/index.html`, `/general-video` + `/hyperframes-core`;
+   Vorbild: `reels/demo-nebenkosten/index.html`):
+   - A-Roll = `assets/tight.mp4` in einem **nicht getimten** Wrapper `<div id="cam">` → Zooms/Punch-ins auf dem
+     Wrapper im Main-Timeline (`/hyperframes-keyframes`), nie auf dem `<video>` selbst
+   - Untertitel: `captions.json` anlegen (korrigierte `words`, `highlight`, `hide` für Hook/CTA) →
+     `npm run captions -- reels/<slug>` → Slot `compositions/mr-captions.html`
+   - Grafiken aus den Bausteinen (Tabelle unten); fehlt etwas → neuer `mr-*`-Baustein oder `/hyperframes-registry`
+   - Für „Wort hinter der Person" (Matte) → `/embedded-captions`
+   - Musik aus `assets/music/` mit Ducking (`/hyperframes-audio`), `data-capcut="music"`
+   - **Soundeffekte: sehr dicht** (siehe STYLE.md) – `sfx.json` schreiben → `npm run sfx -- reels/<slug>`
+     (Lexikon `assets/sfx/README.md`; jede Einblendung, jeder Zoom, jeder Zähler bekommt Sound)
 4. **Prüfen** – `npm run check` muss sauber sein; `npm run snapshot -- --at …` an Schlüsselstellen ansehen
    (Gesicht frei? Text in der Safe-Zone? IG-UI unten/rechts frei?).
 5. **Rendern** – `npm run render` → `reels/<slug>/renders/<slug>.mp4`, dem User schicken. Ziel ist immer ein
@@ -28,6 +31,24 @@ fertige Reels im Mr-Real-Stil. **Vor jedem Schnitt `STYLE.md` lesen** – dort s
    (fertiges MP4, Video-Ebene, transparente Overlay-Ebene als ProRes-MOV, SRT, Musik/SFX, LIESMICH.txt).
 6. **Feedback einarbeiten** – Änderungen umsetzen und **`STYLE.md` aktualisieren** (Regel bestätigen/ändern +
    Zeile im Feedback-Log). So wird der Stil mit jedem Reel genauer.
+
+## Bausteine (`compositions/`)
+
+| Baustein | Zweck | wichtige Variablen |
+|---|---|---|
+| `mr-hook` | Hook-Karte (Kicker + Satz), 0–3 s | `kicker`, `hook` |
+| `mr-heading` | getippte Überschrift (Kapitel/Kernwort) | `word`, `y` |
+| `mr-counter` | Profil-/Wertkarte mit hochzählender Zahl | `name`, `handle`, `label`, `from`, `to`, `prefix`, `suffix`, `countAt`, `countFor`, `y` |
+| `mr-step` | nummerierte Kachel + Titel | `num`, `title`, `tone` (green/gold/silver/bronze), `y` |
+| `mr-lower-third` | Bauchbinde | `name`, `role` |
+| `mr-cta` | Abschluss „Folgen" | `handle`, `cta`, `button` |
+| `mr-progress` | Fortschrittsbalken | `length` (= Reel-Länge) |
+| `mr-captions` | generiert von `scripts/captions.mjs` | – |
+
+**Mehrfach-Nutzung:** Jeder Slot braucht eine **eindeutige `data-composition-id`** (z. B. `head-1`, `head-2`,
+`step-1`), `data-composition-src` zeigt auf die Baustein-Datei. Das Runtime grenzt `document`/Selektoren über diese
+ID auf die Instanz ein – gleiche IDs teilen sich sonst Elemente und Variablen. Bausteine setzen Texte selbst aus
+`getVariables()` (data-var-text allein greift bei abweichender Slot-ID nicht).
 
 ## Konventionen
 
