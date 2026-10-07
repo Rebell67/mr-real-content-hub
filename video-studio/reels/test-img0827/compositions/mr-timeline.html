@@ -1,0 +1,179 @@
+<!doctype html>
+<html
+  lang="de"
+  data-composition-variables='[
+    {"id":"title","type":"string","label":"Titel","default":"Automatisch geschnitten","maxLength":28},
+    {"id":"cuts","type":"string","label":"Schnitte bei (s im Slot, Komma)","default":"1.3,2.1"},
+    {"id":"length","type":"number","label":"Playhead-Dauer (s)","default":2.6,"min":0.5,"step":0.1,"unit":"s"},
+    {"id":"y","type":"number","label":"Position (px von oben)","default":220,"min":160,"max":1400,"step":10,"unit":"px"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face {
+          font-family: "Inter";
+          src: url("assets/fonts/Inter-Variable.woff2") format("woff2");
+          font-weight: 100 900;
+        }
+        @font-face {
+          font-family: "Space Grotesk";
+          src: url("assets/fonts/SpaceGrotesk-Variable.woff2") format("woff2");
+          font-weight: 300 700;
+        }
+        #root {
+          position: absolute;
+          inset: 0;
+        }
+        #mr-tl-panel {
+          position: absolute;
+          left: 90px;
+          width: 900px;
+          top: calc(var(--y) * 1px);
+          padding: 30px 34px 36px;
+          border-radius: 34px;
+          background: linear-gradient(165deg, rgba(26, 32, 41, 0.97), rgba(8, 10, 15, 0.97));
+          border: 2px solid rgba(255, 255, 255, 0.12);
+          box-shadow: 0 36px 70px -24px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+        }
+        #mr-tl-head {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          margin-bottom: 84px;
+        }
+        #mr-tl-title {
+          display: block;
+          font-family: "Space Grotesk", sans-serif;
+          font-weight: 700;
+          font-size: 44px;
+          color: #f4f6f8;
+        }
+        #mr-tl-tracks {
+          position: relative;
+          height: 190px;
+        }
+        .mr-tl-track {
+          position: absolute;
+          left: 0;
+          right: 0;
+          height: 82px;
+          border-radius: 14px;
+          overflow: hidden;
+        }
+        #mr-tl-v {
+          top: 0;
+          background: repeating-linear-gradient(90deg, #12d99a 0 104px, #00a374 104px 108px);
+        }
+        #mr-tl-a {
+          top: 100px;
+          height: 70px;
+          background: #1a2029;
+          border: 2px solid rgba(255, 255, 255, 0.08);
+        }
+        .mr-tl-wave {
+          position: absolute;
+          bottom: 50%;
+          width: 6px;
+          border-radius: 4px;
+          background: #7df7ce;
+          transform: translateY(50%);
+        }
+        .mr-tl-gap {
+          position: absolute;
+          top: -6px;
+          bottom: -6px;
+          width: 18px;
+          margin-left: -9px;
+          background: #080a0f;
+          transform-origin: center;
+        }
+        #mr-tl-head-line {
+          position: absolute;
+          top: -14px;
+          bottom: -14px;
+          left: 0;
+          width: 6px;
+          border-radius: 6px;
+          background: #ffffff;
+          box-shadow: 0 0 18px rgba(255, 255, 255, 0.8);
+        }
+        .mr-tl-scissor {
+          position: absolute;
+          top: -66px;
+          width: 64px;
+          height: 64px;
+          margin-left: -32px;
+          border-radius: 50%;
+          background: #f7c14b;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          opacity: 0;
+        }
+      </style>
+      <div id="root" data-composition-id="mr-timeline" data-width="1080" data-height="1920">
+        <div id="mr-tl-panel">
+          <div id="mr-tl-head">
+            <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#00C389" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>
+            <span id="mr-tl-title" data-var-text="title">Automatisch geschnitten</span>
+          </div>
+          <div id="mr-tl-tracks">
+            <div class="mr-tl-track" id="mr-tl-v"></div>
+            <div class="mr-tl-track" id="mr-tl-a"></div>
+            <div id="mr-tl-head-line"></div>
+          </div>
+        </div>
+      </div>
+      <script>
+        (() => {
+          // document/Selektoren sind vom HyperFrames-Runtime auf diese Instanz begrenzt
+          // (Voraussetzung: eindeutige data-composition-id am Slot, siehe CLAUDE.md).
+          const $ = (sel) => document.querySelector(sel);
+          const vars = window.__hyperframes.getVariables();
+          document.querySelectorAll("[data-var-text]").forEach((el) => {
+            const v = vars[el.getAttribute("data-var-text")];
+            if (v != null && v !== "") el.textContent = String(v);
+          });
+          const W = 832; // Spurbreite (900 − 2×34)
+          const len = Number(vars.length) || 2.6;
+          const cuts = String(vars.cuts || "").split(",").map(Number).filter((n) => n > 0 && n < len);
+          // deterministische Wellenform
+          const a = $("#mr-tl-a");
+          for (let i = 0; i < 60; i++) {
+            const h = 14 + Math.abs(Math.sin(i * 1.7) * 26 + Math.sin(i * 0.53) * 14);
+            const bar = document.createElement("div");
+            bar.className = "mr-tl-wave";
+            bar.style.left = 8 + i * 13.7 + "px";
+            bar.style.height = h + "px";
+            a.appendChild(bar);
+          }
+          const tracks = $("#mr-tl-tracks");
+          const tl = gsap.timeline({ paused: true });
+          tl.fromTo($("#mr-tl-panel"), { opacity: 0, y: -40, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.42, ease: "back.out(1.5)" }, 0);
+          tl.fromTo($("#mr-tl-head-line"), { x: 0 }, { x: W - 6, duration: len, ease: "none" }, 0.25);
+          cuts.forEach((t) => {
+            const px = Math.round((t / len) * (W - 6));
+            const gap = document.createElement("div");
+            gap.className = "mr-tl-gap";
+            gap.style.left = px + "px";
+            tracks.appendChild(gap);
+            const sc = document.createElement("div");
+            sc.className = "mr-tl-scissor";
+            sc.style.left = px + "px";
+            sc.innerHTML = '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#06120D" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>';
+            tracks.appendChild(sc);
+            const at = 0.25 + t;
+            tl.fromTo(sc, { opacity: 0, scale: 0.3, y: 10 }, { opacity: 1, scale: 1, y: 0, duration: 0.2, ease: "back.out(2.4)" }, at - 0.05);
+            tl.fromTo(gap, { scaleX: 0 }, { scaleX: 1, duration: 0.18, ease: "power3.out" }, at + 0.05);
+            tl.to(sc, { opacity: 0, y: -16, duration: 0.25 }, at + 0.45);
+          });
+          window.__timelines["mr-timeline"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

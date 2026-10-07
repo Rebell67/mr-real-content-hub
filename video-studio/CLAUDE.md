@@ -23,6 +23,9 @@ fertige Reels im Mr-Real-Stil. **Vor jedem Schnitt `STYLE.md` lesen** – dort s
    - Musik aus `assets/music/` mit Ducking (`/hyperframes-audio`), `data-capcut="music"`
    - **Soundeffekte: sehr dicht** (siehe STYLE.md) – `sfx.json` schreiben → `npm run sfx -- reels/<slug>`
      (Lexikon `assets/sfx/README.md`; jede Einblendung, jeder Zoom, jeder Zähler bekommt Sound)
+   - Ende: CTA braucht Bild darunter → A-Roll mit `tpad` um die CTA-Dauer verlängern (`assets/tight-ext.mp4`)
+   - Layout pro Clip messen (Frame mit Raster): Gesicht frei halten, Grafiken in freie Zone, Zoom-`transform-origin`
+     auf Gesichtsmitte
 4. **Prüfen** – `npm run check` muss sauber sein; `npm run snapshot -- --at …` an Schlüsselstellen ansehen
    (Gesicht frei? Text in der Safe-Zone? IG-UI unten/rechts frei?).
 5. **Rendern** – `npm run render` → `reels/<slug>/renders/<slug>.mp4`, dem User schicken. Ziel ist immer ein
@@ -37,13 +40,16 @@ fertige Reels im Mr-Real-Stil. **Vor jedem Schnitt `STYLE.md` lesen** – dort s
 | Baustein | Zweck | wichtige Variablen |
 |---|---|---|
 | `mr-hook` | Hook-Karte (Kicker + Satz), 0–3 s | `kicker`, `hook` |
-| `mr-heading` | getippte Überschrift (Kapitel/Kernwort) | `word`, `y` |
+| `mr-heading` | getippte Überschrift (Kapitel/Kernwort) | `word`, `y`, `backdrop` (bei heller Wand) |
 | `mr-counter` | Profil-/Wertkarte mit hochzählender Zahl | `name`, `handle`, `label`, `from`, `to`, `prefix`, `suffix`, `countAt`, `countFor`, `y` |
 | `mr-step` | nummerierte Kachel + Titel | `num`, `title`, `tone` (green/gold/silver/bronze), `y` |
 | `mr-lower-third` | Bauchbinde | `name`, `role` |
 | `mr-cta` | Abschluss „Folgen" | `handle`, `cta`, `button` |
 | `mr-progress` | Fortschrittsbalken | `length` (= Reel-Länge) |
-| `mr-captions` | generiert von `scripts/captions.mjs` | – |
+| `mr-xcard` | Begriff wird rot durchgestrichen („brauchst du nicht") | `text`, `label`, `xAt`, `y` |
+| `mr-dropzone` | App-Fenster, Datei fliegt rein, Häkchen, Badges | `app`, `file`, `hint`, `badges`, `dropAt`, `badgesAt`, `y` |
+| `mr-timeline` | Schnitt-Timeline mit Playhead und Scheren-Cuts | `title`, `cuts`, `length`, `y` |
+| `mr-captions` | generiert von `scripts/captions.mjs` (`box: true` = dunkle Pille, bei hellem Hemd/Wand) | – |
 
 **Mehrfach-Nutzung:** Jeder Slot braucht eine **eindeutige `data-composition-id`** (z. B. `head-1`, `head-2`,
 `step-1`), `data-composition-src` zeigt auf die Baustein-Datei. Das Runtime grenzt `document`/Selektoren über diese

@@ -1,0 +1,120 @@
+<!doctype html>
+<html
+  lang="de"
+  data-composition-variables='[
+    {"id":"num","type":"string","label":"Nummer","default":"1","maxLength":2},
+    {"id":"title","type":"string","label":"Titel","default":"Kaufpreis prüfen","maxLength":24},
+    {"id":"tone","type":"enum","label":"Farbe","default":"green","options":[{"value":"green","label":"Grün"},{"value":"gold","label":"Gold"},{"value":"silver","label":"Silber"},{"value":"bronze","label":"Bronze"}]},
+    {"id":"y","type":"number","label":"Position (px von oben)","default":230,"min":180,"max":1500,"step":10,"unit":"px"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face {
+          font-family: "Inter";
+          src: url("assets/fonts/Inter-Variable.woff2") format("woff2");
+          font-weight: 100 900;
+        }
+        @font-face {
+          font-family: "Space Grotesk";
+          src: url("assets/fonts/SpaceGrotesk-Variable.woff2") format("woff2");
+          font-weight: 300 700;
+        }
+        #root {
+          position: absolute;
+          inset: 0;
+          --c1: #12d99a;
+          --c2: #00805b;
+        }
+        #mr-step-row {
+          position: absolute;
+          left: 70px;
+          right: 70px;
+          top: calc(var(--y) * 1px);
+          display: flex;
+          align-items: center;
+          gap: 28px;
+        }
+        #mr-step-tile {
+          flex: none;
+          width: 170px;
+          height: 170px;
+          border-radius: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: linear-gradient(160deg, #222a36, #0b0e14);
+          border: 3px solid var(--c1);
+          box-shadow: 0 24px 50px -18px rgba(0, 0, 0, 0.75), 0 0 40px -10px var(--c1), inset 0 2px 0 rgba(255, 255, 255, 0.15);
+        }
+        #mr-step-num {
+          font-family: "Space Grotesk", sans-serif;
+          font-weight: 700;
+          font-size: 118px;
+          line-height: 1;
+          background: linear-gradient(180deg, var(--c1), var(--c2));
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+        }
+        #mr-step-title {
+          display: block;
+          padding: 22px 34px;
+          border-radius: 28px;
+          background: rgba(11, 14, 20, 0.9);
+          border: 2px solid rgba(255, 255, 255, 0.1);
+          font-family: "Space Grotesk", sans-serif;
+          font-weight: 700;
+          font-size: 56px;
+          letter-spacing: -0.02em;
+          color: #f4f6f8;
+          white-space: nowrap;
+        }
+      </style>
+      <div id="root" data-composition-id="mr-step" data-width="1080" data-height="1920">
+        <div id="mr-step-row">
+          <div id="mr-step-tile"><span id="mr-step-num" data-var-text="num">1</span></div>
+          <span id="mr-step-title" data-var-text="title">Kaufpreis prüfen</span>
+        </div>
+      </div>
+      <script>
+        (() => {
+          // document/Selektoren sind vom HyperFrames-Runtime auf diese Instanz begrenzt
+          // (Voraussetzung: eindeutige data-composition-id am Slot, siehe CLAUDE.md).
+          const $ = (sel) => document.querySelector(sel);
+          // Texte aus den Instanz-Variablen setzen (data-var-text greift bei eindeutiger Slot-ID nicht immer
+          // vor dem Skript – so ist es deterministisch)
+          const vars = window.__hyperframes.getVariables();
+          document.querySelectorAll("[data-var-text]").forEach((el) => {
+            const v = vars[el.getAttribute("data-var-text")];
+            if (v != null && v !== "") el.textContent = String(v);
+          });
+          const tones = {
+            green: ["#3EEBB2", "#00805B"],
+            gold: ["#FFD879", "#D48A16"],
+            silver: ["#F4F6F8", "#8A96A6"],
+            bronze: ["#F2B48A", "#9A5A2E"],
+          };
+          const [c1, c2] = tones[window.__hyperframes.getVariables().tone] || tones.green;
+          $("#mr-step-row").style.setProperty("--c1", c1);
+          $("#mr-step-row").style.setProperty("--c2", c2);
+          // Titel neben der Kachel einpassen (Zeile 940 px − Kachel 170 − Abstand 28)
+          const title = $("#mr-step-title");
+          let fs = 56;
+          while (title.offsetWidth > 742 && fs > 30) {
+            fs -= 2;
+            title.style.fontSize = fs + "px";
+          }
+          const tl = gsap.timeline({ paused: true });
+          tl.fromTo($("#mr-step-tile"), { opacity: 0, scale: 0.4, rotation: -14 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.45, ease: "back.out(2)" }, 0);
+          tl.fromTo($("#mr-step-title"), { opacity: 0, x: -60 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, 0.18);
+          window.__timelines["mr-step"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

@@ -1,0 +1,277 @@
+{
+ "words": [
+  {
+   "text": "So,",
+   "start": 0.03,
+   "end": 0.18
+  },
+  {
+   "text": "das",
+   "start": 0.18,
+   "end": 0.32
+  },
+  {
+   "text": "ist",
+   "start": 0.32,
+   "end": 0.45
+  },
+  {
+   "text": "jetzt",
+   "start": 0.46,
+   "end": 0.69
+  },
+  {
+   "text": "hier",
+   "start": 0.69,
+   "end": 0.87
+  },
+  {
+   "text": "ein",
+   "start": 0.87,
+   "end": 1
+  },
+  {
+   "text": "Testvideo,",
+   "start": 1.02,
+   "end": 1.54
+  },
+  {
+   "text": "was",
+   "start": 1.54,
+   "end": 1.63
+  },
+  {
+   "text": "Claude",
+   "start": 1.69,
+   "end": 1.92
+  },
+  {
+   "text": "alles",
+   "start": 1.92,
+   "end": 2.11
+  },
+  {
+   "text": "kann.",
+   "start": 2.13,
+   "end": 2.4
+  },
+  {
+   "text": "Mit",
+   "start": 2.4,
+   "end": 2.52
+  },
+  {
+   "text": "Claude",
+   "start": 2.52,
+   "end": 2.66
+  },
+  {
+   "text": "kann",
+   "start": 2.66,
+   "end": 2.8
+  },
+  {
+   "text": "man",
+   "start": 2.8,
+   "end": 2.97
+  },
+  {
+   "text": "unter",
+   "start": 3.04,
+   "end": 3.28
+  },
+  {
+   "text": "anderem",
+   "start": 3.28,
+   "end": 3.68
+  },
+  {
+   "text": "auch",
+   "start": 3.68,
+   "end": 3.92
+  },
+  {
+   "text": "Video",
+   "start": 3.92,
+   "end": 4.32
+  },
+  {
+   "text": "editen,",
+   "start": 4.32,
+   "end": 4.89
+  },
+  {
+   "text": "man",
+   "start": 4.89,
+   "end": 5.03
+  },
+  {
+   "text": "braucht",
+   "start": 5.03,
+   "end": 5.34
+  },
+  {
+   "text": "dafür",
+   "start": 5.35,
+   "end": 5.64
+  },
+  {
+   "text": "nicht",
+   "start": 5.64,
+   "end": 5.76
+  },
+  {
+   "text": "einmal",
+   "start": 5.86,
+   "end": 6.04
+  },
+  {
+   "text": "irgendwelche",
+   "start": 6.04,
+   "end": 6.5
+  },
+  {
+   "text": "Editor",
+   "start": 6.5,
+   "end": 7.04
+  },
+  {
+   "text": "Skills,",
+   "start": 7.04,
+   "end": 7.67
+  },
+  {
+   "text": "man",
+   "start": 7.67,
+   "end": 7.77
+  },
+  {
+   "text": "kann",
+   "start": 7.82,
+   "end": 8
+  },
+  {
+   "text": "einfach",
+   "start": 8,
+   "end": 8.05
+  },
+  {
+   "text": "nur",
+   "start": 8.31,
+   "end": 8.42
+  },
+  {
+   "text": "ein",
+   "start": 8.42,
+   "end": 8.6
+  },
+  {
+   "text": "Video",
+   "start": 8.6,
+   "end": 8.91
+  },
+  {
+   "text": "reinziehen,",
+   "start": 8.91,
+   "end": 9.57
+  },
+  {
+   "text": "wie",
+   "start": 9.57,
+   "end": 9.74
+  },
+  {
+   "text": "ihr",
+   "start": 9.74,
+   "end": 9.83
+  },
+  {
+   "text": "hier",
+   "start": 9.83,
+   "end": 9.97
+  },
+  {
+   "text": "oben",
+   "start": 9.97,
+   "end": 10.11
+  },
+  {
+   "text": "seht",
+   "start": 10.11,
+   "end": 10.28
+  },
+  {
+   "text": "in",
+   "start": 10.28,
+   "end": 10.38
+  },
+  {
+   "text": "der",
+   "start": 10.38,
+   "end": 10.53
+  },
+  {
+   "text": "Animation,",
+   "start": 10.53,
+   "end": 11.05
+  },
+  {
+   "text": "und",
+   "start": 11.3,
+   "end": 11.31
+  },
+  {
+   "text": "dann",
+   "start": 11.33,
+   "end": 11.58
+  },
+  {
+   "text": "auch",
+   "start": 11.58,
+   "end": 11.84
+  },
+  {
+   "text": "gleichzeitig",
+   "start": 11.84,
+   "end": 12.61
+  },
+  {
+   "text": "das",
+   "start": 12.68,
+   "end": 12.76
+  },
+  {
+   "text": "Video",
+   "start": 12.84,
+   "end": 13.13
+  },
+  {
+   "text": "dann",
+   "start": 13.13,
+   "end": 13.29
+  },
+  {
+   "text": "schneiden.",
+   "start": 13.41,
+   "end": 13.99
+  }
+ ],
+ "highlight": [
+  "Claude",
+  "Testvideo",
+  "editen",
+  "Skills",
+  "reinziehen",
+  "Animation",
+  "schneiden"
+ ],
+ "hide": [
+  [
+   14.0,
+   30
+  ]
+ ],
+ "maxWords": 2,
+ "y": 1590,
+ "box": true
+}

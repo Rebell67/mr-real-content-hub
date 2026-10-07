@@ -105,3 +105,4 @@ Abgeleitete Regeln:
 | Datum | Reel | Was hat gefallen | Was ändern | Regel-Update |
 |---|---|---|---|---|
 | 2026-10-06 | (Referenz) | Animationen | – | „extrem viele SFX" → [✓] |
+| 2026-10-07 | test-img0827 („Was kann Claude?", Selfie, Büro) | _ausstehend_ | _ausstehend_ | Erkenntnisse: helle Wand + weißes Hemd → Untertitel-Pille & Heading-Hinterlegung nötig; Whisper `medium` erkennt „Claude" korrekt (`small` → „Cloud") |

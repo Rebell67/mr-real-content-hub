@@ -1,0 +1,229 @@
+<!doctype html>
+<html
+  lang="de"
+  data-composition-variables='[
+    {"id":"app","type":"string","label":"App-Name im Fenster","default":"Claude","maxLength":20},
+    {"id":"file","type":"string","label":"Dateiname","default":"IMG_0827.MOV","maxLength":20},
+    {"id":"hint","type":"string","label":"Text in der Ablage","default":"Video hier reinziehen","maxLength":28},
+    {"id":"badges","type":"string","label":"Badges (Komma-getrennt)","default":"Schnitt,Untertitel,Animationen,Sound"},
+    {"id":"dropAt","type":"number","label":"Datei landet bei (s)","default":1.2,"min":0.3,"step":0.05,"unit":"s"},
+    {"id":"badgesAt","type":"number","label":"Badges ab (s)","default":2.4,"min":0,"step":0.05,"unit":"s"},
+    {"id":"y","type":"number","label":"Position (px von oben)","default":190,"min":160,"max":1400,"step":10,"unit":"px"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face {
+          font-family: "Inter";
+          src: url("assets/fonts/Inter-Variable.woff2") format("woff2");
+          font-weight: 100 900;
+        }
+        @font-face {
+          font-family: "Space Grotesk";
+          src: url("assets/fonts/SpaceGrotesk-Variable.woff2") format("woff2");
+          font-weight: 300 700;
+        }
+        #root {
+          position: absolute;
+          inset: 0;
+        }
+        #mr-dz-win {
+          position: absolute;
+          left: 110px;
+          width: 860px;
+          top: calc(var(--y) * 1px);
+          height: 470px;
+          border-radius: 36px;
+          background: linear-gradient(165deg, rgba(26, 32, 41, 0.97), rgba(8, 10, 15, 0.97));
+          border: 2px solid rgba(255, 255, 255, 0.12);
+          box-shadow: 0 40px 80px -24px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+          font-family: "Inter", sans-serif;
+          color: #f4f6f8;
+        }
+        #mr-dz-bar {
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 0;
+          height: 64px;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 0 28px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .mr-dz-dot {
+          width: 16px;
+          height: 16px;
+          border-radius: 50%;
+        }
+        #mr-dz-app {
+          margin-left: 18px;
+          font-family: "Space Grotesk", sans-serif;
+          font-weight: 700;
+          font-size: 30px;
+          color: #b8c2cf;
+        }
+        #mr-dz-zone {
+          position: absolute;
+          left: 36px;
+          right: 36px;
+          top: 92px;
+          height: 230px;
+          border-radius: 26px;
+          border: 4px dashed rgba(184, 194, 207, 0.45);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 18px;
+        }
+        #mr-dz-zone-fill {
+          position: absolute;
+          inset: 0;
+          border-radius: 22px;
+          background: rgba(0, 195, 137, 0.16);
+          border: 4px solid #00c389;
+          margin: -4px;
+          opacity: 0;
+        }
+        #mr-dz-hint {
+          display: block;
+          font-family: "Space Grotesk", sans-serif;
+          font-weight: 700;
+          font-size: 42px;
+          color: #b8c2cf;
+        }
+        #mr-dz-check {
+          position: absolute;
+          right: 26px;
+          top: 22px;
+          width: 64px;
+          height: 64px;
+          border-radius: 50%;
+          background: #00c389;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          opacity: 0;
+        }
+        #mr-dz-file {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 300px;
+          height: 170px;
+          border-radius: 22px;
+          background: linear-gradient(135deg, #b8fde6, #3eebb2);
+          box-shadow: 0 26px 50px -16px rgba(0, 0, 0, 0.8);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+        }
+        #mr-dz-file-name {
+          display: block;
+          font-family: "Space Grotesk", sans-serif;
+          font-weight: 700;
+          font-size: 30px;
+          color: #06120d;
+        }
+        #mr-dz-badges {
+          position: absolute;
+          left: 36px;
+          right: 36px;
+          top: 350px;
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 12px;
+        }
+        .mr-dz-badge {
+          display: block;
+          padding: 10px 20px;
+          border-radius: 999px;
+          background: rgba(0, 195, 137, 0.14);
+          border: 2px solid #00c389;
+          color: #7df7ce;
+          font-family: "Space Grotesk", sans-serif;
+          font-weight: 700;
+          font-size: 28px;
+        }
+      </style>
+      <div id="root" data-composition-id="mr-dropzone" data-width="1080" data-height="1920">
+        <div id="mr-dz-win">
+          <div id="mr-dz-bar">
+            <div class="mr-dz-dot" style="background: #ff5f57"></div>
+            <div class="mr-dz-dot" style="background: #febc2e"></div>
+            <div class="mr-dz-dot" style="background: #28c840"></div>
+            <span id="mr-dz-app" data-var-text="app">Claude</span>
+          </div>
+          <div id="mr-dz-zone">
+            <div id="mr-dz-zone-fill"></div>
+            <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="#B8C2CF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 21h16"/></svg>
+            <span id="mr-dz-hint" data-var-text="hint">Video hier reinziehen</span>
+            <div id="mr-dz-check">
+              <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#06120d" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+            </div>
+          </div>
+          <div id="mr-dz-badges"></div>
+        </div>
+        <div id="mr-dz-file">
+          <svg width="56" height="56" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="rgba(6,18,13,0.85)"/><path d="M10 8l6 4-6 4z" fill="#3EEBB2"/></svg>
+          <span id="mr-dz-file-name" data-var-text="file">IMG_0827.MOV</span>
+        </div>
+      </div>
+      <script>
+        (() => {
+          // document/Selektoren sind vom HyperFrames-Runtime auf diese Instanz begrenzt
+          // (Voraussetzung: eindeutige data-composition-id am Slot, siehe CLAUDE.md).
+          const $ = (sel) => document.querySelector(sel);
+          const vars = window.__hyperframes.getVariables();
+          document.querySelectorAll("[data-var-text]").forEach((el) => {
+            const v = vars[el.getAttribute("data-var-text")];
+            if (v != null && v !== "") el.textContent = String(v);
+          });
+          const y = Number(vars.y) || 190;
+          const dropAt = Number(vars.dropAt) || 1.2;
+          const badgesAt = Number(vars.badgesAt) || 2.4;
+          const wrap = $("#mr-dz-badges");
+          String(vars.badges || "")
+            .split(",")
+            .map((s) => s.trim())
+            .filter(Boolean)
+            .forEach((b) => {
+              const el = document.createElement("span");
+              el.className = "mr-dz-badge";
+              el.textContent = b;
+              wrap.appendChild(el);
+            });
+          const badges = wrap.querySelectorAll(".mr-dz-badge");
+          const file = $("#mr-dz-file");
+          // Ziel: Mitte der Ablage (Fenster x 110..970, Ablage y+92..y+322)
+          const tx = 540 - 150;
+          const ty = y + 207 - 85;
+          const tl = gsap.timeline({ paused: true });
+          tl.fromTo($("#mr-dz-win"), { opacity: 0, y: 40, scale: 0.92 }, { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: "back.out(1.5)" }, 0);
+          // Datei fliegt von rechts oben (außerhalb) in die Ablage
+          tl.fromTo(
+            file,
+            { x: 900, y: y - 160, rotation: 18, scale: 0.9, opacity: 0 },
+            { x: tx + 120, y: ty - 90, rotation: 8, scale: 1.05, opacity: 1, duration: dropAt * 0.55, ease: "power2.out" },
+            0.15,
+          );
+          tl.to(file, { x: tx, y: ty, rotation: 0, scale: 1, duration: dropAt * 0.3, ease: "power3.in" }, 0.15 + dropAt * 0.55);
+          tl.to(file, { scale: 0.2, opacity: 0, duration: 0.22, ease: "power2.in" }, dropAt + 0.05);
+          tl.fromTo($("#mr-dz-zone-fill"), { opacity: 0 }, { opacity: 1, duration: 0.2 }, dropAt);
+          tl.fromTo($("#mr-dz-hint"), { opacity: 1 }, { opacity: 0.35, duration: 0.2 }, dropAt);
+          tl.fromTo($("#mr-dz-check"), { opacity: 0, scale: 0.3 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2.4)" }, dropAt + 0.15);
+          tl.fromTo(badges, { opacity: 0, y: 20, scale: 0.7 }, { opacity: 1, y: 0, scale: 1, duration: 0.25, ease: "back.out(2)", stagger: 0.18 }, badgesAt);
+          window.__timelines["mr-dropzone"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

@@ -1,0 +1,40 @@
+{
+  "source": "c97c7b0d-IMG_0827.mov",
+  "raw": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "duration": 13.978333,
+    "hdr": false,
+    "hasAudio": true
+  },
+  "settings": {
+    "silenceDb": -35,
+    "minSilence": 0.45,
+    "pad": 0.12,
+    "fillers": true,
+    "model": "small"
+  },
+  "pass1": {
+    "removedPauses": [],
+    "keep": [
+      {
+        "start": 0,
+        "end": 13.978
+      }
+    ]
+  },
+  "pass2": {
+    "removedFillers": [],
+    "keep": [
+      {
+        "start": 0,
+        "end": 14
+      }
+    ]
+  },
+  "tight": {
+    "duration": 14,
+    "words": 50
+  }
+}

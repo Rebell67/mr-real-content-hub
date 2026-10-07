@@ -1,0 +1,100 @@
+<!doctype html>
+<html
+  lang="de"
+  data-composition-variables='[
+    {"id":"kicker","type":"string","label":"Kicker","default":"Immo-Wissen","maxLength":28},
+    {"id":"hook","type":"string","label":"Hook","default":"Diesen Fehler machen 90 % beim ersten Wohnungskauf","maxLength":70},
+    {"id":"accent","type":"color","label":"Akzentfarbe","default":"#00C389"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <style>
+      @font-face {
+        font-family: "Inter";
+        src: url("assets/fonts/Inter-Variable.woff2") format("woff2");
+        font-weight: 100 900;
+      }
+      @font-face {
+        font-family: "Space Grotesk";
+        src: url("assets/fonts/SpaceGrotesk-Variable.woff2") format("woff2");
+        font-weight: 300 700;
+      }
+        #root {
+          position: absolute;
+          inset: 0;
+          font-family: "Inter", sans-serif;
+          color: #f4f6f8;
+        }
+        #mr-hook-scrim {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(180deg, rgba(8, 10, 15, 0.85) 0%, rgba(8, 10, 15, 0.35) 55%, rgba(8, 10, 15, 0) 75%);
+        }
+        #mr-hook-inner {
+          position: absolute;
+          left: 90px;
+          right: 90px;
+          top: 360px;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 36px;
+        }
+        #mr-hook-kicker {
+          display: block;
+          padding: 14px 30px;
+          border-radius: 999px;
+          background: var(--accent);
+          color: #06120d;
+          font-family: "Space Grotesk", sans-serif;
+          font-weight: 700;
+          font-size: 38px;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+        }
+        #mr-hook-text {
+          display: block;
+          font-family: "Space Grotesk", sans-serif;
+          font-weight: 700;
+          font-size: 104px;
+          line-height: 1.04;
+          letter-spacing: -0.03em;
+          text-wrap: balance;
+        }
+      </style>
+      <div id="root" data-composition-id="mr-hook" data-width="1080" data-height="1920">
+        <div id="mr-hook-scrim"></div>
+        <div id="mr-hook-inner">
+          <span id="mr-hook-kicker" data-var-text="kicker">Immo-Wissen</span>
+          <span id="mr-hook-text" data-var-text="hook">Diesen Fehler machen 90 % beim ersten Wohnungskauf</span>
+        </div>
+      </div>
+      <script>
+        (() => {
+          // document/Selektoren sind vom HyperFrames-Runtime auf diese Instanz begrenzt
+          // (Voraussetzung: eindeutige data-composition-id am Slot, siehe CLAUDE.md).
+          const $ = (sel) => document.querySelector(sel);
+          // Texte aus den Instanz-Variablen setzen (data-var-text greift bei eindeutiger Slot-ID nicht immer
+          // vor dem Skript – so ist es deterministisch)
+          const vars = window.__hyperframes.getVariables();
+          document.querySelectorAll("[data-var-text]").forEach((el) => {
+            const v = vars[el.getAttribute("data-var-text")];
+            if (v != null && v !== "") el.textContent = String(v);
+          });
+          const tl = gsap.timeline({ paused: true });
+          tl.fromTo($("#mr-hook-scrim"), { opacity: 0 }, { opacity: 1, duration: 0.3 }, 0);
+          tl.fromTo($("#mr-hook-kicker"), { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out" }, 0.05);
+          tl.fromTo($("#mr-hook-text"), { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0.15);
+          // Ausstieg: letzte 0,3 s des Slots
+          tl.to($("#mr-hook-inner"), { opacity: 0, y: -40, duration: 0.3, ease: "power2.in" }, 2.9);
+          tl.to($("#mr-hook-scrim"), { opacity: 0, duration: 0.3 }, 2.9);
+          window.__timelines["mr-hook"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

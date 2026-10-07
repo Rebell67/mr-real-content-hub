@@ -1,11 +1,11 @@
 {
-  "name": "reel-demo-nebenkosten",
+  "name": "reel-test-img0827",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "npx --yes hyperframes@0.8.138 preview",
     "check": "npx --yes hyperframes@0.8.138 check",
     "snapshot": "npx --yes hyperframes@0.8.138 snapshot",
-    "render": "npx --yes hyperframes@0.8.138 render -o renders/demo-nebenkosten.mp4 && bash ../../scripts/loudnorm.sh renders/demo-nebenkosten.mp4"
+    "render": "npx --yes hyperframes@0.8.138 render -o renders/test-img0827.mp4 && bash ../../scripts/loudnorm.sh renders/test-img0827.mp4"
   }
 }

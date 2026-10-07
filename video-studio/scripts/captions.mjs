@@ -10,7 +10,8 @@
 //     "highlight": ["Nebenkosten", "Kaufpreis"],    // Wörter in Brand-Grün
 //     "hide": [[3.2, 6.0]],                         // Zeitfenster ohne Untertitel (z. B. Hook-Karte)
 //     "maxWords": 2, "maxChars": 16,                // Chunk-Größe
-//     "y": 1180                                      // vertikale Position (Mitte), px von oben
+//     "y": 1180,                                     // vertikale Position (Mitte), px von oben
+//     "box": true                                    // dunkle Pille hinter dem Text (bei hellem Bild)
 //   }
 // Zahlen, %, € werden automatisch Gold. Ausgabe: reels/<slug>/compositions/mr-captions.html
 // Einbinden in index.html als Slot (siehe CLAUDE.md).
@@ -25,6 +26,7 @@ const words = (cfg.words || JSON.parse(readFileSync(join(reelDir, "transcript.js
 const maxWords = cfg.maxWords ?? 2;
 const maxChars = cfg.maxChars ?? 16;
 const y = cfg.y ?? 1180;
+const box = cfg.box ?? false; // dunkle Hinterlegung (z. B. bei hellem Hemd/Hintergrund)
 const hide = cfg.hide || [];
 const highlight = new Set((cfg.highlight || []).map(bare));
 
@@ -66,7 +68,7 @@ const spans = items
         return cls ? `<em class="${cls}">${esc(t)}</em>` : esc(t);
       })
       .join(" ");
-    return `        <div class="cap" id="cap-${i}">${inner}</div>`;
+    return `        <div class="cap" id="cap-${i}"><span class="pill">${inner}</span></div>`;
   })
   .join("\n");
 
@@ -120,6 +122,10 @@ const out = `<!doctype html>
         }
         .cap em:first-child { margin-left: 0; }
         .cap em:last-child { margin-right: 0; }
+        .cap .pill {
+          display: inline-block;
+          ${box ? "padding: 8px 30px 14px; border-radius: 26px; background: rgba(8, 10, 15, 0.82); box-shadow: 0 14px 34px -10px rgba(0, 0, 0, 0.6);" : ""}
+        }
         .cap .hl { color: #00c389; }
         .cap .num { color: #f7c14b; }
       </style>

@@ -79,7 +79,7 @@ writeFileSync(
         dev: `npx --yes ${HF} preview`,
         check: `npx --yes ${HF} check`,
         snapshot: `npx --yes ${HF} snapshot`,
-        render: `npx --yes ${HF} render -o renders/${slug}.mp4`,
+        render: `npx --yes ${HF} render -o renders/${slug}.mp4 && bash ../../scripts/loudnorm.sh renders/${slug}.mp4`,
       },
     },
     null,
@@ -236,7 +236,7 @@ function transcribe(file, outJson) {
 function detectSilence(file, db, minDur, duration) {
   const r = spawnSync(
     "ffmpeg",
-    ["-hide_banner", "-nostdin", "-i", file, "-vn", "-af", `silencedetect=noise=${db}dB:d=${minDur}`, "-f", "null", "-"],
+    ["-hide_banner", "-nostdin", "-i", file, "-map", "0:a:0", "-vn", "-af", `silencedetect=noise=${db}dB:d=${minDur}`, "-f", "null", "-"],
     { encoding: "utf8" },
   );
   const out = [];
@@ -302,6 +302,8 @@ function cutAndConcat(src, segments, out, info) {
         [
           "-y", "-nostdin", "-hide_banner", "-loglevel", "error",
           "-ss", seg.start.toFixed(3), "-i", src, "-t", dur.toFixed(3),
+          // iPhone-Clips haben oft eine zweite Spatial-Audio-Spur (APAC), die FFmpeg nicht dekodiert
+          "-map", "0:v:0", "-map", "0:a:0",
           "-vf", vf,
           ...(af.length ? ["-af", af.join(",")] : []),
           "-c:v", "libx264", "-preset", "fast", "-crf", "16", "-g", "30", "-keyint_min", "30",

@@ -1,0 +1,203 @@
+[
+ {
+  "t": 0.0,
+  "s": "impact-short",
+  "note": "Start"
+ },
+ {
+  "t": 0.05,
+  "s": "whoosh-fast",
+  "note": "Überschrift"
+ },
+ {
+  "t": 0.12,
+  "s": "typing"
+ },
+ {
+  "t": 1.02,
+  "s": "pop",
+  "note": "Punch Testvideo"
+ },
+ {
+  "t": 1.69,
+  "s": "ping",
+  "note": "Claude"
+ },
+ {
+  "t": 2.28,
+  "s": "whoosh-reverse"
+ },
+ {
+  "t": 2.4,
+  "s": "whoosh-fast",
+  "note": "Kachel 1"
+ },
+ {
+  "t": 2.45,
+  "s": "pop-high"
+ },
+ {
+  "t": 2.62,
+  "s": "click-soft"
+ },
+ {
+  "t": 3.92,
+  "s": "click"
+ },
+ {
+  "t": 4.32,
+  "s": "impact-short",
+  "note": "Punch editen"
+ },
+ {
+  "t": 4.8,
+  "s": "whoosh-reverse"
+ },
+ {
+  "t": 4.89,
+  "s": "whoosh-fast",
+  "note": "X-Karte"
+ },
+ {
+  "t": 4.95,
+  "s": "pop"
+ },
+ {
+  "t": 5.64,
+  "s": "error",
+  "note": "X"
+ },
+ {
+  "t": 5.76,
+  "s": "click"
+ },
+ {
+  "t": 5.95,
+  "s": "pop-low",
+  "note": "Label"
+ },
+ {
+  "t": 7.04,
+  "s": "impact-short",
+  "note": "Punch Skills"
+ },
+ {
+  "t": 7.55,
+  "s": "whoosh-reverse"
+ },
+ {
+  "t": 7.65,
+  "s": "whoosh",
+  "note": "App-Fenster"
+ },
+ {
+  "t": 7.72,
+  "s": "pop"
+ },
+ {
+  "t": 7.85,
+  "s": "whoosh-fast",
+  "note": "Datei fliegt"
+ },
+ {
+  "t": 8.91,
+  "s": "impact-short",
+  "note": "Drop"
+ },
+ {
+  "t": 8.93,
+  "s": "pop-high"
+ },
+ {
+  "t": 9.07,
+  "s": "chime",
+  "note": "Häkchen"
+ },
+ {
+  "t": 9.97,
+  "s": "click-soft",
+  "note": "oben"
+ },
+ {
+  "t": 10.5,
+  "s": "pop",
+  "note": "Badge 1"
+ },
+ {
+  "t": 10.68,
+  "s": "pop-high",
+  "note": "Badge 2"
+ },
+ {
+  "t": 10.86,
+  "s": "pop",
+  "note": "Badge 3"
+ },
+ {
+  "t": 11.04,
+  "s": "pop-high",
+  "note": "Badge 4"
+ },
+ {
+  "t": 11.2,
+  "s": "whoosh-reverse"
+ },
+ {
+  "t": 11.28,
+  "s": "whoosh-fast",
+  "note": "Timeline"
+ },
+ {
+  "t": 11.33,
+  "s": "pop"
+ },
+ {
+  "t": 11.84,
+  "s": "impact-short",
+  "note": "Punch gleichzeitig"
+ },
+ {
+  "t": 12.63,
+  "s": "click",
+  "note": "Schere 1"
+ },
+ {
+  "t": 12.7,
+  "s": "whoosh-short"
+ },
+ {
+  "t": 13.36,
+  "s": "click",
+  "note": "Schere 2"
+ },
+ {
+  "t": 13.41,
+  "s": "impact-short",
+  "note": "Punch schneiden"
+ },
+ {
+  "t": 13.45,
+  "s": "whoosh-short"
+ },
+ {
+  "t": 13.95,
+  "s": "whoosh-deep",
+  "note": "CTA"
+ },
+ {
+  "t": 14.1,
+  "s": "pop"
+ },
+ {
+  "t": 14.35,
+  "s": "pop-high"
+ },
+ {
+  "t": 14.55,
+  "s": "click"
+ },
+ {
+  "t": 14.95,
+  "s": "notification"
+ }
+]

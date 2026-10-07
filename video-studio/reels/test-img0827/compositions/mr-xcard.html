@@ -1,0 +1,134 @@
+<!doctype html>
+<html
+  lang="de"
+  data-composition-variables='[
+    {"id":"text","type":"string","label":"Begriff","default":"Editor-Skills","maxLength":22},
+    {"id":"label","type":"string","label":"Label unter der Karte","default":"Brauchst du nicht","maxLength":28},
+    {"id":"xAt","type":"number","label":"X erscheint bei (s im Slot)","default":1.0,"min":0,"step":0.05,"unit":"s"},
+    {"id":"y","type":"number","label":"Position (px von oben)","default":260,"min":160,"max":1500,"step":10,"unit":"px"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face {
+          font-family: "Inter";
+          src: url("assets/fonts/Inter-Variable.woff2") format("woff2");
+          font-weight: 100 900;
+        }
+        @font-face {
+          font-family: "Space Grotesk";
+          src: url("assets/fonts/SpaceGrotesk-Variable.woff2") format("woff2");
+          font-weight: 300 700;
+        }
+        #root {
+          position: absolute;
+          inset: 0;
+        }
+        #mr-x-wrap {
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: calc(var(--y) * 1px);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 26px;
+        }
+        #mr-x-card {
+          position: relative;
+          display: flex;
+          align-items: center;
+          gap: 26px;
+          padding: 30px 46px;
+          border-radius: 34px;
+          background: linear-gradient(160deg, rgba(34, 42, 54, 0.97), rgba(11, 14, 20, 0.97));
+          border: 2px solid rgba(255, 255, 255, 0.12);
+          box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+        }
+        #mr-x-icon {
+          flex: none;
+          width: 92px;
+          height: 92px;
+          border-radius: 24px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: linear-gradient(160deg, #2c3644, #141922);
+          border: 2px solid rgba(255, 255, 255, 0.12);
+        }
+        #mr-x-text {
+          display: block;
+          font-family: "Space Grotesk", sans-serif;
+          font-weight: 700;
+          font-size: 70px;
+          letter-spacing: -0.02em;
+          color: #f4f6f8;
+          white-space: nowrap;
+        }
+        .mr-x-bar {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          width: 112%;
+          height: 18px;
+          margin-left: -56%;
+          margin-top: -9px;
+          border-radius: 18px;
+          background: #ff3b3b;
+          box-shadow: 0 0 30px rgba(255, 59, 59, 0.75);
+          transform-origin: center;
+        }
+        #mr-x-label {
+          display: block;
+          padding: 12px 28px;
+          border-radius: 999px;
+          background: #ff3b3b;
+          color: #fff;
+          font-family: "Space Grotesk", sans-serif;
+          font-weight: 700;
+          font-size: 40px;
+          letter-spacing: 0.02em;
+          text-transform: uppercase;
+        }
+      </style>
+      <div id="root" data-composition-id="mr-xcard" data-width="1080" data-height="1920">
+        <div id="mr-x-wrap">
+          <div id="mr-x-card">
+            <div id="mr-x-icon">
+              <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#B8C2CF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>
+            </div>
+            <span id="mr-x-text" data-var-text="text">Editor-Skills</span>
+            <div class="mr-x-bar" id="mr-x-bar1"></div>
+            <div class="mr-x-bar" id="mr-x-bar2"></div>
+          </div>
+          <span id="mr-x-label" data-var-text="label">Brauchst du nicht</span>
+        </div>
+      </div>
+      <script>
+        (() => {
+          // document/Selektoren sind vom HyperFrames-Runtime auf diese Instanz begrenzt
+          // (Voraussetzung: eindeutige data-composition-id am Slot, siehe CLAUDE.md).
+          const $ = (sel) => document.querySelector(sel);
+          const vars = window.__hyperframes.getVariables();
+          document.querySelectorAll("[data-var-text]").forEach((el) => {
+            const v = vars[el.getAttribute("data-var-text")];
+            if (v != null && v !== "") el.textContent = String(v);
+          });
+          const xAt = Number(vars.xAt) || 1.0;
+          const tl = gsap.timeline({ paused: true });
+          tl.fromTo($("#mr-x-card"), { opacity: 0, y: -50, scale: 0.85 }, { opacity: 1, y: 0, scale: 1, duration: 0.42, ease: "back.out(1.7)" }, 0);
+          tl.fromTo($("#mr-x-bar1"), { scaleX: 0, rotation: 14 }, { scaleX: 1, rotation: 14, duration: 0.16, ease: "power3.out" }, xAt);
+          tl.fromTo($("#mr-x-bar2"), { scaleX: 0, rotation: -14 }, { scaleX: 1, rotation: -14, duration: 0.16, ease: "power3.out" }, xAt + 0.1);
+          tl.fromTo($("#mr-x-card"), { x: 0 }, { x: 14, duration: 0.05, yoyo: true, repeat: 5, ease: "none" }, xAt + 0.12);
+          tl.fromTo($("#mr-x-text"), { opacity: 1 }, { opacity: 0.45, duration: 0.2 }, xAt + 0.1);
+          tl.fromTo($("#mr-x-label"), { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2.2)" }, xAt + 0.3);
+          window.__timelines["mr-xcard"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>
