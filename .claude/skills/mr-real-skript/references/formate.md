@@ -30,6 +30,16 @@ Ende: Drohne zieht über die Dachterrasse weg → Endcard „PRESENTED BY IMMO R
 3. **Kombi (Empfehlung):** Persona + Preis + Hook-Frage: „LEBEN WIE ein Influencer in Wien – für 500.000 €.“
    Danach sofort ein Gegensatz/Frage, die zum Bleiben zwingt.
 
+### Variante „Premium-Tour“ (≥ 3 Mio) – siehe Beispiel 5 (Hohen Markt)
+| Block | Inhalt |
+|---|---|
+| Cold Open 0–6 s | Vergleich („Für 10 Mio bekommst du … Privatinsel, Privatjet oder … DIESE Wohnung“) + Highlight-Flash + „Are you ready for something real?“ |
+| Szenen 6–60 s | Ein Raum pro Szene (6–9 s): Fakt-Satz + Pointe über Größe/Preis; Preis immer wieder aufgreifen |
+| Mid-Follow ~45 % | „Zuschauen ist gratis. Folgen übrigens auch.“ |
+| Re-Hook | „Aber deswegen zahlst du keine X Millionen.“ |
+| Reveal | „Es gibt eine Sache, die du nicht kaufen kannst … außer du hast die richtige Adresse.“ → Hard Cut Drohne |
+| Finale | kurze Sätze mit Pausen, Preis nennen, philosophische Pointe, Schwarzblende, Catchphrase als letzter Satz |
+
 ### Raum-Satz-Formel
 `[Raum/Ort] + [1 harter Fakt mit Zahl/Marke] + [Persona-Metapher ODER Gag ODER Nutzen]`
 - „Das Herzstück ist diese gigantische Wohnküche mit bis zu 4,5 Metern Raumhöhe – dabei wird deine Gattin garantiert schwache Knie bekommen.“

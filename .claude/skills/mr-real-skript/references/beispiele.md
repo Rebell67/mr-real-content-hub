@@ -101,3 +101,28 @@ Outfit: weißes Polo · (frisch gepostet 01.10.2026 – noch keine aussagekräft
 
 **Verbesserungspotenzial:** Persona wird zwischen 7 und 36 s kaum bespielt (Haus-Sanierungs-Fakten) →
 dort Influencer-Bilder einbauen (Content-Kulisse, Licht, Follower), Sanierungsfakten in die Caption.
+
+---
+
+## 5) MR REAL – 9,77 MIO. PENTHOUSE WIEN (Hohen Markt, 1010) — Lucas' eigenes Skript aus dem Drive
+Quelle: Google Doc „MR REAL Skript“ im Ordner „Hohen Markt Penthouse, 1010 Wien“ (Stand 15.09.2026).
+**Das ist das Referenz-Format für den Output** (Szenen, Dauer, Ort, fetter VO, Regie, B-Roll-Liste).
+ca. 400 m², 2 Etagen, bis 6 m Raumhöhe, 7 Zimmer, 2 Wohnbereiche, Kamin, 4 Schlafzimmer, 3 Bäder, 5 WCs,
+2 Tiefgaragenplätze, privater Lift, Stephansdom-Blick · ca. 80 s · Terrasse noch unfertig (wird nicht gezeigt)
+
+| Szene | Dauer | Voice-Over (Original) | Regie / Notiz |
+|---|---|---|---|
+| 1 Cold Open | 0:00–0:06 | „Für 10 MILLIONEN EURO bekommst du …“ – „… eine Privatinsel, einen Privatjet oder … DIESE Wohnung in Wien.“ – „Are you ready for something real?“ | Drohne; extrem schneller Flash: Wohnbereich, Galerie, Kamin, Whirlpool, Stephansdom; harter Reveal. **Hook 2:** „DAS BEKOMMST DU FÜR 10 MIO EURO IN WIEN!“ **Hook 3:** „LEBEN wie der REICHSTE WIENER für 10 MIO EURO im ersten Bezirk?“ |
+| 2 Wohnbereich | 0:06–0:15 | „Wir reden hier von fast 400 Quadratmetern auf zwei Etagen … und teilweise fast sechs Meter Raumhöhe.“ – „Das ist langsam keine Wohnung mehr.“ | Kamera rückwärts vor Lucas, „BAM BAM“ beide Ebenen, Lucas schaut nach oben |
+| 3 Galerie | 0:15–0:23 | „Insgesamt sieben Zimmer und gleich zwei riesige Wohnbereiche.“ – „Falls dir einer davon irgendwann zu klein wird …“ [Partner-Gag im Original – über dem Härtegrad „mittel“, nicht als Vorlage nutzen] | lehnt an der Galerie |
+| 4 Kamin | 0:23–0:30 | „Und natürlich hat das Ding auch seinen eigenen Kamin.“ – „Bei knapp zehn Millionen wäre alles andere aber auch irgendwie frech.“ | kurzer Blick in die Kamera |
+| 5 Küche | 0:30–0:39 | „Hier drüben die offene Designküche mit großer Kochinsel und hochwertigen Geräten.“ – „Ob hier jemals jemand selbst kocht, ist eine andere Frage.“ – „Und keine Sorge: Du musst die 10 Millionen nicht haben. Zuschauen ist gratis. Folgen übrigens auch.“ | Mid-Video-Follow ✔ |
+| 6 Schlafzimmer | 0:39–0:48 | „Vier Schlafzimmer – genug Platz für Familie, Gäste … oder Leute, die nach der Party einfach nicht mehr heimgehen.“ (und wenn’s sein muss auch für die Schwiegermama) | schnelle Cuts |
+| 7 Bäder | 0:48–0:56 | „Dazu drei Bäder und insgesamt fünf WCs.“ – „Bei 400 Quadratmetern willst du schließlich nicht erst Google Maps öffnen müssen, um ein WC zu finden.“ | Beat vor Pointe |
+| 8 Details | 0:56–1:02 | „Zwei Tiefgaragenstellplätze und ein privater Aufzug sind natürlich auch dabei.“ – „Aber deswegen zahlst du keine 9,77 Millionen.“ | Musik baut auf = Re-Hook |
+| 9 Reveal | 1:02–1:10 | „Und bei 9,77 Millionen gibt es noch eine Sache, die du nicht kaufen kannst … außer du hast genau die richtige Adresse.“ | Hard Cut auf Drohne; unfertige Terrasse bewusst nicht zeigen |
+| 10 Finale | 1:10–1:20 | „Der Stephansdom vor dir. Ganz Wien unter dir.“ – „Und für einen Moment fühlt es sich an, als würde dir die Stadt gehören.“ – [2 s Musik] – „9,77 Millionen Euro.“ – „Völlig verrückt.“ – „Aber manche Immobilien kaufst du nicht einfach … du kommst irgendwann dort an.“ – „Are you ready for something real?“ | Drohne zieht zurück, Musik-Peak, Schwarzblende/Logo |
+
+**Was neu ist ggü. den älteren Tours:** keine Persona, sondern Preis als Leitmotiv (wird 5× aufgegriffen);
+Gags kommentieren die absurde Größe/den Preis; Folgen-Aufruf in der Mitte; filmisches, ruhiges Finale;
+Catchphrase als Schlusssatz statt am Anfang allein.

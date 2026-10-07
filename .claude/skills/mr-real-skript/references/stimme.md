@@ -1,5 +1,8 @@
 # Mr Reals Stimme
 
+Mr Real = **Lucas**. Er steht selbst vor der Kamera und spricht alle Texte. Im Team tauchen weitere
+Personen auf (z. B. Phillip, Mirko, Wilhelm, „L&P“-Duo-Videos) – nur einbauen, wenn Lucas sie nennt.
+
 Abgeleitet aus seinen Real-Tour-Videos (James Bond, Elon Musk, Influencer, 1-MIO) und 241 Reel-Captions
 von @mr.r3al (Feb–Okt 2026).
 
@@ -28,6 +31,10 @@ Ein junger Wiener Makler, der Luxus-Immobilien mit dem Selbstbewusstsein eines E
 | Dreier-Steigerung | „nicht ein Schlafzimmer, auch nicht zwei, sondern drei“ / „nicht eine, nicht zwei, sondern drei Terrassen“ | 1× pro Video |
 | Rhetorische Frage | „Was will man mehr?“ / „Alles, was dein Herz begehrt.“ | Nach dem Highlight |
 | Callback | „Jetzt verstehst du, warum ich vom Influencer-Lifestyle gesprochen habe.“ / „Am Anfang hab ich dir eine Frage gestellt …“ / „Den hätten wir gefunden.“ | Vor CTA |
+| Vergleichs-Cold-Open | „Für 10 Millionen bekommst du … eine Privatinsel, einen Privatjet oder … DIESE Wohnung in Wien.“ | Premium-Tour, s 0–6 |
+| Mid-Video-Follow | „Zuschauen ist gratis. Folgen übrigens auch.“ | ~40–50 % |
+| Preis-Rechtfertigung | „Bei knapp zehn Millionen wäre alles andere aber auch irgendwie frech.“ / „Aber deswegen zahlst du keine 9,77 Millionen.“ | vor Reveal |
+| Emotionales Finale | „Manche Immobilien kaufst du nicht einfach … du kommst irgendwann dort an.“ | Premium-Tour, Schluss |
 | Outro-Card | „PRESENTED BY IMMO REBELLEN – FOLGE FÜR MEHR!“ | Visuell, letzte 2 s |
 
 ## CTA-Bank (in seinem Ton)
@@ -50,6 +57,19 @@ Typen, die funktionieren:
    brauchst du natürlich auch einen Raum fürs Bett.“ / Küche „…für die Leute, die nicht nur Pizza bestellen“.
 6. **Understatement nach Wow**: „Nur kurz fünf Minuten in die Jacuzzi-Badewanne …“ / „Zu guter Letzt das Bürozimmer –
    fast zu schade für ein Kinderzimmer.“
+
+7. **Alltags-Absurdität bei Größe**: „Bei 400 Quadratmetern willst du nicht erst Google Maps öffnen müssen, um ein WC zu finden.“ /
+   Schlafzimmer „…für Leute, die nach der Party einfach nicht mehr heimgehen (und wenn’s sein muss auch für die Schwiegermama)“ /
+   Küche: „Ob hier jemals jemand selbst kocht, ist eine andere Frage.“
+
+**Härtegrad: MITTEL – etwas provokant, aber nicht zu extrem** (von Lucas so festgelegt).
+- ✅ Im Rahmen: augenzwinkernde Anspielungen („wo die Eltern den Spaß haben“), Partner-/Schwiegermama-Gags
+  („deine Gattin bekommt schwache Knie“, „…und wenn’s sein muss auch für die Schwiegermama“), Seitenhiebe auf
+  Reiche/Preise („Bei zehn Millionen wäre alles andere frech“), Selbstironie, Makler-Klischees.
+- ❌ Zu extrem: Witze über Körperfunktionen/Periode, Sex explizit, Religion, Herkunft, Aussehen, Politik,
+  Abwertung von Mietern/„Armen“ oder realen Personen.
+- Grenzfall-Test: Würde Lucas die Zeile auch vor einem 60-jährigen Eigentümer-Kunden sagen und der schmunzelt?
+  Dann passt sie. Pro Skript max. 1–2 der provokanteren Zeilen, der Rest charmant-frech.
 
 Gags müssen das Objekt **aufwerten**. Nie: Witze über Mängel, Nachbarn, Lage, Preis zu hoch.
 
