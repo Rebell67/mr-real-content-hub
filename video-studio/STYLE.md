@@ -1,9 +1,29 @@
 # Mr Real · Reel-Stil (lebendes Dokument)
 
 > Dieser Stil wird mit jedem Reel geschärft. **[v0]** = Startannahme, noch nicht gemeinsam bestätigt.
-> **[ref]** = aus einer Referenz übernommen, die „in die richtige Richtung" geht. **[✓]** = vom User bestätigt.
+> **[daten]** = aus deinen eigenen Instagram-Zahlen abgeleitet. **[ref]** = aus einer Referenz übernommen, die „in die richtige Richtung" geht. **[✓]** = vom User bestätigt.
 > Nach jedem Feedback: Regel bestätigen, ändern oder streichen und eine Zeile im Feedback-Log schreiben.
 > Claude liest diese Datei vor jedem Schnitt.
+
+## Profil-Daten @mr.r3al (Metricool, Feb–Okt 2026, ~240 Reels)
+
+Was nachweislich funktioniert – daran richten wir die Schnitt-Formate aus:
+
+| Format | Beispiel (Views) | Ø Sehdauer | Saves/Shares | Fazit |
+|---|---|---|---|---|
+| **News/Erklär (Talking Head)** | EZB-Zinswende (22k), ImmoESt-Anhebung (9,9k) | **17–20 s** | hoch (48/119, 80/74) | stärkstes Format für Autorität & Follower → **Hauptformat des Studios** |
+| **Objekt-Tour mit Story-Hook** | „DAS bekommst du für knapp 1 MIO" (16,6k), „LEBEN wie ELON MUSK – 7,9 MIO" (11,8k) | **21 s** | hoch (43/114, 46/95) | Preis/Fakten als Grafik-Highlights → zweites Studio-Format |
+| KI-Comedy | „Balkon und Katzen" (208k!), „Notfallbier" (9k, 310 Shares) | 8–10 s | Reichweite, wenig Saves | Reichweiten-Booster, kein Schnitt-Fokus |
+| Sketch/POV-Comedy | 5–8k | 5–15 s | gering | ok für Reichweite |
+| Podcast-/Talk-Ausschnitte (je 3–4 Varianten am selben Tag) | meist 100–600 | 3–7 s | ~0 | **schwächstes Format** → genau hier soll der Schnitt-Stil (Grafiken, SFX, Tempo) die Retention heben |
+
+Abgeleitete Regeln:
+- **[daten]** Hooks wie in den Top-Reels: Kontrast/Kehrtwende („Drei Jahre fielen die Zinsen. Gestern war Schluss."),
+  Promi-Vergleich + Preis („LEBEN wie ELON MUSK – für 7,9 MIO"), Preis-Frage („DAS bekommst du für knapp 1 MIO").
+- **[daten]** Zahlen sind der Star: Leitzins, %, €-Beträge, m² → immer als Grafik (Zähler, Karte), nie nur gesprochen.
+- **[daten]** Ziel-Sehdauer: Talk-Clips von heute ~5 s auf **≥ 12 s** heben (Top-Erklärvideos schaffen 17–20 s).
+- **[daten]** Objekt-Tour: Fakten-Karten (📍 Bezirk, m², Zimmer, Terrasse, Preis) im Takt der Schnitte einblenden,
+  Preis am Schluss als großer Zähler-Moment.
 
 ## Grundgefühl
 
