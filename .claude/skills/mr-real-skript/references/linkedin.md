@@ -49,10 +49,16 @@ Weitere belastbare Regeln:
 ```
 Quelle/Link → als **vorbereiteter erster Kommentar** mitliefern, nie in den Post-Text.
 
-## Bild-Specs
-- **Stat-/Quote-Card**: 1200×1500 (4:5). Dunkler Grund `#0B0D10`, große weiße Zahl/These, Akzent `#F7C14B`,
-  klein „MR REAL · IMMO REBELLEN". Max. 12 Wörter auf der Card.
-- **Echtes Foto** (Besichtigung, Baustelle, Auto, Dachterrasse) schlägt die Card – Card ist der Fallback.
+## Bild-Specs (Foto zuerst – von Lucas so gewünscht, 5.11.2026)
+- **Standard = Foto-Overlay**: Echtes Foto (Lucas in einer Immobilie > Immobilie allein > Lucas allein),
+  auf 1200×1500 (4:5) beschnitten, Gesicht/Motiv im oberen Drittel. Darüber ab ~45 % Höhe ein weicher
+  dunkler Verlauf (#07090C, unten ~90 % Deckung). Unten links: Akzentbalken `#F7C14B` (16 px breit),
+  daneben Hook in 2 Zeilen (DejaVu/ähnliche Bold ~72 px, Zeile 1 weiß, Zeile 2 Akzent, max. 6 Wörter),
+  darunter 1 Subline (~46 px, hellgrau), Trennlinie, „MR REAL · IMMO REBELLEN" (36 px). Fotoquelle:
+  Drive-Ordner „LinkedIn Assets" (ID 1brYHg5fbw16BEaUKhOPqfft7nDTABwhD); verwendete Fotos im Lauf nennen,
+  damit keines doppelt kommt.
+- **Stat-/Quote-Card nur als Fallback**, wenn kein unbenutztes Foto da ist: 1200×1500, Grund `#0B0D10`,
+  große weiße Zahl/These, Akzent `#F7C14B`, klein „MR REAL · IMMO REBELLEN". Max. 12 Wörter.
 - **Karussell-PDF**: 1080×1350, 8–12 Slides, 1 Gedanke pro Slide, Slide 1 = Hook, letzte Slide = Frage + „Folg Lucas".
 - Video-Zweitverwertung: Original-Export verwenden (keine TikTok/IG-Wasserzeichen).
 
