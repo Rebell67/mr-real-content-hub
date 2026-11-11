@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suchprofil anlegen</title>
+<meta name="description" content="Sag uns, was du suchst – wir melden uns, bevor die Wohnung online geht. Immo Rebellen, Wien.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B0D10; --card:#13161C; --card2:#191D24; --line:#262B33;
+    --text:#FFFFFF; --muted:#9AA3AD; --acc:#F7C14B; --acc-dark:#D9A32F; --err:#E5484D; --ok:#12D99A;
+  }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){} }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Open Sans',system-ui,sans-serif;min-height:100vh;padding:0 16px}
+  .wrap{max-width:640px;margin:0 auto;padding:40px 0 80px}
+  .brand{display:flex;align-items:center;gap:12px;margin-bottom:36px}
+  .brand .mark{width:10px;height:38px;background:var(--acc);border-radius:2px}
+  .brand b{font-size:15px;letter-spacing:.14em}
+  .brand span{color:var(--muted);font-size:13px;letter-spacing:.1em}
+  h1{font-size:clamp(26px,5.5vw,38px);font-weight:800;line-height:1.15;margin-bottom:10px}
+  h1 em{color:var(--acc);font-style:normal}
+  .sub{color:var(--muted);font-size:15px;line-height:1.55;margin-bottom:28px}
+  .progress{display:flex;gap:6px;margin-bottom:22px}
+  .progress i{height:4px;flex:1;background:var(--line);border-radius:2px;transition:.3s}
+  .progress i.on{background:var(--acc)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px 22px}
+  .step{display:none}.step.on{display:block;animation:in .25s ease}
+  @keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .q{font-size:17px;font-weight:700;margin:18px 0 10px}
+  .q:first-child{margin-top:0}
+  .q small{display:block;color:var(--muted);font-weight:400;font-size:13px;margin-top:2px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{border:1px solid var(--line);background:var(--card2);color:var(--text);padding:9px 15px;border-radius:999px;font-size:14px;cursor:pointer;user-select:none;transition:.15s}
+  .chip:hover{border-color:var(--acc)}
+  .chip.on{background:var(--acc);border-color:var(--acc);color:#14120B;font-weight:700}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:480px){.grid2{grid-template-columns:1fr}}
+  label.fl{display:block;font-size:13px;color:var(--muted);margin:14px 0 6px}
+  input[type=text],input[type=email],input[type=tel],input[type=number],select,textarea{
+    width:100%;background:var(--card2);border:1px solid var(--line);border-radius:10px;color:var(--text);
+    padding:12px 14px;font-size:15px;font-family:inherit;outline:none;transition:.15s}
+  input:focus,select:focus,textarea:focus{border-color:var(--acc)}
+  textarea{resize:vertical;min-height:84px}
+  .row-btns{display:flex;gap:10px;margin-top:24px}
+  .btn{flex:1;border:0;border-radius:12px;padding:15px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;transition:.15s;letter-spacing:.02em}
+  .btn.primary{background:var(--acc);color:#14120B}
+  .btn.primary:hover{background:var(--acc-dark)}
+  .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--muted);flex:0 0 auto;padding:15px 18px}
+  .hint{font-size:12.5px;color:var(--muted);line-height:1.5;margin-top:14px}
+  .hint a{color:var(--acc)}
+  .check{display:flex;gap:10px;align-items:flex-start;margin-top:16px;font-size:13.5px;color:var(--muted);line-height:1.5;cursor:pointer}
+  .check input{width:18px;height:18px;margin-top:1px;accent-color:var(--acc);flex:0 0 auto}
+  .error{display:none;background:rgba(229,72,77,.1);border:1px solid var(--err);color:#ffb4b6;border-radius:10px;padding:11px 14px;font-size:14px;margin-top:14px}
+  .success{display:none;text-align:center;padding:14px 0}
+  .success .tick{width:64px;height:64px;border-radius:50%;background:rgba(18,217,154,.12);border:2px solid var(--ok);color:var(--ok);font-size:30px;line-height:60px;margin:0 auto 18px}
+  .success h2{font-size:24px;font-weight:800;margin-bottom:10px}
+  .success p{color:var(--muted);font-size:15px;line-height:1.6;margin-bottom:8px}
+  .success .agent{margin-top:20px;background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:16px;text-align:left}
+  .success .agent b{display:block;margin-bottom:6px}
+  .success .agent p{font-size:13.5px;margin-bottom:10px}
+  .success a.btnlink{display:inline-block;background:transparent;border:1px solid var(--acc);color:var(--acc);border-radius:10px;padding:10px 16px;font-size:14px;font-weight:700;text-decoration:none}
+  .foot{margin-top:28px;text-align:center;color:var(--muted);font-size:12px;letter-spacing:.08em}
+  .hp{position:absolute;left:-9999px;opacity:0;height:0;overflow:hidden}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand"><div class="mark"></div><div><b>IMMO REBELLEN</b><br><span>SUCHPROFIL</span></div></div>
+
+  <h1>Sag uns, was du suchst – <em>bevor es online geht.</em></h1>
+  <p class="sub">Die besten Immobilien sind oft weg, bevor sie auf willhaben landen. Mit deinem Suchprofil melden wir uns direkt, sobald etwas Passendes reinkommt. Dauert keine 60 Sekunden.</p>
+
+  <div class="progress"><i class="on"></i><i></i><i></i></div>
+
+  <form class="card" id="f" novalidate>
+    <!-- Honeypot -->
+    <div class="hp"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+
+    <!-- STEP 1 -->
+    <div class="step on" data-step="1">
+      <div class="q">Was suchst du?</div>
+      <div class="chips" data-single data-name="art">
+        <span class="chip on" data-v="kauf">Kaufen</span>
+        <span class="chip" data-v="miete">Mieten</span>
+      </div>
+      <div class="q">Welche Art von Immobilie?</div>
+      <div class="chips" data-single data-name="objektart">
+        <span class="chip on" data-v="Wohnung">Wohnung</span>
+        <span class="chip" data-v="Haus">Haus</span>
+        <span class="chip" data-v="Dachgeschoss/Penthouse">Dachgeschoss</span>
+        <span class="chip" data-v="Anlageobjekt">Anlage / Vorsorge</span>
+        <span class="chip" data-v="Grundstück">Grundstück</span>
+        <span class="chip" data-v="Büro/Gewerbe">Büro / Gewerbe</span>
+      </div>
+      <div class="row-btns"><button type="button" class="btn primary" data-next>Weiter →</button></div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step" data-step="2">
+      <div class="q">Wo soll es sein? <small>Mehrfachauswahl möglich</small></div>
+      <div class="chips" data-name="bezirke" id="bezirke"></div>
+      <label class="fl">Außerhalb Wiens / genauere Lage (optional)</label>
+      <input type="text" name="lageText" placeholder="z. B. Mödling, Baden, 1190 Grünlage …">
+      <div class="grid2">
+        <div><label class="fl">Budget bis (€)</label><input type="number" name="budget" inputmode="numeric" placeholder="z. B. 600000" min="0"></div>
+        <div><label class="fl">Wohnfläche ab (m²)</label><input type="number" name="flaeche" inputmode="numeric" placeholder="z. B. 80" min="0"></div>
+      </div>
+      <div class="grid2">
+        <div><label class="fl">Zimmer ab</label><input type="number" name="zimmer" inputmode="numeric" placeholder="z. B. 3" min="0" step="0.5"></div>
+      </div>
+      <div class="q">Was ist dir wichtig? <small>Optional</small></div>
+      <div class="chips" data-name="wuensche">
+        <span class="chip" data-v="Balkon/Terrasse">Balkon / Terrasse</span>
+        <span class="chip" data-v="Garten">Garten</span>
+        <span class="chip" data-v="Lift">Lift</span>
+        <span class="chip" data-v="Garage/Stellplatz">Garage</span>
+        <span class="chip" data-v="Erstbezug/Neubau">Erstbezug</span>
+        <span class="chip" data-v="Altbau">Altbau</span>
+        <span class="chip" data-v="Klimaanlage">Klimaanlage</span>
+      </div>
+      <div class="row-btns">
+        <button type="button" class="btn ghost" data-back>←</button>
+        <button type="button" class="btn primary" data-next>Weiter →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step" data-step="3">
+      <div class="q">Wohin dürfen wir uns melden?</div>
+      <div class="grid2">
+        <div><label class="fl">Anrede</label>
+          <select name="anrede_id"><option value="">–</option><option value="1">Herr</option><option value="2">Frau</option></select></div>
+        <div></div>
+        <div><label class="fl">Vorname *</label><input type="text" name="vorname" autocomplete="given-name" required></div>
+        <div><label class="fl">Nachname *</label><input type="text" name="nachname" autocomplete="family-name" required></div>
+        <div><label class="fl">E-Mail *</label><input type="email" name="email" autocomplete="email" required></div>
+        <div><label class="fl">Telefon</label><input type="tel" name="telefon" autocomplete="tel" placeholder="+43 …"></div>
+      </div>
+      <label class="fl">Noch etwas, das wir wissen sollten? (optional)</label>
+      <textarea name="nachricht" placeholder="z. B. Zeithorizont, Finanzierung schon geklärt, besondere Wünsche …"></textarea>
+      <label class="check"><input type="checkbox" name="dsgvo" required>
+        <span>Ich stimme zu, dass meine Angaben zur Bearbeitung meines Suchprofils verarbeitet werden. Details in der <a href="https://immo-rebellen.at/datenschutz/" target="_blank" rel="noopener" style="color:var(--acc)">Datenschutzerklärung</a>.</span></label>
+      <div class="error" id="err"></div>
+      <div class="row-btns">
+        <button type="button" class="btn ghost" data-back>←</button>
+        <button type="submit" class="btn primary" id="submitBtn">Suchprofil absenden</button>
+      </div>
+      <p class="hint">Kein Spam, keine Weitergabe. Du hörst von uns, wenn etwas wirklich passt.</p>
+    </div>
+  </form>
+
+  <!-- SUCCESS -->
+  <div class="card success" id="done">
+    <div class="tick">✓</div>
+    <h2>Passt. Wir suchen für dich.</h2>
+    <p>Dein Suchprofil ist bei uns eingegangen und wird direkt in unserem System hinterlegt.<br>Sobald etwas Passendes reinkommt – oft bevor es öffentlich ist – melden wir uns persönlich.</p>
+    <div class="agent">
+      <b>Tipp: Automatische Treffer per E-Mail</b>
+      <p>Wenn du zusätzlich unseren automatischen Suchagenten willst, der dir neue Objekte sofort schickt, kannst du ihn hier mit deiner E-Mail aktivieren:</p>
+      <a class="btnlink" href="https://immorebellen.service.immo/registrieren/de" target="_blank" rel="noopener">Suchagenten aktivieren →</a>
+    </div>
+  </div>
+
+  <div class="foot">IMMO REBELLEN GMBH · WIEN &amp; NIEDERÖSTERREICH · <a href="https://immo-rebellen.at" style="color:var(--muted)">immo-rebellen.at</a></div>
+</div>
+
+<script>
+(function(){
+  // Wiener Bezirke als Chips
+  var bz=document.getElementById('bezirke');
+  var namen={1:'Innere Stadt',2:'Leopoldstadt',3:'Landstraße',4:'Wieden',5:'Margareten',6:'Mariahilf',7:'Neubau',8:'Josefstadt',9:'Alsergrund',10:'Favoriten',11:'Simmering',12:'Meidling',13:'Hietzing',14:'Penzing',15:'Fünfhaus',16:'Ottakring',17:'Hernals',18:'Währing',19:'Döbling',20:'Brigittenau',21:'Floridsdorf',22:'Donaustadt',23:'Liesing'};
+  for(var i=1;i<=23;i++){
+    var plz=(1000+i*10);
+    var c=document.createElement('span');c.className='chip';c.dataset.v=plz+' '+namen[i];c.textContent=i+'. '+namen[i];
+    bz.appendChild(c);
+  }
+  // Chip-Logik
+  document.querySelectorAll('.chips').forEach(function(g){
+    g.addEventListener('click',function(e){
+      var c=e.target.closest('.chip'); if(!c) return;
+      if(g.hasAttribute('data-single')){ g.querySelectorAll('.chip').forEach(function(x){x.classList.remove('on');}); c.classList.add('on'); }
+      else c.classList.toggle('on');
+    });
+  });
+  function chipVals(name){ var g=document.querySelector('.chips[data-name="'+name+'"]'); return Array.prototype.map.call(g.querySelectorAll('.chip.on'),function(c){return c.dataset.v;}); }
+
+  // Steps
+  var cur=1, steps=document.querySelectorAll('.step'), bars=document.querySelectorAll('.progress i');
+  function show(n){ cur=n;
+    steps.forEach(function(s){s.classList.toggle('on', +s.dataset.step===n);});
+    bars.forEach(function(b,i){b.classList.toggle('on', i<n);});
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  document.querySelectorAll('[data-next]').forEach(function(b){b.addEventListener('click',function(){show(Math.min(cur+1,3));});});
+  document.querySelectorAll('[data-back]').forEach(function(b){b.addEventListener('click',function(){show(Math.max(cur-1,1));});});
+
+  // Submit
+  var f=document.getElementById('f'), err=document.getElementById('err'), btn=document.getElementById('submitBtn');
+  f.addEventListener('submit', async function(e){
+    e.preventDefault(); err.style.display='none';
+    var fd=new FormData(f);
+    var data={
+      art: chipVals('art')[0]||'kauf',
+      objektart: chipVals('objektart')[0]||'Wohnung',
+      bezirke: chipVals('bezirke'),
+      wuensche: chipVals('wuensche'),
+      lageText: fd.get('lageText'), budget: fd.get('budget'), flaeche: fd.get('flaeche'), zimmer: fd.get('zimmer'),
+      anrede_id: fd.get('anrede_id'), vorname: fd.get('vorname'), nachname: fd.get('nachname'),
+      email: fd.get('email'), telefon: fd.get('telefon'), nachricht: fd.get('nachricht'),
+      dsgvo: !!fd.get('dsgvo'), website: fd.get('website')
+    };
+    if(!data.vorname||!data.nachname||!/.+@.+\..+/.test(data.email||'')){ err.textContent='Bitte Vorname, Nachname und eine gültige E-Mail angeben.'; err.style.display='block'; return; }
+    if(!data.dsgvo){ err.textContent='Bitte stimme der Datenverarbeitung zu.'; err.style.display='block'; return; }
+    btn.disabled=true; btn.textContent='Wird gesendet …';
+    try{
+      var r=await fetch('/api/suchprofil',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+      if(r.ok){ f.style.display='none'; document.querySelector('.progress').style.display='none'; document.getElementById('done').style.display='block'; return; }
+      var j=await r.json().catch(function(){return{};});
+      if(j.error==='relay_not_configured'){
+        err.innerHTML='Unsere Direkt-Übertragung ist gerade nicht erreichbar. Bitte leg dein Suchprofil in 1 Minute direkt hier an: <a href="https://immorebellen.service.immo/registrieren/de" target="_blank" rel="noopener">Zum Formular →</a>';
+      } else {
+        err.innerHTML='Das hat leider nicht geklappt. Versuch es gleich nochmal – oder nutz direkt dieses Formular: <a href="https://immorebellen.service.immo/registrieren/de" target="_blank" rel="noopener">Zum Formular →</a>';
+      }
+      err.style.display='block';
+    }catch(_){
+      err.textContent='Netzwerkfehler – bitte versuch es gleich noch einmal.'; err.style.display='block';
+    }
+    btn.disabled=false; btn.textContent='Suchprofil absenden';
+  });
+})();
+</script>
+</body>
+</html>
